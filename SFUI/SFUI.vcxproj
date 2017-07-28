@@ -1,0 +1,275 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{78145017-F689-4D47-A9AB-C82C9629EF39}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>SFUI</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;SFML_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)/Dependencies/Include</AdditionalIncludeDirectories>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeaderFile />
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>$(SolutionDir)/Dependencies/Lib/Debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-graphics-s-d.lib;sfml-window-s-d.lib;sfml-audio-s-d.lib;sfml-system-s-d.lib;flac.lib;freetype.lib;jpeg.lib;ogg.lib;openal32.lib;vorbis.lib;vorbisenc.lib;vorbisfile.lib;opengl32.lib;winmm.lib;sfml-main-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;SFML_STATIC;SFUI_INCLUDE_EXPERIMENTAL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalIncludeDirectories>$(SolutionDir)/Dependencies/Include;$(SolutionDir)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <PrecompiledHeaderFile />
+      <AdditionalOptions>-D_SCL_SECURE_NO_WARNINGS %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <OutputFile>$(OutputPath)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>$(SolutionDir)/Dependencies/Lib/x64/Debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-graphics-s-d.lib;sfml-window-s-d.lib;sfml-audio-s-d.lib;sfml-system-s-d.lib;flac.lib;freetype.lib;jpeg.lib;ogg.lib;openal32.lib;vorbis.lib;vorbisenc.lib;vorbisfile.lib;opengl32.lib;winmm.lib;sfml-main-d.lib;Kairos.lib;SelbaWard.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ShowProgress>NotSet</ShowProgress>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Include\Application\AppAgent.h" />
+    <ClInclude Include="Include\Application\AppMain.h" />
+    <ClInclude Include="Include\Application\AppWindow.h" />
+    <ClInclude Include="Include\Application\Concurrent.h" />
+    <ClInclude Include="Include\Application\ConfirmDialog.h" />
+    <ClInclude Include="Include\Application\Logger.h" />
+    <ClInclude Include="Include\Common.h" />
+    <ClInclude Include="Include\System\Sys.h" />
+    <ClInclude Include="Include\System\Win.h" />
+    <ClInclude Include="Include\UI\Components\BitmapFont.h" />
+    <ClInclude Include="Include\UI\Components\BitmapFontReader.h" />
+    <ClInclude Include="Include\UI\Components\BitmapFontStore.h" />
+    <ClInclude Include="Include\UI\Components\Colors.h" />
+    <ClInclude Include="Include\UI\Components\MultilineTextView.h" />
+    <ClInclude Include="Include\UI\Components\TextView.h" />
+    <ClInclude Include="Include\UI\Fwd.h" />
+    <ClInclude Include="Include\UI\UI.h" />
+    <ClInclude Include="Include\UI\Widgets\BitmapLabel.h" />
+    <ClInclude Include="Include\UI\Widgets\Button.h" />
+    <ClInclude Include="Include\UI\Widgets\CheckBox.h" />
+    <ClInclude Include="Include\UI\Widgets\CollapsingHeader.h" />
+    <ClInclude Include="Include\UI\Widgets\ColorPicker.h" />
+    <ClInclude Include="Include\UI\Widgets\ComboBox.h" />
+    <ClInclude Include="Include\UI\Widgets\Draggable.h" />
+    <ClInclude Include="Include\UI\Widgets\GenericContainer.h" />
+    <ClInclude Include="Include\UI\Widgets\ColorBox.h" />
+    <ClInclude Include="Include\UI\Widgets\LineEdit.h" />
+    <ClInclude Include="Include\UI\Widgets\ListView.h" />
+    <ClInclude Include="Include\UI\Widgets\Menu.h" />
+    <ClInclude Include="Include\UI\Widgets\MenuBar.h" />
+    <ClInclude Include="Include\UI\Widgets\Panel.h" />
+    <ClInclude Include="Include\UI\Widgets\Popup.h" />
+    <ClInclude Include="Include\UI\Widgets\PopupWindow.h" />
+    <ClInclude Include="Include\UI\Widgets\RainbowStrip.h" />
+    <ClInclude Include="Include\UI\Widgets\ScrollBar.h" />
+    <ClInclude Include="Include\UI\Widgets\Slider.h" />
+    <ClInclude Include="Include\UI\Widgets\SliderTrack.h" />
+    <ClInclude Include="Include\UI\Widgets\LineItem.h" />
+    <ClInclude Include="Include\UI\Widgets\SpinBox.h" />
+    <ClInclude Include="Include\UI\Widgets\TreeRoot.h" />
+    <ClInclude Include="Include\UI\Widgets\ValueSlider.h" />
+    <ClInclude Include="Include\UI\Widgets\TabList.h" />
+    <ClInclude Include="Include\UI\Widgets\ProgressBar.h" />
+    <ClInclude Include="Include\UI\Widgets\Selectable.h" />
+    <ClInclude Include="Include\UI\Widgets\Tab.h" />
+    <ClInclude Include="Include\UI\Widgets\WidgetTree.h" />
+    <ClInclude Include="Include\UI\Widgets\WidgetWindow.h" />
+    <ClInclude Include="Include\UI\Theme.h" />
+    <ClInclude Include="Include\UI\Widget.h" />
+    <ClInclude Include="Include\Utilities\CubicBezier.hpp" />
+    <ClInclude Include="Include\Utilities\DropShadow.h" />
+    <ClInclude Include="Include\Utilities\Vec.hpp" />
+    <ClInclude Include="Shaders\DrawBlack.glsl">
+      <FileType>Text</FileType>
+    </ClInclude>
+    <ClInclude Include="Shaders\SeparableHoriz.glsl">
+      <FileType>Text</FileType>
+    </ClInclude>
+    <ClInclude Include="targetver.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="SFUI.cpp" />
+    <ClCompile Include="Source\Application\AppMain.cpp" />
+    <ClCompile Include="Source\Application\AppWindow.cpp" />
+    <ClCompile Include="Source\Application\ConfirmDialog.cpp" />
+    <ClCompile Include="Source\UI\Components\BitmapFont.cpp" />
+    <ClCompile Include="Source\UI\Components\Colors.cpp" />
+    <ClCompile Include="Source\UI\Components\MultilineTextView.cpp" />
+    <ClCompile Include="Source\UI\Components\TextView.cpp" />
+    <ClCompile Include="Source\UI\Theme.cpp" />
+    <ClCompile Include="Source\UI\Widget.cpp" />
+    <ClCompile Include="Source\UI\Widgets\BitmapLabel.cpp" />
+    <ClCompile Include="Source\UI\Widgets\Button.cpp" />
+    <ClCompile Include="Source\UI\Widgets\CheckBox.cpp" />
+    <ClCompile Include="Source\UI\Widgets\CollapsingHeader.cpp" />
+    <ClCompile Include="Source\UI\Widgets\ColorBox.cpp" />
+    <ClCompile Include="Source\UI\Widgets\ColorPicker.cpp" />
+    <ClCompile Include="Source\UI\Widgets\ComboBox.cpp" />
+    <ClCompile Include="Source\UI\Widgets\Draggable.cpp" />
+    <ClCompile Include="Source\UI\Widgets\GenericContainer.cpp" />
+    <ClCompile Include="Source\UI\Widgets\LineEdit.cpp" />
+    <ClCompile Include="Source\UI\Widgets\LineItem.cpp" />
+    <ClCompile Include="Source\UI\Widgets\ListView.cpp" />
+    <ClCompile Include="Source\UI\Widgets\Menu.cpp" />
+    <ClCompile Include="Source\UI\Widgets\MenuBar.cpp" />
+    <ClCompile Include="Source\UI\Widgets\Panel.cpp" />
+    <ClCompile Include="Source\UI\Widgets\Popup.cpp" />
+    <ClCompile Include="Source\UI\Widgets\PopupWindow.cpp" />
+    <ClCompile Include="Source\UI\Widgets\RainbowStrip.cpp" />
+    <ClCompile Include="Source\UI\Widgets\ScrollBar.cpp" />
+    <ClCompile Include="Source\UI\Widgets\Slider.cpp" />
+    <ClCompile Include="Source\UI\Widgets\SpinBox.cpp" />
+    <ClCompile Include="Source\UI\Widgets\TabList.cpp" />
+    <ClCompile Include="Source\UI\Widgets\ProgressBar.cpp" />
+    <ClCompile Include="Source\UI\Widgets\Selectable.cpp" />
+    <ClCompile Include="Source\UI\Widgets\Tab.cpp" />
+    <ClCompile Include="Source\UI\Widgets\TreeRoot.cpp" />
+    <ClCompile Include="Source\UI\Widgets\ValueSlider.cpp" />
+    <ClCompile Include="Source\UI\Widgets\WidgetTree.cpp" />
+    <ClCompile Include="Source\UI\Widgets\WidgetWindow.cpp" />
+    <ClCompile Include="Source\Utilities\DropShadow.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\CircularBlur.glsl" />
+    <None Include="Shaders\GaussBlur.glsl" />
+    <None Include="Shaders\GaussVert.glsl" />
+    <None Include="Shaders\GaussHoriz.glsl" />
+    <None Include="Shaders\SeparableVert.glsl" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
