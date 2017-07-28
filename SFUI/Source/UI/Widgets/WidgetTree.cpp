@@ -120,10 +120,10 @@ namespace sfui
 
   std::shared_ptr<sfui::TreeRoot> WidgetTree::NewRoot()
   {
-    Vec2i pos = ( m_Roots.empty() ? m_Position : m_Roots.back()->GetPosition() + Vec2i(0, m_Roots.back()->GetSize().y) );
+    Vec2i pos = ( m_Roots.empty() ? m_Position : m_Roots.back()->GetPosition() + Vec2i(0, 15) );
     auto rootPtr = TreeRoot::Create(this, m_Theme);
     m_Roots.push_back(rootPtr);
-    rootPtr->SetSize({ m_Size.x, 25 });
+    rootPtr->SetSize({ m_Size.x, 15 });
     rootPtr->SetPosition(pos);
     rootPtr->SetBitmapFont(m_Theme->DefaultBitmapFont);
     rootPtr->OnExpanded([this, rp = rootPtr.get()]() { RootExpanded(rp); });
@@ -142,14 +142,12 @@ namespace sfui
   {
     auto it = std::find_if(begin(m_Roots), end(m_Roots), [&rootPtr](auto rPtr) { return ( rPtr.get() == rootPtr ); });
 
-    std::cout << "Root expanded\n";
-
     if (it != m_Roots.end()) {
 
       //get the new size of the root and tell all the roots below it to move down
       auto newsize = ( *it )->GetExpansionSize();
+      newsize.y += 3;
 
-      std::cout << "Moving others down by: (" << newsize.x << ", " << newsize.y << ")\n";
       it++;
       while (it != m_Roots.end()) {
         ( *it )->Move(Vec2i(0, newsize.y));
@@ -162,8 +160,6 @@ namespace sfui
   void WidgetTree::RootCollapsed(TreeRoot* rootPtr)
   {
     auto it = std::find_if(begin(m_Roots), end(m_Roots), [&rootPtr](auto rPtr) { return ( rPtr.get() == rootPtr ); });
-
-    std::cout << "Root collapsed\n";
 
     //Find all the widgets after it and tell them to move UP
     if (it != m_Roots.end()) {

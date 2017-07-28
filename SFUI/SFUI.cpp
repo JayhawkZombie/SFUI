@@ -53,12 +53,13 @@ int main(int argc, const char **argv)
 
   //theme->BitmapFonts.LoadFont("verdana", "Fonts/BitmapFonts/Images/verdana18.png", "Fonts/BitmapFonts/Data/verdana18.fnt", 18);
   theme->BitmapFonts.LoadFont("opensans", "Fonts/BitmapFonts/Images/osans14.png", "Fonts/BitmapFonts/Data/osans14.fnt", 14);
+  theme->BitmapFonts.LoadFont("sugo", "Fonts/BitmapFonts/Images/sugo16_light.png", "Fonts/BitmapFonts/Data/sugo16_light.fnt", 16);
 
   //theme->BitmapFonts.LoadFont("calibri", "Fonts/BitmapFonts/Images/cali14.png", "Fonts/BitmapFonts/Data/cali14.fnt", 14);
   //theme->BitmapFonts.LoadFont("calibri", "Fonts/BitmapFonts/Images/cali18.png", "Fonts/BitmapFonts/Data/cali18.fnt", 18);
   //theme->BitmapFonts.LoadFont("calibri", "Fonts/BitmapFonts/Images/cali24.png", "Fonts/BitmapFonts/Data/cali24.fnt", 24);
 
-  theme->DefaultBitmapFont = theme->BitmapFonts.GetFont("opensans", 14).value_or(nullptr);
+  theme->DefaultBitmapFont = theme->BitmapFonts.GetFont("sugo", 16).value_or(nullptr);
 
   /************************************************************************/
   /* Add MenuBar                                                          */
@@ -165,9 +166,10 @@ int main(int argc, const char **argv)
    *
    **/
   auto lEdit = theme->MakeLineEdit("opensans", 14);
-  lEdit->SetPosition({ 10, 15 });
+  lEdit->SetPosition({ 100, 15 });
   lEdit->SetSize({ 250, 20 });
   lEdit->SetBitmapFontTracking(0);
+  lEdit->SetLabel("LineEdit");
 
   auto sBox = theme->MakeSpinBox();
   sBox->SetSize({ 200, 30 });

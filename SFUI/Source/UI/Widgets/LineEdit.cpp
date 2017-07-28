@@ -106,6 +106,7 @@ namespace sfui
     Target.setView(view);
     Target.draw(m_Text);
     Target.setView(oldview);
+    RenderLabel(Target);
   }
 
   void LineEdit::SetConcealed(bool b)

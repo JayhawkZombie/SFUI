@@ -124,7 +124,8 @@ namespace sfui
     m_TreeSize.y += size.y;
     widget->SetParent(this);
     
-    Vec2i wPos = { m_Position.x + 15, m_Position.y + 15 + m_TreeSize.y };
+    Vec2i wPos = { m_Position.x + 7, m_Position.y + m_TreeSize.y };
+    m_TreeSize.y += 3;
     widget->SetPosition(wPos);
     widget->SetTopWindow(m_TopWindow);
     m_Widgets.push_back(widget);

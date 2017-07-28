@@ -1,5 +1,5 @@
-#ifndef SFUI_BUTTON_H
-#define SFUI_BUTTON_H
+#ifndef SFUI_WIDGETANIMATION_H
+#define SFUI_WIDGETANIMATION_H
 
 ////////////////////////////////////////////////////////////
 //
@@ -34,7 +34,7 @@
 ////////////////////////////////////////////////////////////
 // Internal Headers
 ////////////////////////////////////////////////////////////
-#include <SFUI/Include/UI/Widget.h>
+#include <SFUI/Include/Common.h>
 
 ////////////////////////////////////////////////////////////
 // Dependency Headers
@@ -45,53 +45,20 @@
 ////////////////////////////////////////////////////////////
 
 namespace sfui
-{  
-  
-  class Button : public Widget
+{
+
+  class WidgetAnimation
   {
   public:
-    WIDGET_DERIVED(Button, Widget);
+    using shared_ptr = std::shared_ptr<WidgetAnimation>;
+    
+    WidgetAnimation();
+    virtual ~WidgetAnimation();
 
-    Button(optional<Theme*> theme = optional<Theme*>(), optional<Widget::pointer> parent = optional<Widget*>(), uint32 events = Event::Default);
-    virtual ~Button() override = default;
 
-    static shared_ptr Create(optional<Theme*> theme = optional<Theme*>(), optional<Widget::pointer> parent = optional<Widget*>(), uint32 events = Event::Default);
-    static shared_ptr CreateIcon(texture_handle tex, IntRect texRect, optional<Theme*> theme = optional<Theme*>(), optional<Widget::pointer> parent = optional<Widget*>(), uint32 events = Event::Default);
 
-    bool IsPressed() const;
-    void OnClicked(boost::function<void()> func);
-
-    virtual void Update() override;
-    virtual void Render(sf::RenderTarget &Target) override;
-    virtual void SetText(const std::string &Text) override;
-
-    //bool HandleEvent(const sf::Event &event) override;
-
-  protected:
-    Signal<void()> m_ClickedSignal;
-
-    virtual void MouseMoved() override;
-    virtual void MouseEntered() override;
-    virtual void MouseLeft() override;
-    virtual void MousePressed(bool left, bool right) override;
-    virtual void MouseReleased(bool left, bool right) override;
-    virtual void Resized() override;
-
-    virtual void Hovered() override;
-    virtual void Unhovered();
-    virtual void Moved() override;
-    virtual void Pressed();
-    virtual void Released();
-    virtual void Clicked();
-
-  private:
-    texture_handle m_IconTexture;
-    sf::RectangleShape m_IconRect;
-
-    constexpr static sf::Uint8 m_BrightFactor = 15_ui8;
-    constexpr static sf::Uint8 m_DarkFactor = 15_ui8;
   };
-  
-}  
 
-#endif // SFUI_BUTTON_H
+}
+
+#endif // SFUI_WIDGETANIMATION_H

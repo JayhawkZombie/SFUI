@@ -169,6 +169,7 @@
     <ClInclude Include="Include\Common.h" />
     <ClInclude Include="Include\System\Sys.h" />
     <ClInclude Include="Include\System\Win.h" />
+    <ClInclude Include="Include\UI\Animation\WidgetAnimation.h" />
     <ClInclude Include="Include\UI\Components\BitmapFont.h" />
     <ClInclude Include="Include\UI\Components\BitmapFontReader.h" />
     <ClInclude Include="Include\UI\Components\BitmapFontStore.h" />
@@ -179,6 +180,7 @@
     <ClInclude Include="Include\UI\UI.h" />
     <ClInclude Include="Include\UI\Widgets\BitmapLabel.h" />
     <ClInclude Include="Include\UI\Widgets\Button.h" />
+    <ClInclude Include="Include\UI\Widgets\Canvas.h" />
     <ClInclude Include="Include\UI\Widgets\CheckBox.h" />
     <ClInclude Include="Include\UI\Widgets\CollapsingHeader.h" />
     <ClInclude Include="Include\UI\Widgets\ColorPicker.h" />
@@ -233,6 +235,7 @@
     <ClCompile Include="Source\UI\Widget.cpp" />
     <ClCompile Include="Source\UI\Widgets\BitmapLabel.cpp" />
     <ClCompile Include="Source\UI\Widgets\Button.cpp" />
+    <ClCompile Include="Source\UI\Widgets\Canvas.cpp" />
     <ClCompile Include="Source\UI\Widgets\CheckBox.cpp" />
     <ClCompile Include="Source\UI\Widgets\CollapsingHeader.cpp" />
     <ClCompile Include="Source\UI\Widgets\ColorBox.cpp" />

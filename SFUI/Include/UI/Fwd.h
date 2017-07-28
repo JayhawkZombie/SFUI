@@ -51,6 +51,7 @@ namespace sfui
   class ButtonList;
   class BitmapLabel;
 
+  class Canvas;
   class CheckBox;
   class ComboBox;
   class CollapsingHeader;

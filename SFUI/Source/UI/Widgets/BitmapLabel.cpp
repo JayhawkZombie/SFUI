@@ -121,6 +121,9 @@ namespace sfui
   void BitmapLabel::SetBMText(const std::string &Text)
   {
     m_BMText.setString(Text);
+    auto bds = m_BMText.getLocalBounds();
+    m_Size.x = cast_int(ceil(bds.width));
+    m_Size.y = cast_int(ceil(bds.height));
   }
 
   void BitmapLabel::SetBMTextColor(const Color &c)

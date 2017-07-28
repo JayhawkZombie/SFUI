@@ -280,6 +280,7 @@ namespace sfui
   {
     BitmapLabel::shared_ptr bmLabel = BitmapLabel::Create(this, parent);
     bmLabel->SetBMFont(DefaultBitmapFont);
+    bmLabel->SetBMText("");
     return bmLabel;
   }
 

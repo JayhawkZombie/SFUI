@@ -1,6 +1,3 @@
-#ifndef SFUI_BUTTON_H
-#define SFUI_BUTTON_H
-
 ////////////////////////////////////////////////////////////
 //
 // MIT License
@@ -34,7 +31,7 @@
 ////////////////////////////////////////////////////////////
 // Internal Headers
 ////////////////////////////////////////////////////////////
-#include <SFUI/Include/UI/Widget.h>
+#include <SFUI/Include/UI/Widgets/Canvas.h>
 
 ////////////////////////////////////////////////////////////
 // Dependency Headers
@@ -47,51 +44,71 @@
 namespace sfui
 {  
   
-  class Button : public Widget
+  Canvas::Canvas(optional<Theme *> theme, std::optional<pointer> parent)
+    : Widget(theme, parent)
   {
-  public:
-    WIDGET_DERIVED(Button, Widget);
 
-    Button(optional<Theme*> theme = optional<Theme*>(), optional<Widget::pointer> parent = optional<Widget*>(), uint32 events = Event::Default);
-    virtual ~Button() override = default;
+  }
 
-    static shared_ptr Create(optional<Theme*> theme = optional<Theme*>(), optional<Widget::pointer> parent = optional<Widget*>(), uint32 events = Event::Default);
-    static shared_ptr CreateIcon(texture_handle tex, IntRect texRect, optional<Theme*> theme = optional<Theme*>(), optional<Widget::pointer> parent = optional<Widget*>(), uint32 events = Event::Default);
+  Canvas::~Canvas()
+  {
 
-    bool IsPressed() const;
-    void OnClicked(boost::function<void()> func);
+  }
 
-    virtual void Update() override;
-    virtual void Render(sf::RenderTarget &Target) override;
-    virtual void SetText(const std::string &Text) override;
+  Canvas::shared_ptr Canvas::Create(optional<Theme *> theme, std::optional<pointer> parent)
+  {
+    return std::make_shared<Canvas>(theme, parent);
+  }
 
-    //bool HandleEvent(const sf::Event &event) override;
+  void Canvas::Clear()
+  {
+    m_RenderTexture.clear(m_ClearColor);
+  }
 
-  protected:
-    Signal<void()> m_ClickedSignal;
+  void Canvas::Render(sf::RenderTarget &Target)
+  {
+    
+  }
 
-    virtual void MouseMoved() override;
-    virtual void MouseEntered() override;
-    virtual void MouseLeft() override;
-    virtual void MousePressed(bool left, bool right) override;
-    virtual void MouseReleased(bool left, bool right) override;
-    virtual void Resized() override;
+  void Canvas::Display()
+  {
+    m_RenderTexture.display();
+  }
 
-    virtual void Hovered() override;
-    virtual void Unhovered();
-    virtual void Moved() override;
-    virtual void Pressed();
-    virtual void Released();
-    virtual void Clicked();
+  bool Canvas::HandleEvent(const sf::Event &event)
+  {
+    return Widget::HandleEvent(event);
+  }
 
-  private:
-    texture_handle m_IconTexture;
-    sf::RectangleShape m_IconRect;
+  void Canvas::SetPosition(const Vec2i &Position)
+  {
+    super::SetPosition(Position);
+    m_RenderRect.setPosition(Position);
+  }
 
-    constexpr static sf::Uint8 m_BrightFactor = 15_ui8;
-    constexpr static sf::Uint8 m_DarkFactor = 15_ui8;
-  };
-  
+  void Canvas::SetSize(const Vec2i &Size)
+  {
+    if (!m_RenderTexture.create(Size.x, Size.y)) {
+      std::cerr << "Unable to create render texture of size: (" << Size.x << ", " << Size.y << ")\n";
+    }
+    m_RenderRect.setSize(Size);
+  }
+
+  void Canvas::Move(const Vec2i &Delta)
+  {
+    super::Move(Delta);
+    m_RenderRect.move(Delta);
+  }
+
+  void Canvas::SetBorder(const Color &c, int32 Width)
+  {
+    m_RenderRect.setOutlineColor(c);
+    m_RenderRect.setOutlineThickness(cast_float(Width));
+  }
+
+  void Canvas::SetClearColor(const Color &c)
+  {
+    m_ClearColor = c;
+  }
+
 }  
-
-#endif // SFUI_BUTTON_H

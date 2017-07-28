@@ -1,5 +1,5 @@
-#ifndef SFUI_BUTTON_H
-#define SFUI_BUTTON_H
+#ifndef SFUI_CANVAS_H
+#define SFUI_CANVAS_H
 
 ////////////////////////////////////////////////////////////
 //
@@ -47,51 +47,30 @@
 namespace sfui
 {  
   
-  class Button : public Widget
+  class Canvas : public Widget
   {
   public:
-    WIDGET_DERIVED(Button, Widget);
+    WIDGET_DERIVED(Canvas, Widget);
+    Canvas(optional<Theme *> theme = {}, std::optional<pointer> parent = nullptr);
+    virtual ~Canvas() override;
 
-    Button(optional<Theme*> theme = optional<Theme*>(), optional<Widget::pointer> parent = optional<Widget*>(), uint32 events = Event::Default);
-    virtual ~Button() override = default;
-
-    static shared_ptr Create(optional<Theme*> theme = optional<Theme*>(), optional<Widget::pointer> parent = optional<Widget*>(), uint32 events = Event::Default);
-    static shared_ptr CreateIcon(texture_handle tex, IntRect texRect, optional<Theme*> theme = optional<Theme*>(), optional<Widget::pointer> parent = optional<Widget*>(), uint32 events = Event::Default);
-
-    bool IsPressed() const;
-    void OnClicked(boost::function<void()> func);
-
-    virtual void Update() override;
+    static shared_ptr Create(optional<Theme *> theme = { }, std::optional<pointer> parent = nullptr);
+    virtual void Clear();
     virtual void Render(sf::RenderTarget &Target) override;
-    virtual void SetText(const std::string &Text) override;
-
-    //bool HandleEvent(const sf::Event &event) override;
+    virtual void Display();
+    virtual bool HandleEvent(const sf::Event &event) override;
+    virtual void SetPosition(const Vec2i &Position) override;
+    virtual void SetSize(const Vec2i &Size) override;
+    virtual void Move(const Vec2i &Delta) override;
+    void SetBorder(const Color &c, int32 Width);
+    void SetClearColor(const Color &c);
 
   protected:
-    Signal<void()> m_ClickedSignal;
-
-    virtual void MouseMoved() override;
-    virtual void MouseEntered() override;
-    virtual void MouseLeft() override;
-    virtual void MousePressed(bool left, bool right) override;
-    virtual void MouseReleased(bool left, bool right) override;
-    virtual void Resized() override;
-
-    virtual void Hovered() override;
-    virtual void Unhovered();
-    virtual void Moved() override;
-    virtual void Pressed();
-    virtual void Released();
-    virtual void Clicked();
-
-  private:
-    texture_handle m_IconTexture;
-    sf::RectangleShape m_IconRect;
-
-    constexpr static sf::Uint8 m_BrightFactor = 15_ui8;
-    constexpr static sf::Uint8 m_DarkFactor = 15_ui8;
+    Color m_ClearColor = sf::Color::Black;
+    RenderTexture m_RenderTexture;
+    sf::RectangleShape m_RenderRect;
   };
   
 }  
 
-#endif // SFUI_BUTTON_H
+#endif // SFUI_CANVAS_H

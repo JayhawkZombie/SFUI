@@ -68,6 +68,7 @@
 #include <SFUI/Include/UI/Widgets/ComboBox.h>
 #include <SFUI/Include/UI/Widgets/LineEdit.h>
 #include <SFUI/Include/UI/Widgets/SpinBox.h>
+#include <SFUI/Include/UI/Widgets/Canvas.h>
 
 ////////////////////////////////////////////////////////////
 // Dependency Headers

@@ -129,7 +129,7 @@ namespace sfui
     Vec2i GetPosition() const;
     Vec2i GetSize() const;
 
-    void SetText(const std::string &Text);
+    virtual void SetText(const std::string &Text);
     void SetTextColor(const Color &c);
     void SetTextSize(uint32 Size);
     void SetTextAlignment(TextAlignment alignment);
@@ -208,6 +208,7 @@ namespace sfui
     virtual void Update();
     virtual void Render(sf::RenderTarget &Target);
     virtual void BaseUpdate();
+    virtual void SetLabel(const std::string &Text);
 
     virtual bool HandleEvent(const sf::Event &event);
     virtual void SetTopWindow(WidgetWindow *TopWindow);
@@ -287,9 +288,13 @@ namespace sfui
     bool m_IsLeftMouseDown = false;
     bool m_IsRightMouseDown = false;
     bool m_IsMouseOver = false;
+    bool m_HasLabel = false;
+
+    void RenderLabel(sf::RenderTarget &Target);
 
     Theme *m_Theme = nullptr;
     std::optional<TextView::shared_ptr> m_TextView;
+    _shared_ptr<BitmapLabel> m_Label;
     optional<Widget::shared_ptr> m_Tooltip;
 
     bool m_HasMouseFocus = false;

@@ -112,7 +112,7 @@ namespace sfui
   {
     super::SetSize(Size);
 
-    IntRect bds = { m_Position.x, m_Position.y, m_Size.x, m_Size.y };
+    IntRect bds = { m_Position.x, m_Position.y + m_Size.x, m_Size.x, m_Size.y - m_Size.x };
     m_Slider->SetDragBounds(bds);
 
     if (m_IsVertical) {

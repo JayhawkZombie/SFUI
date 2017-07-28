@@ -94,6 +94,16 @@ namespace sfui
     }
   }
 
+  void Button::SetText(const std::string &Text)
+  {
+    Widget::SetText(Text);
+
+    auto tSize = GetTextSize();
+    tSize.x = cast_int(floor(tSize.x * 1.2f));
+
+    //SetSize(tSize);
+  }
+
   void Button::MouseMoved()
   {
     super::MouseMoved();
@@ -160,6 +170,14 @@ namespace sfui
   {
     m_IconRect.setSize(m_Size);
     ( *m_TextView )->SetPosition(m_Position);
+
+    //auto tSize = GetTextSize();
+    //tSize.x = cast_int(floor(tSize.x * 1.2f));
+    //
+    //m_Size = tSize;
+    //m_Bounds.width = m_Size.x;
+    //m_Bounds.height = m_Size.y;
+    //m_BackgroundRect.setSize(m_Size);
   }
 
   void Button::Hovered()
@@ -176,6 +194,11 @@ namespace sfui
   {
     m_IconRect.setPosition(m_Position);
     ( *m_TextView )->SetPosition(m_Position);
+
+    //auto tSize = GetTextSize();
+    //tSize.x = cast_int(floor(tSize.x * 1.2f));
+
+    //SetSize(tSize);
   }
 
   void Button::Pressed()

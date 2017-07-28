@@ -35,6 +35,7 @@
 #include <SFUI/Include/UI/Theme.h>
 #include <SFUI/Include/UI/Widgets/PopupWindow.h>
 #include <SFUI/Include/UI/Widgets/WidgetWindow.h>
+#include <SFUI/Include/UI/Widgets/BitmapLabel.h>
 
 ////////////////////////////////////////////////////////////
 // Dependency Headers
@@ -97,6 +98,10 @@ namespace sfui
     m_Bounds.left = cast_float(m_Position.x);
     m_Bounds.top = cast_float(m_Position.y);
     if (m_TextView) ( *m_TextView )->SetPosition(m_Position);
+    if (m_Label) {
+      auto lSize = m_Label->GetSize();
+      m_Label->SetPosition({ m_Position.x - lSize.x - 10, m_Position.y + m_Size.y - 3 });
+    }
     Moved();
   }
 
@@ -107,6 +112,10 @@ namespace sfui
     m_Bounds.width = cast_float(m_Size.x);
     m_Bounds.height = cast_float(m_Size.y);
     if (m_TextView) ( *m_TextView )->SetPosition(m_Position);
+    if (m_Label) {
+      auto lSize = m_Label->GetSize();
+      m_Label->SetPosition({ m_Position.x - lSize.x - 10, m_Position.y + m_Size.y - 3 });
+    }
     Resized();
   }
 
@@ -117,6 +126,7 @@ namespace sfui
     m_Bounds.top += cast_float(Delta.y);
     m_Position += Delta;
     if (m_TextView) ( *m_TextView )->SetPosition(m_Position);
+    if (m_Label) m_Label->Move(Delta);
     Moved();
   }
 
@@ -706,6 +716,33 @@ namespace sfui
   void Widget::MoveChildToBack(pointer child)
   {
 
+  }
+
+  void Widget::RenderLabel(sf::RenderTarget &Target)
+  {
+    if (m_HasLabel && m_Label)
+      m_Label->Render(Target);
+  }
+
+  void Widget::SetLabel(const std::string &Text)
+  {
+    m_HasLabel = true;
+    if (!m_Label) {
+      m_Label = m_Theme->MakeBitmapLabel(this);
+    }
+
+    m_Label->SetBMText(Text);
+    auto lSize = m_Label->GetSize();
+    m_Label->SetPosition({ m_Position.x - lSize.x - 10, m_Position.y + m_Size.y - 3 });
+    //else {
+    //  auto oldLabelSize = m_Label->GetSize();
+    //  m_Label->SetBMText(Text);
+
+    //  auto lSize = m_Label->GetSize();
+    //  auto xDiff = lSize.x - oldLabelSize.x;
+
+    //  Move({ xDiff, 0 });
+    //}
   }
 
 }  
