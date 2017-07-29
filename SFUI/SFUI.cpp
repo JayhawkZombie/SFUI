@@ -98,7 +98,7 @@ int main(int argc, const char **argv)
 
   auto tList = theme->MakeTabList();
   tList->SetTabHeight(20);
-  tList->SetSize({ initData.WindowSize.x, 20 });
+  tList->SetDefaultSize({ initData.WindowSize.x, 20 });
   tList->SetPanelWidth(initData.WindowSize.x);
 
   auto buttonPanel = tList->AddTab("Buttons");
@@ -120,11 +120,11 @@ int main(int argc, const char **argv)
   sfui::AppMainWindow::AddWidget(tList);
   auto tstBtn = theme->MakeButton("TestButton");
   tstBtn->SetPosition({ 10, 20 });
-  tstBtn->SetSize({ 150, 25 });
+  tstBtn->SetDefaultSize({ 150, 25 });
 
   auto cBox = theme->MakeCheckBox("Test Check");
   cBox->SetPosition({ 10, 90 });
-  cBox->SetSize({ 100, 25 });
+  cBox->SetDefaultSize({ 100, 25 });
 
   buttonPanel->Add(tstBtn);
   buttonPanel->Add(cBox);
@@ -136,7 +136,7 @@ int main(int argc, const char **argv)
     *
     */
   auto vSlider = theme->MakeValueSlider();
-  vSlider->SetSize({ 15, 300 });
+  vSlider->SetDefaultSize({ 15, 300 });
   vSlider->SetPosition({ 10, 10 });
   vSlider->SetBarHeight(5);
   vSlider->SetBarWidth(21);
@@ -144,7 +144,7 @@ int main(int argc, const char **argv)
 
 
   auto hSlider = theme->MakeValueSlider();
-  hSlider->SetSize({ 300, 15 });
+  hSlider->SetDefaultSize({ 300, 15 });
   hSlider->SetPosition({ 45, 10 });
   hSlider->SetBarHeight(21);
   hSlider->SetBarWidth(5);
@@ -167,12 +167,12 @@ int main(int argc, const char **argv)
    **/
   auto lEdit = theme->MakeLineEdit("opensans", 14);
   lEdit->SetPosition({ 100, 15 });
-  lEdit->SetSize({ 250, 20 });
+  lEdit->SetDefaultSize({ 250, 20 });
   lEdit->SetBitmapFontTracking(0);
   lEdit->SetLabel("LineEdit");
 
   auto sBox = theme->MakeSpinBox();
-  sBox->SetSize({ 200, 30 });
+  sBox->SetDefaultSize({ 200, 30 });
   sBox->SetPosition({ 10, 40 });
   sBox->SetIsIntegral(false);
 
@@ -205,14 +205,14 @@ int main(int argc, const char **argv)
   auto lView = theme->MakeListView();
   lView->SetTopWindow(sfui::AppMainWindow::AppMainWidgets.get());
   lView->SetPosition({ 40, 40 });
-  lView->SetSize({ 100, 300 });
+  lView->SetDefaultSize({ 100, 300 });
 
   for (size_t i = 0; i < 50; ++i) {
     lView->AddItem("Item " + std::to_string(i));
   }
 
   auto combo = theme->MakeComboBox();
-  combo->SetSize({ 200, 20 });
+  combo->SetDefaultSize({ 200, 20 });
   combo->SetBoxSize({ 200, 300 });
   combo->SetPosition({ 150, 40 });
   combo->AddItem("Test item 1");
@@ -223,17 +223,17 @@ int main(int argc, const char **argv)
 
   auto wTree = theme->MakeTree();
   wTree->SetPosition({ 360, 40 });
-  wTree->SetSize({ 200, 300 });
+  wTree->SetDefaultSize({ 200, 300 });
 
   auto root1 = wTree->NewRoot();
   root1->SetText("Root 1");
 
   auto root1button = theme->MakeButton("Root 1 button");
-  root1button->SetSize({ 85, 15 });
+  root1button->SetDefaultSize({ 85, 15 });
   root1->Add(root1button);
 
   auto root1btn2 = theme->MakeButton("Root 1 btn2");
-  root1btn2->SetSize({ 85, 15 });
+  root1btn2->SetDefaultSize({ 85, 15 });
   root1->Add(root1btn2);
 
   auto root2 = wTree->NewRoot();
@@ -249,7 +249,7 @@ int main(int argc, const char **argv)
    */
   auto cPicker = theme->MakeColorPicker();
   cPicker->SetPosition({ 10, 10 });
-  cPicker->SetSize({ 250, 250 });
+  cPicker->SetDefaultSize({ 250, 250 });
   cPicker->OnColorAccepted([ ](auto color)
   {
     std::cout << "Color accepted: (" << color.r << ", " << color.g << ", " << color.b << ", " << color.a << ")\n";
@@ -263,12 +263,12 @@ int main(int argc, const char **argv)
    */
   
    auto pBar = theme->MakeProgressBar();
-   pBar->SetSize({ 300, 7 });
+   pBar->SetDefaultSize({ 300, 7 });
    pBar->SetPosition({ 10, 10 });
    
    auto progBtn = theme->MakeButton("Change Progress");
    progBtn->SetPosition({ 320, 10 });
-   progBtn->SetSize({ 150, 20 });
+   progBtn->SetDefaultSize({ 150, 20 });
    srand(0);
    progBtn->OnClicked(
      [progPtr = pBar.get()]()

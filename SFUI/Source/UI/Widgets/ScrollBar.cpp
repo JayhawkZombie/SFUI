@@ -51,7 +51,13 @@ namespace sfui
     : Widget(theme, parent)
   {
     m_UpButton = m_Theme->MakeButton("U");
+    m_UpButton->SetCanAnimateContract(false);
+    m_UpButton->SetCanAnimateExpand(false);
+
     m_DownButton = m_Theme->MakeButton("D");
+    m_DownButton->SetCanAnimateContract(false);
+    m_DownButton->SetCanAnimateExpand(false);
+
     m_Slider = m_Theme->MakeSlider(this);
     m_Slider->SetBackgroundColor(sf::Color(211, 217, 226));
     m_Slider->SetBorderColor(Color(125, 0, 160));
@@ -179,7 +185,7 @@ namespace sfui
     m_ScrollSize = cast_int(floor(( ( ( double )m_VisibleRange ) / ( ( double )m_TotalRange ) ) * m_ScrollRange));
 
     m_Slider->SetPosition({ m_Position.x + 1, m_Position.y + m_Size.x });
-    m_Slider->SetSize({ m_Size.x - 2, m_ScrollSize });
+    m_Slider->SetDefaultSize({ m_Size.x - 2, m_ScrollSize });
   }
 
   void ScrollBar::SliderMoved(const Vec2i &delta)

@@ -1,5 +1,5 @@
-#ifndef SFUI_BUTTON_H
-#define SFUI_BUTTON_H
+#ifndef SFUI_WIDGETANIMATOR_H
+#define SFUI_WIDGETANIMATOR_H
 
 ////////////////////////////////////////////////////////////
 //
@@ -34,64 +34,84 @@
 ////////////////////////////////////////////////////////////
 // Internal Headers
 ////////////////////////////////////////////////////////////
-#include <SFUI/Include/UI/Widget.h>
+#include <SFUI/Include/Utilities/CubicBezier.hpp>
+#include <SFUI/Include/Common.h>
 
 ////////////////////////////////////////////////////////////
 // Dependency Headers
 ////////////////////////////////////////////////////////////
+#include <Kairos.hpp>
 
 ////////////////////////////////////////////////////////////
 // Standard Library Headers
 ////////////////////////////////////////////////////////////
+#include <queue>
 
 namespace sfui
 {  
   
-  class Button : public Widget
+  enum class WidgetAnimation : uint32
+  {
+    SlideIn,
+    SlideOut,
+    FadeIn,
+    FadeOut,
+    Bounce,
+    Expand,
+    Contract,
+    Spin
+  };
+
+  enum class Easing
+  {
+    Standard,
+    Decelerate,
+    Accelerate,
+    EaseInOut
+  };
+
+  namespace EasingCurves
+  {  
+    const CubicBezier standard = CubicBezier(0.4f, 0.f, 0.2f, 1.f);
+    const CubicBezier deceleration = CubicBezier(0.f, 0.f, 0.2f, 1.f);
+    const CubicBezier acceleration = CubicBezier(0.4f, 0.f, 1.f, 1.f);
+    const CubicBezier easeInOut = CubicBezier(0.4f, 0.f, 0.6f, 1.f);
+  }  
+
+  struct Animation
+  {
+    CubicBezier curve;
+    WidgetAnimation animation;
+    kairos::Duration duration;
+    Vec2f initialValue;
+    Vec2f finalValue;
+  };
+
+  class Widget;
+
+  class WidgetAnimator
   {
   public:
-    WIDGET_DERIVED(Button, Widget);
+    WidgetAnimator(Widget *widget);
+    ~WidgetAnimator();
 
-    Button(optional<Theme*> theme = optional<Theme*>(), optional<Widget::pointer> parent = optional<Widget*>(), uint32 events = Event::Default);
-    virtual ~Button() override = default;
-
-    static shared_ptr Create(optional<Theme*> theme = optional<Theme*>(), optional<Widget::pointer> parent = optional<Widget*>(), uint32 events = Event::Default);
-    static shared_ptr CreateIcon(texture_handle tex, IntRect texRect, optional<Theme*> theme = optional<Theme*>(), optional<Widget::pointer> parent = optional<Widget*>(), uint32 events = Event::Default);
-
-    bool IsPressed() const;
-    void OnClicked(boost::function<void()> func);
-
-    virtual void Update() override;
-    virtual void Render(sf::RenderTarget &Target) override;
-    virtual void SetText(const std::string &Text) override;
-    virtual void SetDefaultSize(const Vec2i &Size) override;
-    //bool HandleEvent(const sf::Event &event) override;
-
-  protected:
-    Signal<void()> m_ClickedSignal;
-
-    virtual void MouseMoved() override;
-    virtual void MouseEntered() override;
-    virtual void MouseLeft() override;
-    virtual void MousePressed(bool left, bool right) override;
-    virtual void MouseReleased(bool left, bool right) override;
-    virtual void Resized() override;
-
-    virtual void Hovered() override;
-    virtual void Unhovered();
-    virtual void Moved() override;
-    virtual void Pressed();
-    virtual void Released();
-    virtual void Clicked();
-
+    void Animate(WidgetAnimation Anim, const Vec2f &initialVal, const Vec2f &finalVal, Easing curve, uint32 Duration);
+    void EndCurrent();
+    void RestartCurrent();
+    void Stop();
+    void Update();
+    
   private:
-    texture_handle m_IconTexture;
-    sf::RectangleShape m_IconRect;
+    void ApplyAnimation(float perc);
+    void DequeAnimation();
 
-    constexpr static sf::Uint8 m_BrightFactor = 15_ui8;
-    constexpr static sf::Uint8 m_DarkFactor = 15_ui8;
+    Widget *m_Widget = nullptr;
+    kairos::Duration m_Duration;
+    kairos::Timer m_Timer;
+    std::queue<Animation> m_AnimationQueue;
+    bool m_EndCurrent = false;
   };
-  
+
 }  
 
-#endif // SFUI_BUTTON_H
+#endif // SFUI_WIDGETANIMATOR_H

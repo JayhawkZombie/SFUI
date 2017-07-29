@@ -112,6 +112,9 @@ namespace sfui
   void Button::MouseEntered()
   {
     super::MouseEntered();
+    if (m_CanAnimateExpand) 
+      m_Animator.Animate(WidgetAnimation::Expand, m_Size, m_ExpandSize, Easing::EaseInOut, 150);
+
     if (m_IsLeftMouseDown) {
       Button::MousePressed(true, m_IsRightMouseDown);
     }
@@ -129,6 +132,8 @@ namespace sfui
   void Button::MouseLeft()
   {
     super::MouseLeft();
+    if (m_CanAnimateContract)
+      m_Animator.Animate(WidgetAnimation::Expand, m_Size, m_ContractSize, Easing::EaseInOut, 150);
 
     m_BackgroundRect.setFillColor(m_BGColor);
     Unhovered();
@@ -168,8 +173,10 @@ namespace sfui
 
   void Button::Resized()
   {
+    
     m_IconRect.setSize(m_Size);
     ( *m_TextView )->SetPosition(m_Position);
+    m_TextView.value()->RealignText();
 
     //auto tSize = GetTextSize();
     //tSize.x = cast_int(floor(tSize.x * 1.2f));
@@ -178,6 +185,13 @@ namespace sfui
     //m_Bounds.width = m_Size.x;
     //m_Bounds.height = m_Size.y;
     //m_BackgroundRect.setSize(m_Size);
+  }
+
+  void Button::SetDefaultSize(const Vec2i &Size)
+  {
+    m_ExpandSize = Size + Vec2i(5, 5);
+    m_ContractSize = Size;
+    SetSize(Size);
   }
 
   void Button::Hovered()

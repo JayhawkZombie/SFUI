@@ -60,6 +60,9 @@ namespace sfui
     void Check();
     void Uncheck();
 
+    virtual void SetDefaultSize(const Vec2i &Size) override;
+    virtual void SetExpandSize(const Vec2i &Size) override;
+
     virtual void OnChecked(boost::function<void()> func);
     virtual void Render(sf::RenderTarget &Target) override;
 

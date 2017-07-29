@@ -38,6 +38,7 @@
 #include <SFUI/Include/UI/Fwd.h>
 #include <SFUI/Include/UI/Components/TextView.h>
 #include <SFUI/Include/Utilities/DropShadow.h>
+#include <SFUI/Include/UI/Animation/WidgetAnimator.h>
 
 ////////////////////////////////////////////////////////////
 // Dependency Headers
@@ -124,6 +125,8 @@ namespace sfui
 
     virtual void SetPosition(const Vec2i &Position);
     virtual void SetSize(const Vec2i &Size);
+    virtual void SetDefaultSize(const Vec2i &Size);
+    virtual void SetExpandSize(const Vec2i &Size);
     virtual void Move(const Vec2i &Delta);
     void SetParent(pointer parent);
     Vec2i GetPosition() const;
@@ -219,6 +222,12 @@ namespace sfui
     virtual void StealKeyboardFocus(Widget *widget);
     virtual void ReturnKeyboardFocus(Widget *widget);
 
+    void SetCanAnimateExpand(bool can);
+    void SetCanAnimateContract(bool can);
+    void SetCanAnimateBounce(bool can);
+    void SetCanAnimateSlide(bool can);
+    void SetCanAnimateFade(bool can);
+
   protected:
     static Vec2i currentMousePosition;
     static Vec2i previousMousePositon;
@@ -290,6 +299,13 @@ namespace sfui
     bool m_IsMouseOver = false;
     bool m_HasLabel = false;
 
+    //Controlling animations
+    bool m_CanAnimateExpand = true;
+    bool m_CanAnimateContract = true;
+    bool m_CanAnimateSlide = true;
+    bool m_CanAnimateFade = true;
+    bool m_CanAnimateBounce = true;
+
     void RenderLabel(sf::RenderTarget &Target);
 
     Theme *m_Theme = nullptr;
@@ -301,13 +317,16 @@ namespace sfui
     bool m_HasKeyboardFocus = false;
 
     WidgetWindow *m_TopWindow = nullptr;
-
+    WidgetAnimator m_Animator;
     optional<pointer> m_ChildWithMouseFocus;
     optional<pointer> m_ChildWithKeyboardFocus;
 
     FloatRect m_Bounds = { 0.f, 0.f, 0.f, 0.f };
     Vec2i m_Position = { 0, 0 };
     Vec2i m_Size = { 0, 0 };
+    Vec2i m_ExpandSize = { 0, 0 };
+    Vec2i m_ContractSize = { 0, 0 };
+    Vec2i m_ExpansionDelta = { 0, 0 };
 
     PopupWindow* m_BlockingWindow = nullptr;
     optional<pointer> m_Parent = nullptr;

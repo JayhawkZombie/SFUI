@@ -216,19 +216,23 @@ namespace sfui
     int heightBy2 = static_cast< int >( std::floor(m_Size.y / 2.f) );
 
     m_LockButton->SetPosition({ m_Position.x + wLessHeight, m_Position.y });
-    m_LockButton->SetSize({ heightBy2, heightBy2 });
+    m_LockButton->SetDefaultSize({ heightBy2, heightBy2 });
+    m_LockButton->SetExpandSize({ heightBy2 + 4, heightBy2 + 4 });
 
     m_ResetButton->SetPosition({ m_Position.x + wLessHeight, m_Position.y + heightBy2 });
-    m_ResetButton->SetSize({ heightBy2, heightBy2 });
+    m_ResetButton->SetDefaultSize({ heightBy2, heightBy2 });
+    m_ResetButton->SetExpandSize({ heightBy2 + 4, heightBy2 + 4 });
 
     m_IncreaseButton->SetPosition({ m_Position.x + m_Size.x - heightBy2, m_Position.y });
-    m_IncreaseButton->SetSize({ heightBy2, heightBy2 });
+    m_IncreaseButton->SetDefaultSize({ heightBy2, heightBy2 });
+    m_IncreaseButton->SetExpandSize({ heightBy2 + 4, heightBy2 + 4 });
 
     m_DecreaseButton->SetPosition({ m_Position.x + m_Size.x - heightBy2, m_Position.y + heightBy2 });
-    m_DecreaseButton->SetSize({ heightBy2, heightBy2 });
+    m_DecreaseButton->SetDefaultSize({ heightBy2, heightBy2 });
+    m_DecreaseButton->SetExpandSize({ heightBy2 + 4, heightBy2 + 4 });
 
     m_ValueInput->SetPosition(m_Position);
-    m_ValueInput->SetSize({ wLessHeight, m_Size.y });
+    m_ValueInput->SetDefaultSize({ wLessHeight, m_Size.y });
   }
 
   void SpinBox::IncreaseButtonClicked()

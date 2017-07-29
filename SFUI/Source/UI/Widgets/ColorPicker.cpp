@@ -226,11 +226,11 @@ namespace sfui
 
     curHoriz = m_Position.x + _10PercWidth;
     m_CancelBtn->SetPosition({ curHoriz, curVert });
-    m_CancelBtn->SetSize({ _35PercWidth, 15 });
+    m_CancelBtn->SetDefaultSize({ _35PercWidth, 15 });
 
     curHoriz += _35PercWidth + _10PercWidth;
     m_OKBtn->SetPosition({ curHoriz, curVert });
-    m_OKBtn->SetSize({ _35PercWidth, 15 });
+    m_OKBtn->SetDefaultSize({ _35PercWidth, 15 });
   }
 
 }  

@@ -51,6 +51,7 @@ namespace sfui
   Widget::Widget(optional<Theme*> theme, optional<pointer> parent /*= nullptr*/, uint64 events /*= Event::Default*/)
     : m_Parent(parent), m_Theme(theme.value_or(nullptr))
     , m_TextView(TextView::Create(this, "", WIDGET_STYLE_COLOR_LIGHT_GREY, Body2, nullptr))
+    , m_Animator(this)
   {
     if (( events & Event::MouseMove ) != 0) { m_AcceptsMouseMove = true; }
     if (( events & Event::MouseExit ) != 0) { m_AcceptsMouseExit = true; }
@@ -117,6 +118,17 @@ namespace sfui
       m_Label->SetPosition({ m_Position.x - lSize.x - 10, m_Position.y + m_Size.y - 3 });
     }
     Resized();
+  }
+
+  void Widget::SetDefaultSize(const Vec2i &Size)
+  {
+    Widget::SetSize(Size);
+    m_ContractSize = Size;
+  }
+
+  void Widget::SetExpandSize(const Vec2i &Size)
+  {
+    m_ExpandSize = Size;
   }
 
   void Widget::Move(const Vec2i &Delta)
@@ -499,7 +511,7 @@ namespace sfui
       MouseLeft();
     }
       //HandleMouseMovedOff();
-
+    m_Animator.Update();
     Update();
   }
 
@@ -604,6 +616,31 @@ namespace sfui
   {
     if (m_Parent.value() != nullptr)
       m_Parent.value()->ReturnKeyboardFocus(widget);
+  }
+
+  void Widget::SetCanAnimateExpand(bool can)
+  {
+    m_CanAnimateExpand = can;
+  }
+
+  void Widget::SetCanAnimateContract(bool can)
+  {
+    m_CanAnimateContract = can;
+  }
+
+  void Widget::SetCanAnimateBounce(bool can)
+  {
+    m_CanAnimateBounce = can;
+  }
+
+  void Widget::SetCanAnimateSlide(bool can)
+  {
+    m_CanAnimateSlide = can;
+  }
+
+  void Widget::SetCanAnimateFade(bool can)
+  {
+    m_CanAnimateFade = can;
   }
 
   void Widget::MouseMoved()

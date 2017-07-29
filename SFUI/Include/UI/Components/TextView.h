@@ -130,8 +130,6 @@ namespace sfui
     Vec2i GetSize() const;
 
     virtual void Reposition();
-
-  protected:
     virtual void RealignText();
 
   private:

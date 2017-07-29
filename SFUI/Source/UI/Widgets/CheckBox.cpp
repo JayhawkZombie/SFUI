@@ -53,9 +53,12 @@ namespace sfui
     m_Texture->loadFromFile("iconmap_grey.png");
     m_CheckedRect = IntRect(153, 102, 50, 50);
     m_UncheckedRect = IntRect(612, 0, 50, 50);
-
+    
     m_CheckRect.setTexture(m_Texture.get());
     m_CheckRect.setTextureRect(m_UncheckedRect);
+
+    m_CanAnimateExpand = false;
+    m_CanAnimateContract = false;
   }
 
   sfui::CheckBox::shared_ptr CheckBox::Create(optional<Theme*> theme /*= optional<Theme*>()*/, optional<Widget*> parent /*= optional<Widget*>()*/)
@@ -81,6 +84,18 @@ namespace sfui
     m_CheckRect.setTextureRect(m_UncheckedRect);
     SetTextAlignment(TextAlignment::Left);
     m_IsChecked = false;
+  }
+
+  void CheckBox::SetDefaultSize(const Vec2i &Size)
+  {
+    m_ContractSize = Size;
+    m_ExpandSize = Size;
+    SetSize(Size);
+  }
+
+  void CheckBox::SetExpandSize(const Vec2i &Size)
+  {
+    //Ignore it. CheckBoxs don't expand or contract
   }
 
   void CheckBox::OnChecked(boost::function<void()> func)

@@ -48,39 +48,43 @@ class CubicBezier {
 public:
   CubicBezier( ) = default;
   ~CubicBezier( ) = default;
-  CubicBezier(Vec2f p0, Vec2f p1, Vec2f p2, Vec2f p3)
-    : m_P1(p1), m_P2(p2), m_P3(p3), m_P0(p0) { }
+  CubicBezier(float x1, float y1, float x2, float y2)
+    : m_X1(x1), m_Y1(y1), m_X2(x2), m_Y2(y2) { }
 
-  void Set(Vec2f p0, Vec2f p1, Vec2f p2, Vec2f p3)
+  void Set(float x1, float y1, float x2, float y2)
   {
-    m_P0 = p0;
-    m_P1 = p1;
-    m_P2 = p2;
-    m_P3 = p3;
+    m_X1 = x1;
+    m_X2 = x2;
+    m_Y1 = y1;
+    m_Y2 = y2;
   }
 
   Vec2f Compute(float t)
   {
-    Vec2f final = m_P0;
+    static Vec2f first = { 0.f, 0.f };
+    static Vec2f last = { 1.f, 1.f };
+    Vec2f p1 = { m_X1, m_Y1 };
+    Vec2f p2 = { m_X2, m_Y2 };
+
+    Vec2f point = first;
     float a = 1 - t;
     float b = a * a;
     float y = t * t;
 
     /* B(t) = (1 - t)^3P0 + 3(1 - t)^2 t*P1 + 3(1 - t) t^2*P2 + t^3*P3 */
 
-    final = b * a * m_P0;
-    final += 3 * b * t * m_P1;
-    final += 3 * a * y * m_P2;
-    final += y * t * m_P3;
+    point += 3 * b * t * p1;
+    point += 3 * a * y * p2;
+    point += y * t * last;
 
-    return final;
+    return point;
   }
 
 private:
-  Vec2f m_P0 = { 0, 0 };
-  Vec2f m_P1 = { 0, 0 };
-  Vec2f m_P2 = { 0, 0 };
-  Vec2f m_P3 = { 0, 0 };
+  float m_X1 = 0.f;
+  float m_Y1 = 0.f;
+  float m_X2 = 0.f;
+  float m_Y2 = 0.f;
 };
 
 #endif // SFUI_CUBICBEZIER_H

@@ -113,6 +113,7 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <PrecompiledHeaderFile />
       <AdditionalOptions>-D_SCL_SECURE_NO_WARNINGS %(AdditionalOptions)</AdditionalOptions>
+      <DisableSpecificWarnings>4267</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -221,6 +222,7 @@
     <ClInclude Include="Shaders\SeparableHoriz.glsl">
       <FileType>Text</FileType>
     </ClInclude>
+    <ClInclude Include="Include\UI\Animation\WidgetAnimator.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
@@ -228,6 +230,7 @@
     <ClCompile Include="Source\Application\AppMain.cpp" />
     <ClCompile Include="Source\Application\AppWindow.cpp" />
     <ClCompile Include="Source\Application\ConfirmDialog.cpp" />
+    <ClCompile Include="Source\UI\Animation\WidgetAnimator.cpp" />
     <ClCompile Include="Source\UI\Components\BitmapFont.cpp" />
     <ClCompile Include="Source\UI\Components\Colors.cpp" />
     <ClCompile Include="Source\UI\Components\MultilineTextView.cpp" />
