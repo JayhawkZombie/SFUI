@@ -309,6 +309,13 @@ namespace sfui
     return sBox;
   }
 
+  _shared_ptr<sfui::LoadingSpinner> Theme::MakeLoadingSpinner(optional<Widget*> parent /*= optional<Widget*>()*/)
+  {
+    LoadingSpinner::shared_ptr lSpinner = LoadingSpinner::Create(this, parent);
+    
+    return lSpinner;
+  }
+
   _shared_ptr<sfui::ProgressBar> Theme::MakeProgressBar(optional<Widget*> parent /*= optional<Widget*>()*/)
   {
     ProgressBar::shared_ptr pBar = ProgressBar::Create(this, parent);

@@ -1,5 +1,5 @@
-#ifndef SFUI_FWD_H
-#define SFUI_FWD_H
+#ifndef SFUI_LOADINGSPINNER_H
+#define SFUI_LOADINGSPINNER_H
 
 ////////////////////////////////////////////////////////////
 //
@@ -34,10 +34,12 @@
 ////////////////////////////////////////////////////////////
 // Internal Headers
 ////////////////////////////////////////////////////////////
+#include <SFUI/Include/UI/Widget.h>
 
 ////////////////////////////////////////////////////////////
 // Dependency Headers
 ////////////////////////////////////////////////////////////
+#include <Kairos.hpp>
 
 ////////////////////////////////////////////////////////////
 // Standard Library Headers
@@ -45,55 +47,38 @@
 
 namespace sfui
 {  
-  class Menu;
-  class Widget;
-  class Button;
-  class ButtonList;
-  class BitmapLabel;
-
-  class Canvas;
-  class CheckBox;
-  class ComboBox;
-  class CollapsingHeader;
-  class ColorBox;
-  class ColorPicker;
-
-  class Draggable;
-
-  class GenericContainer;
-
-  class ItemList;
-
-  class Label;
-  class LineEdit;
-  class LineItem;
-  class ListView;
-  class LoadingSpinner;
-
-  class MenuBar;
   
-  class ProgressBar;
-  class Popup;
-  class PopupWindow;
-  class Panel;
-  class PanelView;
+  class LoadingSpinner : public Widget
+  {
+  public:
+    WIDGET_DERIVED(LoadingSpinner, Widget);
+    LoadingSpinner(optional<Theme*> theme = {}, optional<Widget*> parent = nullptr);
+    virtual ~LoadingSpinner() override;
 
-  class RainbowStrip;
+    static shared_ptr Create(optional<Theme*> theme = { }, optional<Widget*> parent = nullptr);
 
-  class ScrollBar;
-  class Selectable;
-  class Slider;
-  class SpinBox;
+    virtual bool HandleEvent(const sf::Event &event) override;
+    virtual void Render(sf::RenderTarget &Target) override;
+    virtual void Update() override;
 
-  class Tab;
-  class TabList;
-  class TabWidget;
-  class TreeRoot;
+    virtual void SetPosition(const Vec2i &Position) override;
+    virtual void SetSize(const Vec2i &Size) override;
+    virtual void SetSpeed(int rate);
+    void SetFrameCount(uint32 count);
+    void LoadTexture(const std::string &File);
 
-  class ValueSlider;
+  protected:
+    void AdvanceFrame();
+    void GenerateFrames();
 
-  class WidgetTree;
-  class WidgetWindow;
+    uint32 m_FrameCount = 10;
+    kairos::Duration m_Speed = 10;
+    kairos::Timer m_AnimationTimer;
+    std::vector<IntRect> m_Frames;
+    size_t m_CurrentFrame = 0;
+    _shared_ptr<sf::Texture> m_SpinnerTexture = nullptr;
+  };
+  
 }  
 
-#endif // SFUI_FWD_H
+#endif // SFUI_LOADINGSPINNER_H

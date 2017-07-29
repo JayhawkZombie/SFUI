@@ -190,6 +190,7 @@
     <ClInclude Include="Include\UI\Widgets\ColorBox.h" />
     <ClInclude Include="Include\UI\Widgets\LineEdit.h" />
     <ClInclude Include="Include\UI\Widgets\ListView.h" />
+    <ClInclude Include="Include\UI\Widgets\LoadingSpinner.h" />
     <ClInclude Include="Include\UI\Widgets\Menu.h" />
     <ClInclude Include="Include\UI\Widgets\MenuBar.h" />
     <ClInclude Include="Include\UI\Widgets\Panel.h" />
@@ -246,6 +247,7 @@
     <ClCompile Include="Source\UI\Widgets\LineEdit.cpp" />
     <ClCompile Include="Source\UI\Widgets\LineItem.cpp" />
     <ClCompile Include="Source\UI\Widgets\ListView.cpp" />
+    <ClCompile Include="Source\UI\Widgets\LoadingSpinner.cpp" />
     <ClCompile Include="Source\UI\Widgets\Menu.cpp" />
     <ClCompile Include="Source\UI\Widgets\MenuBar.cpp" />
     <ClCompile Include="Source\UI\Widgets\Panel.cpp" />

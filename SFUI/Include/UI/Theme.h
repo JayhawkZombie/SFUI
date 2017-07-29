@@ -85,6 +85,7 @@ namespace sfui
     _shared_ptr<ColorPicker> MakeColorPicker(optional<Widget*> parent = optional<Widget*>());
     _shared_ptr<WidgetTree> MakeTree(optional<Widget*> parent = optional<Widget*>());
     _shared_ptr<SpinBox> MakeSpinBox(optional<Widget*> parent = optional<Widget*>());
+    _shared_ptr<LoadingSpinner> MakeLoadingSpinner(optional<Widget*> parent = optional<Widget*>());
     //_shared_ptr<ButtonWidget> MakeButton(const std::string &Text, const std::string &HText = "", const std::string &PText = "", UIWidget *parent = nullptr);
     //_shared_ptr<ButtonList> MakeButtonList(UIWidget *parent = nullptr);
     //_shared_ptr<ItemList> MakeItemList(UIWidget *parent = nullptr);

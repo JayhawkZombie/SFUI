@@ -69,6 +69,7 @@
 #include <SFUI/Include/UI/Widgets/LineEdit.h>
 #include <SFUI/Include/UI/Widgets/SpinBox.h>
 #include <SFUI/Include/UI/Widgets/Canvas.h>
+#include <SFUI/Include/UI/Widgets/LoadingSpinner.h>
 
 ////////////////////////////////////////////////////////////
 // Dependency Headers

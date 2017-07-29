@@ -278,8 +278,15 @@ int main(int argc, const char **argv)
    }
    );
 
+   auto lSpinner = theme->MakeLoadingSpinner();
+   lSpinner->SetPosition({ 10, 40 });
+   lSpinner->LoadTexture("../Images/WindowsLoadingHorizontal.png");
+   lSpinner->SetFrameCount(37);
+   lSpinner->SetSpeed(45);
+
    otherPanel->Add(pBar);
    otherPanel->Add(progBtn);
+   otherPanel->Add(lSpinner);
 
   int evntRet = 0;
   int updRet = 0;
