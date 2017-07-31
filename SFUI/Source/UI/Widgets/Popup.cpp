@@ -88,12 +88,7 @@ namespace sfui
   void Popup::InitDropShadow()
   {
     //m_DropShadow.SetImageSize(Vec2i(floor(1.25f * m_Size.x), floor(1.25f * m_Size.y)));
-    m_DropShadow.SetShadowSize(1.025f * m_Size);
-    m_DropShadow.SetShadowPosition(m_Position - 0.0125f * m_Size);
-    m_DropShadow.SetRadius(50);
-
-    m_DropShadow.Init();
-    m_DropShadow.DrawShadowSource(m_Size);
+    
   }
 
   void Popup::Update()

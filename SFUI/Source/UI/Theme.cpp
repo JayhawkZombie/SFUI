@@ -34,6 +34,7 @@
 #include <SFUI/Include/UI/Theme.h>
 #include <SFUI/Include/UI/UI.h>
 #include <SFUi/Include/UI/Components/TextView.h>
+#include <SFUI/Include/Application/AppLogger.h>
 
 ////////////////////////////////////////////////////////////
 // Dependency Headers
@@ -53,6 +54,7 @@ namespace sfui
 
   _shared_ptr<sfui::Button> Theme::MakeButton(const std::string &Text, optional<Widget*> parent)
   {
+    APP_LOG_WIDGET_CONSTRUCTION(Button);
     Button::shared_ptr btn = std::make_shared<Button>(this, parent);
     btn->SetBackgroundColor(WidgetBackgroundColor);
     btn->SetBorderColor(WidgetOutlineColor);
@@ -69,6 +71,7 @@ namespace sfui
 
   _shared_ptr<sfui::Button> Theme::MakeButton(const std::string &Text, uint32 textSize, optional<Widget*> parent /*= optional<Widget*>()*/)
   {
+    APP_LOG_WIDGET_CONSTRUCTION(Button);
     Button::shared_ptr btn = std::make_shared<Button>(this, parent);
     btn->SetBackgroundColor(WidgetBackgroundColor);
     btn->SetBorderColor(WidgetOutlineColor);
@@ -85,6 +88,7 @@ namespace sfui
 
   _shared_ptr<sfui::Button> Theme::MakeIconButton(texture_handle tex, IntRect iconRect, optional<Widget*> parent /*= optional<Widget*>()*/)
   {
+    APP_LOG_WIDGET_CONSTRUCTION(Button);
     Button::shared_ptr btn = Button::CreateIcon(tex, iconRect, this, parent);
     btn->SetBackgroundColor(WidgetBackgroundColor);
     return btn;
@@ -92,6 +96,7 @@ namespace sfui
 
   _shared_ptr<sfui::Selectable> Theme::MakeSelectableButton(const std::string &Text, optional<Widget*> parent /*= optional<Widget*>()*/)
   {
+    APP_LOG_WIDGET_CONSTRUCTION(Selectable);
     Selectable::shared_ptr sel = Selectable::Create(this, parent);
     sel->SetBackgroundColor(WidgetBackgroundColor);
     sel->SetBorderColor(WidgetOutlineColor);
@@ -108,6 +113,7 @@ namespace sfui
 
   _shared_ptr<sfui::Tab> Theme::MakeTab(TabList* list, const std::string &Text)
   {
+    APP_LOG_WIDGET_CONSTRUCTION(Tab);
     Tab::shared_ptr tPtr = Tab::Create(Text, list, this);
     tPtr->SetBackgroundColor(WidgetBackgroundColor);
     tPtr->SetBorderColor(WidgetOutlineColor);
@@ -124,6 +130,7 @@ namespace sfui
 
   _shared_ptr<sfui::Panel> Theme::MakePanel(optional<Widget*> parent /*= optional<Widget*>()*/)
   {
+    APP_LOG_WIDGET_CONSTRUCTION(Panel);
     Panel::shared_ptr pPtr = Panel::Create(this, parent);
     pPtr->SetBackgroundColor(WidgetBackgroundColor);
     pPtr->SetBorderWidth(WidgetOutlineWidth);
@@ -133,6 +140,7 @@ namespace sfui
 
   _shared_ptr<sfui::TabList> Theme::MakeTabList(optional<Widget*> parent /*= optional<Widget*>()*/)
   {
+    APP_LOG_WIDGET_CONSTRUCTION(TabList);
     TabList::shared_ptr tList = TabList::Create(parent, this);
     tList->SetBackgroundColor(WidgetBackgroundColor);
     tList->SetBorderColor(WidgetOutlineColor);
@@ -143,6 +151,7 @@ namespace sfui
 
   _shared_ptr<sfui::Popup> Theme::MakePopup(WidgetWindow* stealFocus)
   {
+    APP_LOG_WIDGET_CONSTRUCTION(Popup);
     Popup::shared_ptr pPtr = Popup::Create(stealFocus, this);
     pPtr->SetBackgroundColor(WidgetBackgroundColor);
     pPtr->SetBorderColor(WidgetOutlineColor);
@@ -152,6 +161,7 @@ namespace sfui
 
   _shared_ptr<sfui::ScrollBar> Theme::MakeScrollBar(optional<Widget*> parent /*= optional<Widget*>()*/)
   {
+    APP_LOG_WIDGET_CONSTRUCTION(ScrollBar);
     ScrollBar::shared_ptr sBar = ScrollBar::Create(this, parent);
     if (parent) {
       sBar->m_TopWindow = ( *parent )->m_TopWindow;
@@ -164,6 +174,7 @@ namespace sfui
 
   _shared_ptr<sfui::Slider> Theme::MakeSlider(optional<Widget*> parent /*= optional<Widget*>()*/)
   {
+    APP_LOG_WIDGET_CONSTRUCTION(Slider);
     Slider::shared_ptr slid = Slider::Create(this, parent);
     slid->SetBackgroundColor(WidgetBackgroundColor);
     slid->SetBorderColor(WidgetOutlineColor);
@@ -173,6 +184,7 @@ namespace sfui
 
   _shared_ptr<sfui::LineItem> Theme::MakeLineItem(optional<Widget*> parent /*= optional<Widget*>()*/)
   {
+    APP_LOG_WIDGET_CONSTRUCTION(LineItem);
     LineItem::shared_ptr item = LineItem::Create(this, parent);
     Color tColor = WIDGET_STYLE_COLOR_LIGHT_GREY;
     tColor.a = TEXT_OPACITY_HIGH_CONTRAST_SMALL_TEXT;
@@ -187,6 +199,7 @@ namespace sfui
 
   _shared_ptr<sfui::MenuBar> Theme::MakeMenuBar(WidgetWindow* WWindow)
   {
+    APP_LOG_WIDGET_CONSTRUCTION(MenuBar);
     MenuBar::shared_ptr mPtr = MenuBar::Create(WWindow, this);
     mPtr->SetBackgroundColor(WidgetBackgroundColor);
     mPtr->SetBorderColor(WidgetOutlineColor);
@@ -198,6 +211,7 @@ namespace sfui
 
   _shared_ptr<sfui::ListView> Theme::MakeListView(optional<Widget*> parent /*= optional<Widget*>()*/)
   {
+    APP_LOG_WIDGET_CONSTRUCTION(ListView);
     ListView::shared_ptr lView = ListView::Create(this, parent);
     lView->SetBackgroundColor(WidgetBackgroundColor);
     return lView;
@@ -205,6 +219,7 @@ namespace sfui
 
   _shared_ptr<sfui::CollapsingHeader> Theme::MakeCollapsingHeader(const std::string &Text, optional<Widget*> parent /*= optional<Widget*>()*/)
   {
+    APP_LOG_WIDGET_CONSTRUCTION(CollapsingHeader);
     CollapsingHeader::shared_ptr cHeader = CollapsingHeader::Create(this, parent);
     cHeader->SetBackgroundColor(WidgetBackgroundColor);
     Color tColor = WIDGET_STYLE_COLOR_LIGHT_GREY;
@@ -219,6 +234,7 @@ namespace sfui
 
   _shared_ptr<sfui::ComboBox> Theme::MakeComboBox(optional<Widget*> parent /*= optional<Widget*>()*/)
   {
+    APP_LOG_WIDGET_CONSTRUCTION(ComboBox);
     ComboBox::shared_ptr cBox = ComboBox::Create(this, parent);
     cBox->SetBackgroundColor(WidgetBackgroundColor);
     cBox->SetBorderColor(WidgetOutlineColor);
@@ -235,6 +251,7 @@ namespace sfui
 
   _shared_ptr<sfui::LineEdit> Theme::MakeLineEdit(const std::string &fontfamily, uint32 fontsize, optional<Widget*> parent /*= optional<Widget*>()*/)
   {
+    APP_LOG_WIDGET_CONSTRUCTION(LineEdit);
     LineEdit::shared_ptr lEdit = LineEdit::Create(this, parent);
 
     auto fnt = BitmapFonts.GetFont(fontfamily, fontsize);
@@ -255,6 +272,7 @@ namespace sfui
 
   _shared_ptr<sfui::ValueSlider> Theme::MakeValueSlider(optional<Widget*> parent /*= optional<Widget*>()*/)
   {
+    APP_LOG_WIDGET_CONSTRUCTION(ValueSlider);
     ValueSlider::shared_ptr vSlider = ValueSlider::Create(this, parent);
     vSlider->SetBackgroundColor(WidgetBackgroundColor);
     vSlider->SetBorderColor(WidgetOutlineColor);
@@ -264,12 +282,14 @@ namespace sfui
 
   _shared_ptr<sfui::RainbowStrip> Theme::MakeRainbowStrip(optional<Widget*> parent /*= optional<Widget*>()*/)
   {
+    APP_LOG_WIDGET_CONSTRUCTION(RainbowStrip);
     RainbowStrip::shared_ptr rStrip = RainbowStrip::Create(this, parent);
     return rStrip;
   }
 
   _shared_ptr<sfui::ColorBox> Theme::MakeColorBox(optional<Widget*> parent /*= optional<Widget*>()*/)
   {
+    APP_LOG_WIDGET_CONSTRUCTION(ColorBox);
     ColorBox::shared_ptr cBox = ColorBox::Create(this, parent);
     cBox->SetBorderColor(WidgetOutlineColor);
     cBox->SetBorderWidth(1);
@@ -278,6 +298,7 @@ namespace sfui
 
   _shared_ptr<sfui::BitmapLabel> Theme::MakeBitmapLabel(optional<Widget*> parent /*= optional<Widget*>()*/)
   {
+    APP_LOG_WIDGET_CONSTRUCTION(BitmapLabel);
     BitmapLabel::shared_ptr bmLabel = BitmapLabel::Create(this, parent);
     bmLabel->SetBMFont(DefaultBitmapFont);
     bmLabel->SetBMText("");
@@ -286,6 +307,7 @@ namespace sfui
 
   _shared_ptr<sfui::ColorPicker> Theme::MakeColorPicker(optional<Widget*> parent /*= optional<Widget*>()*/)
   {
+    APP_LOG_WIDGET_CONSTRUCTION(ColorPicker);
     ColorPicker::shared_ptr cPicker = ColorPicker::Create(this, parent);
     cPicker->SetBackgroundColor(WidgetBackgroundColor);
     cPicker->SetBorderColor(WidgetOutlineColor);
@@ -295,6 +317,7 @@ namespace sfui
 
   _shared_ptr<sfui::WidgetTree> Theme::MakeTree(optional<Widget*> parent /*= optional<Widget*>()*/)
   {
+    APP_LOG_WIDGET_CONSTRUCTION(WidgetTree);
     WidgetTree::shared_ptr wTree = WidgetTree::Create(this, parent);
     wTree->SetBackgroundColor(WidgetBackgroundColor);
     wTree->SetBorderColor(WidgetOutlineColor);
@@ -304,6 +327,7 @@ namespace sfui
 
   _shared_ptr<sfui::SpinBox> Theme::MakeSpinBox(optional<Widget*> parent /*= optional<Widget*>()*/)
   {
+    APP_LOG_WIDGET_CONSTRUCTION(SpinBox);
     SpinBox::shared_ptr sBox = SpinBox::Create(this, parent);
     sBox->SetBackgroundColor(WidgetBackgroundColor);
     return sBox;
@@ -311,6 +335,7 @@ namespace sfui
 
   _shared_ptr<sfui::LoadingSpinner> Theme::MakeLoadingSpinner(optional<Widget*> parent /*= optional<Widget*>()*/)
   {
+    APP_LOG_WIDGET_CONSTRUCTION(LoadingSpinner);
     LoadingSpinner::shared_ptr lSpinner = LoadingSpinner::Create(this, parent);
     
     return lSpinner;
@@ -318,6 +343,7 @@ namespace sfui
 
   _shared_ptr<sfui::ProgressBar> Theme::MakeProgressBar(optional<Widget*> parent /*= optional<Widget*>()*/)
   {
+    APP_LOG_WIDGET_CONSTRUCTION(ProgressBar);
     ProgressBar::shared_ptr pBar = ProgressBar::Create(this, parent);
     pBar->SetBackgroundColor(WidgetBackgroundColor);
     pBar->SetBorderColor(WidgetOutlineColor);
@@ -334,6 +360,7 @@ namespace sfui
 
   _shared_ptr<sfui::CheckBox> Theme::MakeCheckBox(const std::string &Text, optional<Widget*> parent /*= optional<Widget*>()*/)
   {
+    APP_LOG_WIDGET_CONSTRUCTION(CheckBox);
     CheckBox::shared_ptr cBox = CheckBox::Create(this, parent);
     cBox->SetBackgroundColor(WidgetBackgroundColor);
     cBox->SetBorderColor(WidgetOutlineColor);
@@ -350,6 +377,7 @@ namespace sfui
 
   _shared_ptr<Menu> Theme::MakeMenu(optional<Widget*> parent /*= optional<Widget*>()*/)
   {
+    APP_LOG_WIDGET_CONSTRUCTION(Menu);
     Menu::shared_ptr menu = Menu::Create(this, parent);
     menu->SetBackgroundColor(WidgetBackgroundColor);
     menu->SetBorderColor(WidgetOutlineColor);

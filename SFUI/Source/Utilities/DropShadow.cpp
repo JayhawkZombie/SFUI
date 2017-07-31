@@ -46,84 +46,233 @@ namespace sfui
   
   DropShadow::DropShadow()
   {
-    if (!m_BlurShader.loadFromFile("Shaders/GaussBlur.glsl", sf::Shader::Fragment)) {
-      std::cerr << "Unable to load blur shader\n";
-    }
 
-    if (!m_BlackShader.loadFromFile("Shaders/DrawBlack.glsl", sf::Shader::Fragment)) {
-      std::cerr << "Unable to load blackening shader\n";
-    }
-    m_HorizShader.loadFromFile("Shaders/GaussHoriz.glsl", sf::Shader::Fragment);
-    m_VertShader.loadFromFile("Shaders/GaussVert.glsl", sf::Shader::Fragment);
   }
 
-  void DropShadow::SetShadowSize(const sf::Vector2f &size)
+  DropShadow::~DropShadow()
   {
-    m_ShadowSize = size;
-    m_BlurringRect.setSize(size);
-    m_ShadowRect.setSize(size);
+
   }
 
-  void DropShadow::SetRadius(uint32 Radius)
+  void DropShadow::SetRadius(float Radius)
   {
     m_Radius = Radius;
   }
 
-  void DropShadow::Init()
+  void DropShadow::SetCasterSize(const Vec2f &Size)
   {
-    if (!m_BlurTexture.create(( uint32 )( m_ShadowSize.x + 2 * m_Radius ), ( uint32 )( m_ShadowSize.y + 2 * m_Radius )) ||
-        !m_InterimTexture.create(( uint32 )m_ShadowSize.x + 2 * m_Radius, ( uint32 )( m_ShadowSize.y + 2 * m_Radius )) ||
-        !m_HorizTexture.create(( uint32 )m_ShadowSize.x + 2 * m_Radius, ( uint32 )( m_ShadowSize.y + 2 * m_Radius ))) {
-      std::cerr << "Unable to set render texture size to (" << m_ShadowSize.x << ", " << m_ShadowSize.y << ")\n";
-    }
-    m_BlurringRect.setSize(m_ShadowSize + 2.f * Vec2f(m_Radius, m_Radius));
-    m_ShadowRect.setPosition(m_ShadowPos - Vec2f(m_Radius, m_Radius));
-    m_ShadowRect.setSize(m_ShadowSize + 2.f * Vec2f(m_Radius, m_Radius));
+    m_CasterSize = Size;
   }
 
-  void DropShadow::SetShadowPosition(const sf::Vector2f &position)
+  void DropShadow::SetCasterPosition(const Vec2f &Position)
   {
-    m_ShadowPos = position;
+    m_CasterPosition = Position;
   }
 
-  void DropShadow::DrawShadowSource(const sf::Vector2f &Size)
+  void DropShadow::SetOffset(const Vec2f &Offset)
   {
-    m_InterimTexture.setActive(true);
-
-    m_InterimTexture.clear(sf::Color::Transparent);
-    sf::RectangleShape srcRect;
-    srcRect.setSize(m_ShadowSize);
-
-    srcRect.setPosition(Vec2f(m_Radius, m_Radius));
-
-    //Draw it in all black
-    m_InterimTexture.draw(srcRect, &m_BlackShader);
-
-    m_InterimTexture.display();
-
-    ////Blur it
-    m_HorizTexture.clear(sf::Color::Transparent);
-    m_BlurringRect.setTexture(&m_InterimTexture.getTexture());
-
-    m_HorizShader.setUniform("image", m_InterimTexture.getTexture());
-    m_HorizShader.setUniform("imagesize", sf::Glsl::Vec2(m_InterimTexture.getSize()));
-    m_HorizTexture.draw(m_BlurringRect, &m_HorizShader);
-    //m_HorizTexture.draw(m_BlurringRect, &m_HorizShader);
-    m_HorizTexture.display();
-
-    m_BlurTexture.clear(sf::Color::Transparent);
-    m_VertShader.setUniform("image", m_HorizTexture.getTexture());
-    m_VertShader.setUniform("imagesize", sf::Glsl::Vec2(m_InterimTexture.getSize()));
-    m_BlurTexture.draw(m_BlurringRect, &m_VertShader);
-    //m_BlurTexture.draw(m_BlurringRect, &m_VertShader);
-    m_BlurTexture.display();
-
-    m_ShadowRect.setTexture(&m_BlurTexture.getTexture());
+    m_ShadowOffset = Offset;
   }
 
   void DropShadow::Render(sf::RenderTarget &Target)
   {
-    Target.draw(m_ShadowRect);
+    m_DrawingRect.setPosition(m_CasterPosition + m_ShadowOffset - Vec2f(m_Radius, m_Radius));
+    
+    Target.draw(m_DrawingRect);
   }
+
+  void DropShadow::Create()
+  {
+    Vec2f SizeCasterPlusShadow = m_CasterSize + Vec2f(4.f * m_Radius, 4.f * m_Radius);
+    Vec2u CeilSize = Vec2u(
+      static_cast< unsigned int >( ceil(SizeCasterPlusShadow.x) ),
+      static_cast< unsigned int >( ceil(SizeCasterPlusShadow.y) )
+    );
+
+    m_ShadowTexture.reset(new sf::RenderTexture);
+    m_HorizontalBlurTexture.reset(new sf::RenderTexture);
+    m_VerticalBlurTexture.reset(new sf::RenderTexture);
+
+    //First create the shadow texture
+    
+    if (m_ShadowTexture->create(CeilSize.x, CeilSize.y)) { std::cout << "Created shadowTexture\n"; } else { std::cout << "Failed to create shadow texture\n"; }
+    if (m_HorizontalBlurTexture->create(CeilSize.x, CeilSize.y)) { std::cout << "Created horizontalBlurTexture\n"; } else { std::cout << "Failed to create horizontal blur texture\n"; }
+    if (m_VerticalBlurTexture->create(CeilSize.x, CeilSize.y)) { std::cout << "Created verticalBlurTexture\n"; } else { std::cout << "Failed to create vertical blur texture\n"; }
+
+    //Set size of casting object and offset it by the radius
+    m_CasterRect.setSize({ 50.f, 50.f });
+    m_CasterRect.setPosition(Vec2f(2.f * m_Radius, 2.f * m_Radius));
+    m_CasterRect.setFillColor(sf::Color(0, 0, 0));
+
+    m_ShadowTexture->clear(sf::Color::Transparent);
+    m_ShadowTexture->draw(m_CasterRect);
+    m_ShadowTexture->display();
+    //m_DrawingRect.setTexture(&m_ShadowTexture->getTexture());
+    m_DrawingRect.setPosition({ 0.f, 0.f });
+    m_DrawingRect.setSize(static_cast< sf::Vector2f >( m_ShadowTexture->getSize() ));
+
+    //Now blur it
+    auto tSize = m_ShadowTexture->getSize();
+
+    //Horizontally first
+    m_HorizontalBlurShader->setUniform("image", m_ShadowTexture->getTexture());
+    m_HorizontalBlurShader->setUniform("imagesize", sf::Glsl::Vec2(m_ShadowTexture->getSize()));
+    m_HorizontalBlurTexture->clear(sf::Color::Transparent);
+    m_HorizontalBlurTexture->draw(m_DrawingRect, m_HorizontalBlurShader);
+    m_HorizontalBlurTexture->display();
+    //m_HorizontalBlurTexture->setSmooth(true);
+    //m_DrawingRect.setTexture(&m_HorizontalBlurTexture->getTexture());
+
+    //Then vertically
+    m_VerticalBlurShader->setUniform("image", m_HorizontalBlurTexture->getTexture());
+    m_VerticalBlurShader->setUniform("imagesize", sf::Glsl::Vec2(m_ShadowTexture->getSize()));
+    m_VerticalBlurTexture->clear(sf::Color::Transparent);
+    m_VerticalBlurTexture->draw(m_DrawingRect, m_VerticalBlurShader);
+    m_VerticalBlurTexture->display();
+    //m_VerticalBlurTexture->setSmooth(true);
+    m_DrawingRect.setTexture(&m_VerticalBlurTexture->getTexture());
+
+    static bool saved = false;
+    if (!saved) {
+      saved = true;
+      m_ShadowTexture->getTexture().copyToImage().saveToFile("shadowTexture.png");
+      m_HorizontalBlurTexture->getTexture().copyToImage().saveToFile("horizBlurTexture.png");
+      m_VerticalBlurTexture->getTexture().copyToImage().saveToFile("vertBlurTexture.png");
+    }
+  }
+
+  void DropShadow::LoadShaders()
+  {
+    ExecuteOnlyOnce;
+    m_BlackingOpacityShader = new sf::Shader();
+    m_HorizontalBlurShader = new sf::Shader();
+    m_VerticalBlurShader = new sf::Shader();
+
+    //m_BlackingOpacityShader->loadFromMemory(R"( #version 130                              
+    //                                            void main()                               
+    //                                            {                                         
+    //                                               vec4 color = gl_Color;                 
+    //                                               gl_FragColor = vec4(0, 0, 0, color.w); 
+    //                                            }
+    //                                         )"
+    //                                       , sf::Shader::Fragment);
+
+
+    m_HorizontalBlurShader->loadFromMemory(
+      R"( // From https://www.shadertoy.com/view/Mtl3Rj
+
+          #version 130
+
+          uniform sampler2D image;
+          uniform vec2 imagesize;
+
+          float Scurve(float x) {
+
+            x = x * 2.0 - 1.0;
+            return ( -x * abs(x) * 0.5 + x + 0.5 );
+          }
+
+          vec4 blurH(sampler2D source, vec2 size, vec2 uv, float radius) {
+
+            if (radius >= 1.0) {
+  
+              vec4 a = vec4(0.0);
+              vec4 c = vec4(0.0);
+
+              float width = 1.0 / size.x;
+              float divisor = 0.0;
+              float weight = 0.0;
+              float radiusMult = 1.0 / radius;
+
+              for (float x = -30.0; x <= 30.0; x++) {
+    
+                a = texture2D(source, uv + vec2(x * width, 0.0));
+                weight = Scurve(1.0 - (abs(x) * radiusMult));
+                c += a * weight;
+
+                divisor += weight;
+              }
+    
+              return vec4(c.r / divisor, c.g / divisor, c.b / divisor, c.a / divisor);
+            }
+
+            return texture2D(source, uv);
+          }
+
+          void main()
+          {
+            vec2 uv = gl_FragCoord.xy / imagesize.xy;
+            gl_FragColor = blurH(image, imagesize.xy, uv, 20.0);
+          }
+      )"
+      , sf::Shader::Fragment
+    );
+
+    m_VerticalBlurShader->loadFromMemory(
+      R"( // From https://www.shadertoy.com/view/Mtl3Rj
+
+          #version 130
+
+          uniform sampler2D image;
+          uniform vec2 imagesize;
+
+          float SCurve(float x) {
+
+            x = x * 2.0 - 1.0;
+            return ( -x * abs(x) * 0.5 + x + 0.5 );
+          }
+
+          vec4 BlurV (sampler2D source, vec2 size, vec2 uv, float radius) {
+
+	          if (radius >= 1.0)
+	          {
+		          vec4 A = vec4(0.0); 
+		          vec4 C = vec4(0.0); 
+
+		          float height = 1.0 / size.y;
+
+		          float divisor = 0.0; 
+                  float weight = 0.0;
+        
+                  float radiusMultiplier = 1.0 / radius;
+
+                  for (float y = -30.0; y <= 30.0; y++)
+		          {
+			          A = texture(source, uv + vec2(0.0, y * height));
+            	
+            	          weight = SCurve(1.0 - (abs(y) * radiusMultiplier)); 
+            
+            	          C += A * weight; 
+            
+			          divisor += weight; 
+		          }
+
+		          return vec4(C.r / divisor, C.g / divisor, C.b / divisor, C.a / divisor);
+	          }
+
+	          return texture(source, uv);
+          }
+
+          void main()
+          {
+            vec2 uv = gl_FragCoord.xy / imagesize.xy;
+            gl_FragColor = BlurV(image, imagesize.xy, uv, 20.0);
+          }
+        )"
+      , sf::Shader::Fragment );
+  }
+
+  void DropShadow::CleanupShaders()
+  {
+    delete m_BlackingOpacityShader;
+    delete m_HorizontalBlurShader;
+    delete m_VerticalBlurShader;
+  }
+
+  sf::Shader* DropShadow::m_BlackingOpacityShader = nullptr;
+
+  sf::Shader* DropShadow::m_VerticalBlurShader = nullptr;
+
+  sf::Shader* DropShadow::m_HorizontalBlurShader = nullptr;
 
 }  

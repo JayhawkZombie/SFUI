@@ -1,6 +1,3 @@
-#ifndef SFUI_CHECKBOX_H
-#define SFUI_CHECKBOX_H
-
 ////////////////////////////////////////////////////////////
 //
 // MIT License
@@ -34,7 +31,7 @@
 ////////////////////////////////////////////////////////////
 // Internal Headers
 ////////////////////////////////////////////////////////////
-#include <SFUI/Include/UI/Widgets/Button.h>
+#include <SFUI/Include/Application/AppLogger.h>
 
 ////////////////////////////////////////////////////////////
 // Dependency Headers
@@ -47,39 +44,41 @@
 namespace sfui
 {  
   
-  class CheckBox : public Button
+  FileLogPolicy::FileLogPolicy()
+    : m_OutStream(new std::ofstream)
   {
-  public:
-    WIDGET_DERIVED(CheckBox, Button);
-    CheckBox(optional<Theme*> theme = optional<Theme*>(), optional<Widget*> parent = optional<Widget*>());
-    virtual ~CheckBox() override = default;
 
-    static shared_ptr Create(optional<Theme*> theme = optional<Theme*>(), optional<Widget*> parent = optional<Widget*>());
+  }
 
-    bool IsChecked() const;
-    void Check();
-    void Uncheck();
+  FileLogPolicy::~FileLogPolicy()
+  {
+    if (m_OutStream)
+    {
+      CloseStream();
+      m_OutStream.reset();
+    }
+  }
 
-    virtual void SetDefaultSize(const Vec2i &Size) override;
+  void FileLogPolicy::OpenStream(const std::string &Name)
+  {
+    m_OutStream->open(Name, std::ios::binary | std::ios::out);
+    if (!m_OutStream) {
+      std::cerr << "Could not open file \"" << Name << "\" for logging\n";
+      throw std::runtime_error("AppLogger: Failed to open output stream");
+    }
+  }
 
-    virtual void OnChecked(boost::function<void()> func);
-    virtual void Render(sf::RenderTarget &Target) override;
+  void FileLogPolicy::CloseStream()
+  {
+    if (m_OutStream) {
+      m_OutStream->close();
+    }
+  }
 
-  protected:
-    Signal<void()> m_CheckedSignal;
-    virtual void Clicked() override;
-    virtual void Moved() override;
-    virtual void Resized() override;
+  void FileLogPolicy::Write(const std::string &Message)
+  {
+    m_OutStream->write(Message.c_str(), Message.size());
+    m_OutStream->put('\n');
+  }
 
-    virtual void Checked();
-    sf::RectangleShape m_CheckRect;
-
-    bool m_IsChecked = false;
-    texture_handle m_Texture = nullptr;
-    IntRect m_CheckedRect, m_UncheckedRect;
-
-  };
-  
 }  
-
-#endif // SFUI_CHECKBOX_H

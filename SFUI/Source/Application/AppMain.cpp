@@ -42,34 +42,167 @@
 ////////////////////////////////////////////////////////////
 // Standard Library Headers
 ////////////////////////////////////////////////////////////
+#include <ppltasks.h>
 
 namespace sfui
 {
 
+  Vec2i WindowSize = Vec2i(0, 0);
+
   void AppMainWindow::TerminateHandler()
   {
-    std::cerr << "Super bad. Terminate called" << std::endl;
+    APP_LOG_FAT("Application terminated by call to std::terminate");
+
     exit(-10);
   }
 
   int AppMainWindow::Allocate()
   {
-    std::cerr << "Allocating Main Render Window\n";
+    APP_LOG("Allocating OS render window");
     AppMainRenderWindow = std::make_shared<sf::RenderWindow>();
 
-    std::cerr << "Allocating Main Widget Window\n";
+    APP_LOG("Allocating main UI widget handler");
     AppMainWidgets = std::make_shared<sfui::WidgetWindow>(*AppMainRenderWindow);
     
     return 0;
   }
 
+  int AppMainWindow::FailedStartup()
+  {
+    //Uh oh
+
+    try
+    {
+      return Shutdown();
+    }
+    catch (const std::exception &exc)
+    {
+      APP_LOG_EXCEPTION("Main thread - Shutdown failure. Terminating", exc);
+
+      terminate();
+    }
+  }
+
+  int AppMainWindow::UncaughtRuntimeException(std::exception &exc)
+  {
+    APP_LOG_EXCEPTION("Main thread - uncaught runtime exception", exc);
+
+    return 0;
+  }
+
   int AppMainWindow::Init(const AppMainInitData &InitData)
   {
-    int alloc_ret = Allocate();
+    try
+    {
+      //Start timing for the app's total time open
+      START_PERFORMANCE_TIMING(AppStartTime, AppFrequency);
 
-    AppMainRenderWindow->create(sf::VideoMode(InitData.WindowSize.x, InitData.WindowSize.y), InitData.WindowTitle, InitData.WindowStyle);
-    AppMainWidgets->SetSize(InitData.WindowSize);
+      LARGE_INTEGER InitStart, InitEnd, ElspasedMicroseconds;
+      LARGE_INTEGER Frequency;
+      //Start timing for window creation
+      START_PERFORMANCE_TIMING(InitStart, Frequency);
+
+      int alloc_ret = Allocate();
+      sf::ContextSettings set;
+      set.majorVersion = 3;
+      set.minorVersion = 3;
+      WindowSize = Vec2i(InitData.WindowSize);
+      AppMainRenderWindow->create(sf::VideoMode(InitData.WindowSize.x, InitData.WindowSize.y), InitData.WindowTitle, InitData.WindowStyle, set);
+
+      //End timing for window creation and log the time
+      END_PERFORMANCE_TIMING(InitEnd, InitStart, Frequency, ElspasedMicroseconds);
+      APP_LOG_TASK_PERFORMANCE("Initial Window Allocation & Creation", ElspasedMicroseconds);
+
+      AppMainRenderWindow->setVerticalSyncEnabled(false);
+      AppMainWidgets->SetSize(InitData.WindowSize);
+
+      int uiStatus = 0;
+      int themeStatus = 0;
+
+      //Start timing for concurrent ui creation
+      START_PERFORMANCE_TIMING(InitStart, Frequency);
+
+      auto CreatorTask = concurrency::create_task(
+        []()
+      {
+        try { return CreateTheme(); }
+        catch (std::exception &exc) { APP_LOG_EXCEPTION("Failed to create ui theme", exc); return -1; }
+      }
+      ).then([&InitStart, &Frequency](int themeRet)
+      {
+        if (themeRet != 0)
+          return -1;
+
+        START_PERFORMANCE_TIMING(InitStart, Frequency);
+        try { return CreateUI(); }
+        catch (const std::exception &exc) { APP_LOG_EXCEPTION("Failed to create ui", exc); return -1; }
+      }
+      );
+
+      CreatorTask.wait();
+
+      //End timing for ui creation and log the time
+      END_PERFORMANCE_TIMING(InitEnd, InitStart, Frequency, ElspasedMicroseconds);
+      APP_LOG_TASK_PERFORMANCE("UI Creation (concurrent)", ElspasedMicroseconds);
+
+      if (CreatorTask.get() != 0)
+        return -3;
+
+      APP_LOG("Loading UI Shaders");
+      sfui::DropShadow::LoadShaders();
+
+      return 0;
+    }
+    catch (const std::exception &exc)
+    {
+      APP_LOG_EXCEPTION("Main thread - initialization failure", exc);
+
+      return -1;
+    }
+
     return 0;
+  }
+
+  int AppMainWindow::CreateTheme()
+  {
+    try
+    {
+      m_DefaultTheme = std::make_shared<sfui::Theme>();
+
+      texture_handle iconTexture = std::make_shared<sf::Texture>();
+      iconTexture->loadFromFile("iconmap_grey.png");
+
+      font_handle hFont = std::make_shared<sf::Font>();
+      if (!hFont->loadFromFile("segoeui.ttf")) {
+        APP_LOG_LOAD_FAILURE("segoeui.ttf");
+        return -1;
+      }
+
+      m_DefaultTheme->DefaultFont = hFont;
+      m_DefaultTheme->IconTexture = iconTexture;
+
+      //Load bitmap fonts
+      m_DefaultTheme->BitmapFonts.LoadFont("opensans", "Fonts/BitmapFonts/Images/osans14.png", "Fonts/BitmapFonts/Data/osans14.fnt", 14);
+      m_DefaultTheme->BitmapFonts.LoadFont("sugo", "Fonts/BitmapFonts/Images/sugo16_light.png", "Fonts/BitmapFonts/Data/sugo16_light.fnt", 16);
+      m_DefaultTheme->DefaultBitmapFont = m_DefaultTheme->BitmapFonts.GetFont("sugo", 16).value_or(nullptr);
+
+      return 0;
+    }
+    catch (const std::exception &exc)
+    {
+      APP_LOG_EXCEPTION("Failed to create theme", exc);
+      return -1;
+    }
+  }
+
+  int AppMainWindow::CreateUI()
+  {
+    try { return ExternCreateUI(m_DefaultTheme.get(), [ ](Widget::shared_ptr wptr) { sfui::AppMainWindow::AddWidget(wptr); }); }
+    catch (const std::exception &exc) 
+    { 
+      APP_LOG_EXCEPTION("Failed to create ui", exc);
+      return -1; 
+    }
   }
 
   int AppMainWindow::ProcessEvents()
@@ -105,28 +238,49 @@ namespace sfui
 
   int AppMainWindow::Render()
   {
-    AppMainRenderWindow->setActive(true);
+    //AppMainRenderWindow->setActive(true);
     AppMainRenderWindow->clear(sf::Color(122, 122, 122));
     AppMainWidgets->Render();
     AppMainRenderWindow->display();
-    AppMainRenderWindow->setActive(false);
+    //AppMainRenderWindow->setActive(false);
     return 0;
   }
 
   int AppMainWindow::Shutdown()
   {
-    // Signal windows to close down
-    m_DefaultTheme = nullptr;
-    
-    for (auto & handle : WindowHandles)
-      delete handle;
-    WindowHandles.clear();
-    m_Windows.clear();
-    // After all windows are closed, shut down ourselves
-    AppMainWidgets->Cleanup();
-    AppMainWidgets.reset();
-    AppMainRenderWindow->close();
-    AppMainRenderWindow.reset();
+    try
+    {
+      // Signal windows to close down
+      m_DefaultTheme = nullptr;
+
+      for (auto & handle : WindowHandles)
+        delete handle;
+      WindowHandles.clear();
+      m_Windows.clear();
+
+      sfui::DropShadow::CleanupShaders();
+      // After all windows are closed, shut down ourselves
+      if (AppMainWidgets) {
+        AppMainWidgets->Cleanup();
+        AppMainWidgets.reset();
+      }
+
+      if (AppMainRenderWindow) {
+        AppMainRenderWindow->close();
+        AppMainRenderWindow.reset();
+      }
+
+      //Log how long the application was run for
+      END_PERFORMANCE_TIMING(AppEndTime, AppStartTime, AppFrequency, AppElapsedTimeRun);
+      std::stringstream appTimeStr; appTimeStr.str("");
+      appTimeStr << "Application was run for " << static_cast< uint32 >( floor(AppElapsedTimeRun.QuadPart * 0.001) ) << " ms";
+      APP_LOG(appTimeStr.str());
+    }
+    catch (const std::exception &exc)
+    {
+      APP_LOG_EXCEPTION("Failed propert shutdown", exc);
+      throw;
+    }
 
     return 0;
   }
@@ -154,7 +308,7 @@ namespace sfui
     }
     catch (const std::exception &e)
     {
-      std::cerr << "Exception while trying to update\n";
+      APP_LOG_EXCEPTION("Exception while updating", e);
       return -1;
     }
 
@@ -193,12 +347,18 @@ namespace sfui
   std::shared_ptr<sf::RenderWindow> AppMainWindow::AppMainRenderWindow;
 
 
+  LARGE_INTEGER AppMainWindow::AppStartTime;
+
+  LARGE_INTEGER AppMainWindow::AppEndTime;
+
+  LARGE_INTEGER AppMainWindow::AppFrequency;
+
+  LARGE_INTEGER AppMainWindow::AppElapsedTimeRun;
+
   std::shared_ptr<sfui::WidgetWindow> AppMainWindow::AppMainWidgets;
 
   AppWindowHandle* AppMainWindow::LaunchPopup(Vec2i size, const std::string &title, sf::Uint32 style)
   {
-    std::cout << "Spawning popup window\n";
-
     std::shared_ptr<AppWindow> win = std::make_shared<AppWindow>(size, title, style);
     m_Windows.push_back(win);
 
@@ -208,8 +368,6 @@ namespace sfui
 
   sfui::AppWindowHandle* AppMainWindow::Confirm(Vec2i Size, const std::string &Title, sf::Uint32 style, const std::string &Message, const std::string &CnclTxt, const std::string &OKTxt, boost::function<void()> cancelled, boost::function<void()> accepted)
   {
-    std::cout << "Spawning confirm dialog\n";
-
     std::shared_ptr<ConfirmDialog> win = std::make_shared<ConfirmDialog>(Size, Title, style, Message, CnclTxt, OKTxt, cancelled, accepted, m_DefaultTheme);
     m_Windows.push_back(win);
     win->PositionWidgets();

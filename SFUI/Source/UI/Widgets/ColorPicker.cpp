@@ -58,8 +58,14 @@ namespace sfui
     m_OKBtn = m_Theme->MakeButton("OK", this);
 
     m_ColorStrip = m_Theme->MakeRainbowStrip(this);
+    m_ColorStrip->DisableAnimations();
+
     m_OpacitySlider = m_Theme->MakeValueSlider(this);
+    m_OpacitySlider->DisableAnimations();
+
     m_ColorBox = m_Theme->MakeColorBox(this);
+    m_ColorBox->DisableAnimations();
+
     m_OpacitySlider->SetBarWidth(21);
     m_OpacitySlider->SetBarHeight(5);
     m_OpacitySlider->OnValuChanged([this]( auto val ) { OpacityChanged(val); });

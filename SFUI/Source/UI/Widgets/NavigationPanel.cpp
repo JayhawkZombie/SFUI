@@ -1,6 +1,3 @@
-#ifndef SFUI_CHECKBOX_H
-#define SFUI_CHECKBOX_H
-
 ////////////////////////////////////////////////////////////
 //
 // MIT License
@@ -34,7 +31,7 @@
 ////////////////////////////////////////////////////////////
 // Internal Headers
 ////////////////////////////////////////////////////////////
-#include <SFUI/Include/UI/Widgets/Button.h>
+#include <SFUI/Include/UI/Widgets/NavigationPanel.h>
 
 ////////////////////////////////////////////////////////////
 // Dependency Headers
@@ -47,39 +44,4 @@
 namespace sfui
 {  
   
-  class CheckBox : public Button
-  {
-  public:
-    WIDGET_DERIVED(CheckBox, Button);
-    CheckBox(optional<Theme*> theme = optional<Theme*>(), optional<Widget*> parent = optional<Widget*>());
-    virtual ~CheckBox() override = default;
-
-    static shared_ptr Create(optional<Theme*> theme = optional<Theme*>(), optional<Widget*> parent = optional<Widget*>());
-
-    bool IsChecked() const;
-    void Check();
-    void Uncheck();
-
-    virtual void SetDefaultSize(const Vec2i &Size) override;
-
-    virtual void OnChecked(boost::function<void()> func);
-    virtual void Render(sf::RenderTarget &Target) override;
-
-  protected:
-    Signal<void()> m_CheckedSignal;
-    virtual void Clicked() override;
-    virtual void Moved() override;
-    virtual void Resized() override;
-
-    virtual void Checked();
-    sf::RectangleShape m_CheckRect;
-
-    bool m_IsChecked = false;
-    texture_handle m_Texture = nullptr;
-    IntRect m_CheckedRect, m_UncheckedRect;
-
-  };
-  
 }  
-
-#endif // SFUI_CHECKBOX_H

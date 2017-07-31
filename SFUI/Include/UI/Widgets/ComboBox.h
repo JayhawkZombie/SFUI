@@ -89,6 +89,7 @@ namespace sfui
     sf::IntRect m_ExpandedIconRect = IntRect(306, 153, 50, 50);
     sf::IntRect m_CollapseRect = IntRect(408, 102, 50, 50);
     ListView::shared_ptr m_Options;
+    std::string m_SelectedItemString = "";
   };
   
 }  

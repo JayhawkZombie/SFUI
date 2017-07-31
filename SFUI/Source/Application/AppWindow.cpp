@@ -105,6 +105,7 @@ namespace sfui
   void AppWindow::MainLoop()
   {
     m_Window = std::make_shared<sf::RenderWindow>(sf::VideoMode(m_WindowSize.x, m_WindowSize.y), m_WindowTitle, m_WindowStyle);
+    m_Window->setVerticalSyncEnabled(true);
     m_Widgets = std::make_shared<WidgetWindow>(*m_Window);
 
     sf::Event event;

@@ -39,6 +39,7 @@
 #include <SFUI/Include/UI/UI.h>
 #include <SFUI/Include/Application/AppWindow.h>
 #include <SFUI/Include/UI/Theme.h>
+#include <SFUI/Include/Application/AppLogger.h>
 
 ////////////////////////////////////////////////////////////
 // Dependency Headers
@@ -47,6 +48,18 @@
 ////////////////////////////////////////////////////////////
 // Standard Library Headers
 ////////////////////////////////////////////////////////////
+
+extern int ExternCreateUI(sfui::Theme *uiTheme, std::function<void(sfui::Widget::shared_ptr)> addFunc);
+
+#define START_PERFORMANCE_TIMING(START_TIME, FREQ) \
+QueryPerformanceFrequency(&FREQ); \
+QueryPerformanceCounter(&START_TIME); 
+
+#define END_PERFORMANCE_TIMING(END_TIME, START_TIME, FREQ, ELAPSED) \
+QueryPerformanceCounter(&END_TIME); \
+ELAPSED.QuadPart = END_TIME.QuadPart - START_TIME.QuadPart; \
+ELAPSED.QuadPart *= 1000000; \
+ELAPSED.QuadPart /= FREQ.QuadPart;
 
 namespace sfui
 {
@@ -63,14 +76,22 @@ namespace sfui
   class AppWindow;
   class ConfirmDialog;
 
+  extern Vec2i WindowSize;
+
   class AppMainWindow
   {
   public:
     // For last-second "Oh shit"'s
     static void TerminateHandler();
+
     static int Allocate();
 
+    static int FailedStartup();
+    static int UncaughtRuntimeException(std::exception &exc);
+
     static int Init(const AppMainInitData &InitData);
+    static int CreateTheme();
+    static int CreateUI();
 
     //Query our own events
     static int ProcessEvents();
@@ -117,6 +138,10 @@ namespace sfui
     static std::vector<AppWindowHandle*> WindowHandles;
     static bool MarkForShutdown;
     static std::shared_ptr<sf::RenderWindow> AppMainRenderWindow;
+    static LARGE_INTEGER AppStartTime;
+    static LARGE_INTEGER AppEndTime;
+    static LARGE_INTEGER AppFrequency;
+    static LARGE_INTEGER AppElapsedTimeRun;
   };
 
 }

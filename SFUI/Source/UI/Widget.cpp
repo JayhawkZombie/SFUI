@@ -122,13 +122,22 @@ namespace sfui
 
   void Widget::SetDefaultSize(const Vec2i &Size)
   {
-    Widget::SetSize(Size);
+    m_Size = Size;
+    m_BackgroundRect.setSize(m_Size);
+    m_Bounds.width = cast_float(m_Size.x);
+    m_Bounds.height = cast_float(m_Size.y);
+    if (m_TextView) ( *m_TextView )->SetPosition(m_Position);
+    if (m_Label) {
+      auto lSize = m_Label->GetSize();
+      m_Label->SetPosition({ m_Position.x - lSize.x - 10, m_Position.y + m_Size.y - 3 });
+    }
+    m_DefaultSize = Size;
     m_ContractSize = Size;
   }
 
-  void Widget::SetExpandSize(const Vec2i &Size)
+  void Widget::SetExpandSizeOffset(const Vec2i &Size)
   {
-    m_ExpandSize = Size;
+    m_ExpandSizeOffset = Size;
   }
 
   void Widget::Move(const Vec2i &Delta)
@@ -641,6 +650,56 @@ namespace sfui
   void Widget::SetCanAnimateFade(bool can)
   {
     m_CanAnimateFade = can;
+  }
+
+  void Widget::DisableAnimations()
+  {
+    m_CanAnimateFade = false;
+    m_CanAnimateExpand = false;
+    m_CanAnimateContract = false;
+    m_CanAnimateBounce = false;
+    m_CanAnimateSlide = false;
+  }
+
+  void Widget::Animate(WidgetAnimation Anim, const Vec2i &StartValue, const Vec2i &EndValue, Easing curve, uint32 Duration)
+  {
+    switch (Anim)
+    {
+      case WidgetAnimation::Bounce: return;
+      case WidgetAnimation::Contract:
+      {
+        if (!m_CanAnimateContract) return;
+        m_Animator.Animate(WidgetAnimation::Contract, StartValue, EndValue, curve, Duration);
+        break;
+      }
+      case WidgetAnimation::Expand:
+      {
+        if (!m_CanAnimateExpand) return;
+        m_Animator.Animate(WidgetAnimation::Expand, StartValue, EndValue, curve, Duration);
+        break;
+      }
+      case WidgetAnimation::FadeIn: return;
+      case WidgetAnimation::FadeOut: return;
+
+      case WidgetAnimation::SlideIn:
+      {
+        if (!m_CanAnimateSlide) return;
+        m_Animator.Animate(WidgetAnimation::SlideIn, StartValue, EndValue, curve, Duration);
+        break;
+      }
+      case WidgetAnimation::SlideOut:
+      {
+        if (!m_CanAnimateSlide) return;
+        m_Animator.Animate(WidgetAnimation::SlideIn, StartValue, EndValue, curve, Duration);
+        break;
+      }
+      case WidgetAnimation::Spin: return;
+    }
+  }
+
+  std::string Widget::Class() const
+  {
+    return std::string("Widget");
   }
 
   void Widget::MouseMoved()

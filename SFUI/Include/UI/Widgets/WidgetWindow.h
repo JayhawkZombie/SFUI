@@ -43,6 +43,8 @@
 ////////////////////////////////////////////////////////////
 // Standard Library Headers
 ////////////////////////////////////////////////////////////
+#include <Windows.h>
+#include <concurrent_vector.h>
 
 namespace sfui
 {  
@@ -50,7 +52,7 @@ namespace sfui
   class WidgetWindow : public Widget
   {
   public:
-    WIDGET_TYPE_TRAITS(WidgetWindow);
+    WIDGET_DERIVED(WidgetWindow, Widget);
     WidgetWindow(sf::RenderWindow &Window);
     ~WidgetWindow() override final;
 
@@ -95,16 +97,57 @@ namespace sfui
     virtual void StealKeyboardFocus(Widget *widget) override;
     virtual void ReturnKeyboardFocus(Widget *widget) override;
 
+    void UseParallelUpdate(bool UseParallel);
+
   private:
+
+    void ParallelUpdate();
+    void SequentialUpdate();
+
+    bool m_UseParallelUpdate = false;
     bool m_IsBeingBlocked = false;
     std::vector<Widget*> m_MouseFocusPool;
 
     Widget* GlobalMouseFocus = nullptr;
     Widget* GlobalKeyboardFocus = nullptr;
 
+    LARGE_INTEGER m_UpdateStartTime;
+    LARGE_INTEGER m_UpdateEndTime;
+    LARGE_INTEGER m_UpdateElapsedTime;
+    LARGE_INTEGER m_RenderStartTime;
+    LARGE_INTEGER m_RenderEndTime;
+    LARGE_INTEGER m_RenderElapsedTime;
+    LARGE_INTEGER m_Frequency;
+
+    sf::Text m_UpdateTimeText;
+    sf::Text m_RenderTimeText;
+    sf::Font m_UpdateTimeFont;
+    sf::RectangleShape m_UpdateTimeBG;
+
+    kairos::Stopwatch m_UpdateTimer;
+
+    std::stringstream m_UpdateString;
+    long long m_CumulativeUpdateTotal = 0;
+    long long m_ThisUpdateTime = 0;
+    long long m_UpdateCounts = 0;
+
+    long long m_CumulativeRenderTotal = 0;
+    long long m_ThisRenderTime = 0;
+    long long m_RenderCounts = 0;
+
+    // Testing shows a parallel update is not worth it
+    //  But this makes sense.  The update methods for widgets are (currently)
+    //  very simple/fast.  The overhead of launching them in parallel is too high
+    //  while the UI does so little
+
+    //concurrency::concurrent_vector<Widget*> m_WidgetsParallel;
+    //std::vector<Widget*> m_WidgetsSequential;
+
+    concurrency::concurrent_vector<Widget::shared_ptr> m_Widgets;
+
     std::vector<_shared_ptr<PopupWindow>> m_Popups;
     
-    std::vector<Widget::shared_ptr> m_Widgets;
+    //std::vector<Widget::shared_ptr> m_Widgets;
     sf::RenderWindow &m_Window;
   };
   

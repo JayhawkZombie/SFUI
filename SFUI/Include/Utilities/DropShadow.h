@@ -51,40 +51,33 @@ namespace sfui
   {
   public:
     DropShadow();
-    ~DropShadow() = default;
+    ~DropShadow();
 
-    //Set the size of the shadow to draw on screen
-    void SetShadowSize(const sf::Vector2f &size);
-
-    void SetRadius(uint32 Radius);
-
-    void Init();
-
-    //Set the position of the shadow on screen
-    void SetShadowPosition(const sf::Vector2f &position);
-
-    //Draw the source in black for bluring
-    void DrawShadowSource(const sf::Vector2f &Size);
-
-    //Render the blurred shadow
+    void SetRadius(float Radius);
+    void SetCasterSize(const Vec2f &Size);
+    void SetCasterPosition(const Vec2f &Position);
+    void SetOffset(const Vec2f &Offset);
     void Render(sf::RenderTarget &Target);
+    void Create();
+
+    static void LoadShaders();
+    static void CleanupShaders();
 
   private:
-    sf::RectangleShape m_ShadowRect;
-    sf::RectangleShape m_BlurringRect;
-    sf::Shader m_BlurShader;
-    sf::Shader m_BlackShader;
+    static sf::Shader *m_BlackingOpacityShader;
+    static sf::Shader *m_VerticalBlurShader;
+    static sf::Shader *m_HorizontalBlurShader;
 
-    Vec2f m_ShadowSize;
-    Vec2f m_ShadowPos;
-    uint32 m_Radius;
+    _shared_ptr<sf::RenderTexture> m_ShadowTexture = nullptr;
+    _shared_ptr<sf::RenderTexture> m_HorizontalBlurTexture = nullptr;
+    _shared_ptr<sf::RenderTexture> m_VerticalBlurTexture = nullptr;
 
-    sf::Shader m_HorizShader;
-    sf::Shader m_VertShader;
-
-    sf::RenderTexture m_BlurTexture;
-    sf::RenderTexture m_HorizTexture;
-    sf::RenderTexture m_InterimTexture;
+    sf::RectangleShape m_DrawingRect;
+    sf::RectangleShape m_CasterRect;
+    Vec2f m_ShadowOffset = { 0.f, 0.f };
+    Vec2f m_CasterPosition = { 0.f, 0.f };
+    Vec2d m_CasterSize = { 0.f, 0.f };
+    float m_Radius = 0.f;
   };
   
 }  

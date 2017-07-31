@@ -33,6 +33,8 @@
 ////////////////////////////////////////////////////////////
 #include <SFUI/Include/UI/Widgets/WidgetWindow.h>
 #include <SFUI/Include/UI/Widgets/PopupWindow.h>
+#include <SFUI/Include/Application/AppLogger.h>
+#include <SFUI/Include/Application/AppMain.h>
 
 ////////////////////////////////////////////////////////////
 // Dependency Headers
@@ -42,6 +44,9 @@
 // Standard Library Headers
 ////////////////////////////////////////////////////////////
 #include <algorithm>
+#include <ppl.h>
+#include <ppltasks.h>
+#include <cmath>
 
 namespace sfui
 {
@@ -52,6 +57,24 @@ namespace sfui
   {
     m_Size = Window.getSize();
     m_BlockingWindow = nullptr;
+    m_UpdateTimeFont.loadFromFile("NotoSans-Regular.ttf");
+    m_UpdateTimeText.setFont(m_UpdateTimeFont);
+    m_UpdateTimeText.setFillColor(sf::Color::White);
+    m_UpdateTimeText.setCharacterSize(14);
+    m_UpdateTimeText.setPosition({ 10.f, 25.f });
+
+    m_RenderTimeText.setFont(m_UpdateTimeFont);
+    m_RenderTimeText.setFillColor(sf::Color::White);
+    m_RenderTimeText.setCharacterSize(14);
+    m_RenderTimeText.setPosition({ 10.f, 45.f });
+
+    m_UpdateTimeBG.setFillColor(sf::Color::Black);
+    m_UpdateTimeBG.setOutlineColor(sf::Color(122, 122, 122));
+    m_UpdateTimeBG.setOutlineThickness(1);
+    m_UpdateTimeBG.setPosition({ 7.f, 22.f });
+    m_UpdateTimeBG.setSize({ 300.f, 50.f });
+    m_UpdateTimer.restart();
+    m_UpdateTimer.pause();
   }
 
   WidgetWindow::~WidgetWindow()
@@ -59,11 +82,14 @@ namespace sfui
     for (auto & pWin : m_Popups) {
       if (pWin) { pWin->Destroy(); }
     }
+    m_Widgets.clear();
   }
 
   sfui::WidgetWindow::shared_ptr WidgetWindow::Create(sf::RenderWindow &Window)
   {
-    return std::make_shared<WidgetWindow>(Window);
+    auto WWindow = std::make_shared<WidgetWindow>(Window);
+    
+    return WWindow;
   }
 
   void WidgetWindow::Add(Widget::shared_ptr widget)
@@ -75,11 +101,14 @@ namespace sfui
 
   void WidgetWindow::Remove(Widget::shared_ptr widget)
   {
-    auto it = std::find(m_Widgets.begin(), m_Widgets.end(), widget);
+    //TODO: Implement container/algorithm so widgets can be removed
+    //  concurrent_vector cannot remove items
 
-    if (it != m_Widgets.end()) {
-      m_Widgets.erase(it);
-    }
+    //auto it = std::find(m_Widgets.begin(), m_Widgets.end(), widget);
+
+    //if (it != m_Widgets.end()) {
+    //  m_Widgets.erase(it);
+    //}
   }
 
   void WidgetWindow::ShowAll()
@@ -94,18 +123,75 @@ namespace sfui
 
   void WidgetWindow::Update()
   {
+    //Still seeing which would be better
+    //  Sequential might be better if the # of widgets is too
+    //  low to justify the cost of starting up a parallel run
+    if (m_UseParallelUpdate)
+      ParallelUpdate();
+    else
+      SequentialUpdate();
+
+    m_CumulativeUpdateTotal += static_cast< long long >( m_UpdateElapsedTime.QuadPart );
+    m_UpdateCounts++;
+
+    double updateAvg = ( static_cast< double >( m_UpdateTimer.getTime().asMilliseconds() ) ) / static_cast< double >( m_UpdateCounts );
+    double renderAvg = ( static_cast< double >( m_CumulativeRenderTotal ) * 0.001 ) / static_cast< double >( m_RenderCounts );
+
+    m_UpdateString.str("");
+    m_UpdateString << "Average Update Time (" << ( m_UseParallelUpdate ? "Parallel" : "Sequential" ) << "): ";
+    m_UpdateString.precision(2);
+    m_UpdateString << updateAvg << " ms";
+
+    m_UpdateTimeText.setString(m_UpdateString.str());
+
+    m_UpdateString.str("");
+    m_UpdateString << "Average Render Time: ";
+    m_UpdateString.precision(2);
+    m_UpdateString << renderAvg << " ms";
+
+    m_RenderTimeText.setString(m_UpdateString.str());
+
+    auto hBds = m_UpdateTimeText.getLocalBounds();
+    auto rBds = m_RenderTimeText.getLocalBounds();
+
+    float txtHeight = ( 45.f + rBds.height - 25.f );
+    float txtWidth = std::max(hBds.width, rBds.width);
+
+    if (GlobalMouseFocus || GlobalKeyboardFocus) {
+      GlobalMouseFocus->BaseUpdate();
+    }
+  }
+
+  void WidgetWindow::ParallelUpdate()
+  {
+    m_UpdateTimer.resume();
     for (auto & pWin : m_Popups) {
       if (pWin && pWin->IsOpen()) {
         pWin->Update();
       }
     }
 
-    std::for_each(m_Widgets.begin(), m_Widgets.end(),
-                  [this](Widget::shared_ptr wptr) { wptr->BaseUpdate(); });
+    concurrency::parallel_for_each(
+      m_Widgets.begin(),
+      m_Widgets.end(),
+      [this](Widget::shared_ptr wptr) { wptr->BaseUpdate(); }
+    );
 
-    if (GlobalMouseFocus || GlobalKeyboardFocus) {
-      GlobalMouseFocus->BaseUpdate();
-    }
+    m_UpdateTimer.pause();
+  }
+
+  void WidgetWindow::SequentialUpdate()
+  {
+    m_UpdateTimer.resume();
+    std::for_each(begin(m_Popups), 
+                  end(m_Popups), 
+                  [ ](auto &pWin) { if (pWin && pWin->IsOpen()) pWin->Update(); });
+
+    std::for_each(begin(m_Widgets),
+                  end(m_Widgets),
+                  [ ](Widget::shared_ptr wPtr) { wPtr->BaseUpdate(); }
+    );
+    m_UpdateTimer.pause();
   }
 
   bool WidgetWindow::HandleEvent(sf::Event event)
@@ -193,8 +279,10 @@ namespace sfui
 
   void WidgetWindow::Render()
   {
+    START_PERFORMANCE_TIMING(m_RenderStartTime, m_Frequency);
+
     std::for_each(m_Widgets.begin(), m_Widgets.end(),
-                  [this](auto wptr) { wptr->Render(m_Window); });
+                  [this](auto wptr) { wptr->Render(m_Window); wptr->RenderLabel(m_Window); });
 
     if (GlobalMouseFocus) {
       GlobalMouseFocus->Render(m_Window);
@@ -202,6 +290,14 @@ namespace sfui
     if (GlobalKeyboardFocus) {
       GlobalKeyboardFocus->Render(m_Window);
     }
+    
+    m_Window.draw(m_UpdateTimeBG);
+    m_Window.draw(m_UpdateTimeText);
+    m_Window.draw(m_RenderTimeText);
+
+    END_PERFORMANCE_TIMING(m_RenderEndTime, m_RenderStartTime, m_Frequency, m_RenderElapsedTime);
+    m_RenderCounts++;
+    m_CumulativeRenderTotal += static_cast< long long >( m_RenderElapsedTime.QuadPart );
   }
 
   void WidgetWindow::Render(sf::RenderTarget &Target)
@@ -274,6 +370,19 @@ namespace sfui
   void WidgetWindow::ReturnKeyboardFocus(Widget *widget)
   {
     GlobalKeyboardFocus = nullptr;
+  }
+
+  void WidgetWindow::UseParallelUpdate(bool UseParallel)
+  {
+    m_UseParallelUpdate = UseParallel;
+    
+    //And reset the cumulative totals whenever we switch update methods
+    m_UpdateTimer.restart();
+    m_UpdateTimer.pause();
+    m_CumulativeRenderTotal = 0;
+    m_CumulativeRenderTotal = 0;
+    m_RenderCounts = 0;
+    m_UpdateCounts = 0;
   }
 
   void WidgetWindow::ChildTakingMouseFocus(Widget::pointer child)

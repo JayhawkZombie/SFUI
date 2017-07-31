@@ -89,13 +89,8 @@ namespace sfui
   void CheckBox::SetDefaultSize(const Vec2i &Size)
   {
     m_ContractSize = Size;
-    m_ExpandSize = Size;
+    m_ExpandSizeOffset = { 0, 0 };
     SetSize(Size);
-  }
-
-  void CheckBox::SetExpandSize(const Vec2i &Size)
-  {
-    //Ignore it. CheckBoxs don't expand or contract
   }
 
   void CheckBox::OnChecked(boost::function<void()> func)

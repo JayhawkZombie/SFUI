@@ -63,7 +63,8 @@ using unique_ptr      = std::unique_ptr<W_CLASS>; \
 
 #define WIDGET_DERIVED(W_CLASS, W_PARENT) \
 WIDGET_TYPE_TRAITS(W_CLASS);              \
-using super = W_PARENT;
+using super = W_PARENT;                   \
+virtual std::string Class() const override { return std::string( #W_CLASS ); }
 
 namespace sfui
 {  
@@ -126,7 +127,7 @@ namespace sfui
     virtual void SetPosition(const Vec2i &Position);
     virtual void SetSize(const Vec2i &Size);
     virtual void SetDefaultSize(const Vec2i &Size);
-    virtual void SetExpandSize(const Vec2i &Size);
+    virtual void SetExpandSizeOffset(const Vec2i &Size);
     virtual void Move(const Vec2i &Delta);
     void SetParent(pointer parent);
     Vec2i GetPosition() const;
@@ -227,6 +228,11 @@ namespace sfui
     void SetCanAnimateBounce(bool can);
     void SetCanAnimateSlide(bool can);
     void SetCanAnimateFade(bool can);
+    void DisableAnimations();
+
+    virtual void Animate(WidgetAnimation Animation, const Vec2i &StartValue, const Vec2i &EndValue, Easing curve, uint32 Duration);
+    virtual std::string Class() const = 0;
+    void RenderLabel(sf::RenderTarget &Target);
 
   protected:
     static Vec2i currentMousePosition;
@@ -306,8 +312,6 @@ namespace sfui
     bool m_CanAnimateFade = true;
     bool m_CanAnimateBounce = true;
 
-    void RenderLabel(sf::RenderTarget &Target);
-
     Theme *m_Theme = nullptr;
     std::optional<TextView::shared_ptr> m_TextView;
     _shared_ptr<BitmapLabel> m_Label;
@@ -324,7 +328,8 @@ namespace sfui
     FloatRect m_Bounds = { 0.f, 0.f, 0.f, 0.f };
     Vec2i m_Position = { 0, 0 };
     Vec2i m_Size = { 0, 0 };
-    Vec2i m_ExpandSize = { 0, 0 };
+    Vec2i m_DefaultSize = { 0, 0 };
+    Vec2i m_ExpandSizeOffset = { 0, 0 };
     Vec2i m_ContractSize = { 0, 0 };
     Vec2i m_ExpansionDelta = { 0, 0 };
 

@@ -100,18 +100,27 @@ namespace sfui
   void ComboBox::AddItem(const std::string &Text)
   {
     m_Options->AddItem(Text);
+
+    //If this is the first item added, it is the value by default
+    //Simulate a selection on this first item only
+    if (m_Options->GetItemCount() == 1) {
+      m_SelectedItemString = Text;
+      SetText(Text);
+    }
   }
 
   void ComboBox::Open()
   {
     m_IconRect.setTextureRect(m_ExpandedIconRect);
     m_BackgroundRect.setFillColor(m_BGColor);
+    StealMouseFocus(this);
     m_IsOpen = true;
   }
 
   void ComboBox::Close()
   {
     m_IconRect.setTextureRect(m_CollapseRect);
+    ReturnMouseFocus(this);
     m_IsOpen = false;
   }
 
@@ -132,7 +141,7 @@ namespace sfui
 
   std::string ComboBox::GetSelectedItem() const
   {
-    return GetText();
+    return m_SelectedItemString;
   }
 
   bool ComboBox::IsItemSelected() const
@@ -144,6 +153,7 @@ namespace sfui
   {
     SetText(str);
     Deselect();
+    m_SelectedItemString = str;
     m_ItemSelectedSignal(str);
   }
 

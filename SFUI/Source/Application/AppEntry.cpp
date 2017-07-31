@@ -1,5 +1,5 @@
-#ifndef SFUI_CHECKBOX_H
-#define SFUI_CHECKBOX_H
+#ifndef SFUI_APPENTRY_H
+#define SFUI_APPENTRY_H
 
 ////////////////////////////////////////////////////////////
 //
@@ -34,7 +34,7 @@
 ////////////////////////////////////////////////////////////
 // Internal Headers
 ////////////////////////////////////////////////////////////
-#include <SFUI/Include/UI/Widgets/Button.h>
+#include <SFUI/Include/Application/AppMain.h>
 
 ////////////////////////////////////////////////////////////
 // Dependency Headers
@@ -44,42 +44,53 @@
 // Standard Library Headers
 ////////////////////////////////////////////////////////////
 
-namespace sfui
-{  
-  
-  class CheckBox : public Button
-  {
-  public:
-    WIDGET_DERIVED(CheckBox, Button);
-    CheckBox(optional<Theme*> theme = optional<Theme*>(), optional<Widget*> parent = optional<Widget*>());
-    virtual ~CheckBox() override = default;
+//Application main entry point
 
-    static shared_ptr Create(optional<Theme*> theme = optional<Theme*>(), optional<Widget*> parent = optional<Widget*>());
+int main(int argc, const char **argv)
+{
 
-    bool IsChecked() const;
-    void Check();
-    void Uncheck();
+  //Create initialization data
+  sfui::AppMainInitData initData;
+  initData.argc = argc;
+  initData.argv = argv;
+  initData.WindowTitle = "SFUI";
+  initData.WindowSize = Vec2i(1400, 800);
+  initData.WindowStyle = sf::Style::Default;
 
-    virtual void SetDefaultSize(const Vec2i &Size) override;
+  APP_LOG("Initializing application data");
 
-    virtual void OnChecked(boost::function<void()> func);
-    virtual void Render(sf::RenderTarget &Target) override;
+  //Try to initialize, but initiate a shutdown if it fails
+  auto initStatus = sfui::AppMainWindow::Init(initData);
+  if (initStatus != 0)
+    return sfui::AppMainWindow::FailedStartup();
 
-  protected:
-    Signal<void()> m_CheckedSignal;
-    virtual void Clicked() override;
-    virtual void Moved() override;
-    virtual void Resized() override;
+  APP_LOG("Beginning main loop");
 
-    virtual void Checked();
-    sf::RectangleShape m_CheckRect;
+  while (sfui::AppMainWindow::IsRunning()) {
 
-    bool m_IsChecked = false;
-    texture_handle m_Texture = nullptr;
-    IntRect m_CheckedRect, m_UncheckedRect;
+    //A non-zero return is only used for unrecoverable errors.
+    // Errors handled internally (successfully handled) will still return 0
+    try
+    {
+      if (sfui::AppMainWindow::ProcessEvents() != 0)
+        throw std::runtime_error("Event Processing Error");
+      if (sfui::AppMainWindow::Update() != 0)
+        throw std::runtime_error("Update Error");
+      if (sfui::AppMainWindow::Render() != 0)
+        throw std::runtime_error("Rendering Error");
+    }
+    catch (const std::exception &exc)
+    {
+      APP_LOG_EXCEPTION("Uncaught runtime error", exc);
 
-  };
-  
-}  
+      return sfui::AppMainWindow::Abort();
+    }
 
-#endif // SFUI_CHECKBOX_H
+  }
+
+  APP_LOG("Beginning application shutdown");
+  try { return sfui::AppMainWindow::Shutdown(); }
+  catch (const std::exception&) { return -1; }
+}
+
+#endif // SFUI_APPENTRY_H

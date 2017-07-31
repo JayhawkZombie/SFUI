@@ -195,6 +195,12 @@
     <ClInclude Include="Include\UI\Animation\WidgetAnimator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Include\UI\Widgets\NavigationPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Application\AppLogger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SFUI.cpp">
@@ -326,6 +332,15 @@
     <ClCompile Include="Source\UI\Animation\WidgetAnimator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\UI\Widgets\NavigationPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\AppEntry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Application\AppLogger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\GaussBlur.glsl" />
@@ -333,5 +348,8 @@
     <None Include="Shaders\SeparableVert.glsl" />
     <None Include="Shaders\GaussVert.glsl" />
     <None Include="Shaders\GaussHoriz.glsl" />
+    <None Include="Include\Application\AppLogger.inl">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

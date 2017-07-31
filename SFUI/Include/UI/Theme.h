@@ -38,6 +38,7 @@
 #include <SFUI/Include/UI/Fwd.h>
 #include <SFUI/Include/UI/Components/Colors.h>
 #include <SFUI/Include/UI/Components/BitmapFontStore.h>
+#include <SFUI/Include/Application/AppLogger.h>
 
 ////////////////////////////////////////////////////////////
 // Dependency Headers
@@ -47,9 +48,16 @@
 // Standard Library Headers
 ////////////////////////////////////////////////////////////
 
+#if defined ( LOG_WIDGET_CREATION )
+#define APP_LOG_WIDGET_CONSTRUCTION(WIDGET_CLASS) \
+APP_LOG("Construction: Widget (Class = " ## #WIDGET_CLASS ##")")
+#else
+
+#endif //LOG_WIDGET_CREATION
+
 namespace sfui
 {  
-  
+
   class Theme
   {
   public:
@@ -86,17 +94,9 @@ namespace sfui
     _shared_ptr<WidgetTree> MakeTree(optional<Widget*> parent = optional<Widget*>());
     _shared_ptr<SpinBox> MakeSpinBox(optional<Widget*> parent = optional<Widget*>());
     _shared_ptr<LoadingSpinner> MakeLoadingSpinner(optional<Widget*> parent = optional<Widget*>());
-    //_shared_ptr<ButtonWidget> MakeButton(const std::string &Text, const std::string &HText = "", const std::string &PText = "", UIWidget *parent = nullptr);
-    //_shared_ptr<ButtonList> MakeButtonList(UIWidget *parent = nullptr);
-    //_shared_ptr<ItemList> MakeItemList(UIWidget *parent = nullptr);
-    //_shared_ptr<LineItem> MakeLineItem(const std::string &Text, UIWidget *parent = nullptr);
     _shared_ptr<ProgressBar> MakeProgressBar(optional<Widget*> parent = optional<Widget*>());
-    //_shared_ptr<TextInput> MakeTextInput(UIWidget *parent = nullptr);
-    //_shared_ptr<WidgetWindow> MakeWidgetWindow(sf::RenderWindow &Win, UIWidget *parent = nullptr);
     _shared_ptr<CheckBox> MakeCheckBox(const std::string &Text, optional<Widget*> parent = optional<Widget*>());
     _shared_ptr<Menu> MakeMenu(optional<Widget*> parent = optional<Widget*>());
-    //_shared_ptr<IconButton> MakeIconButton(texture_handle tex, IntRect Active, IntRect Inactive, UIWidget* parent = nullptr);
-    //_shared_ptr<Label> MakeLabel(const std::string &Text, UIWidget *parent = nullptr);
 
     static const std::string UserOptionalSkip;
     static const std::string UserActionCancel;

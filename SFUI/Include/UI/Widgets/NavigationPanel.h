@@ -1,5 +1,5 @@
-#ifndef SFUI_CHECKBOX_H
-#define SFUI_CHECKBOX_H
+#ifndef SFUI_NAVIGATIONPANEL_H
+#define SFUI_NAVIGATIONPANEL_H
 
 ////////////////////////////////////////////////////////////
 //
@@ -34,7 +34,7 @@
 ////////////////////////////////////////////////////////////
 // Internal Headers
 ////////////////////////////////////////////////////////////
-#include <SFUI/Include/UI/Widgets/Button.h>
+#include <SFUI/Include/UI/Widgets/Panel.h>
 
 ////////////////////////////////////////////////////////////
 // Dependency Headers
@@ -47,39 +47,42 @@
 namespace sfui
 {  
   
-  class CheckBox : public Button
+  class NavigationPanel : public Panel
   {
   public:
-    WIDGET_DERIVED(CheckBox, Button);
-    CheckBox(optional<Theme*> theme = optional<Theme*>(), optional<Widget*> parent = optional<Widget*>());
-    virtual ~CheckBox() override = default;
+    WIDGET_DERIVED(NavigationPanel, Panel);
+    NavigationPanel(optional<Theme*> theme = {}, optional<Widget*> parent = {});
+    virtual ~NavigationPanel() override;
+    
+    static shared_ptr Create(optional<Theme*> theme = {}, optional<Widget*> parent = {});
 
-    static shared_ptr Create(optional<Theme*> theme = optional<Theme*>(), optional<Widget*> parent = optional<Widget*>());
-
-    bool IsChecked() const;
-    void Check();
-    void Uncheck();
-
-    virtual void SetDefaultSize(const Vec2i &Size) override;
-
-    virtual void OnChecked(boost::function<void()> func);
+    virtual void Update() override;
     virtual void Render(sf::RenderTarget &Target) override;
+    virtual void SetSize(const Vec2i &Size) override;
+    virtual void SetPosition(const Vec2i &Position) override;
+    virtual void SetDefaultSize(const Vec2i &Size) override;
+    virtual void SetExpandSizeOffset(const Vec2i &Size) override;
+    virtual void Move(const Vec2i &Delta) override;
+
+    bool IsOpen() const;
+    std::string GetSelectedPanel() const;
+
+    void Open();
+    void Close();
+
+    void OnPanelSelected(boost::function<void(const std::string &)> func);
 
   protected:
-    Signal<void()> m_CheckedSignal;
-    virtual void Clicked() override;
+    Signal<void(const std::string &)> m_PanelSelectedSignal;
+
+    virtual void Shown() override;
+    virtual void Hidden() override;
+
     virtual void Moved() override;
     virtual void Resized() override;
-
-    virtual void Checked();
-    sf::RectangleShape m_CheckRect;
-
-    bool m_IsChecked = false;
-    texture_handle m_Texture = nullptr;
-    IntRect m_CheckedRect, m_UncheckedRect;
 
   };
   
 }  
 
-#endif // SFUI_CHECKBOX_H
+#endif // SFUI_NAVIGATIONPANEL_H

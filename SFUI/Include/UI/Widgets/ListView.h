@@ -71,6 +71,7 @@ namespace sfui
     virtual void SetPosition(const Vec2i &Position) override;
     virtual void Move(const Vec2i &Delta) override;
     virtual void ScrollTo(int ListTop);
+    size_t GetItemCount() const;
 
   protected:
     Signal<void(const std::string &)> m_ItemSelectedSignal;

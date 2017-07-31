@@ -65,6 +65,8 @@ namespace sfui
     virtual void Render(sf::RenderTarget &Target) override;
     virtual void SetText(const std::string &Text) override;
     virtual void SetDefaultSize(const Vec2i &Size) override;
+    virtual void SetSize(const Vec2i &Size) override;
+    void SetHasDropShadow(bool HasDropShadow);
     //bool HandleEvent(const sf::Event &event) override;
 
   protected:
@@ -85,8 +87,12 @@ namespace sfui
     virtual void Clicked();
 
   private:
+    void CreateDropShadow();
+    bool m_HasDropShadow = false;
+
     texture_handle m_IconTexture;
     sf::RectangleShape m_IconRect;
+    DropShadow m_DropShadow;
 
     constexpr static sf::Uint8 m_BrightFactor = 15_ui8;
     constexpr static sf::Uint8 m_DarkFactor = 15_ui8;

@@ -60,6 +60,7 @@
 #include <iostream>
 #include <unordered_map>
 #include <unordered_set>
+#include <stdexcept>
 
 #define D_SCL_SECURE_NO_WARNINGS
 
@@ -214,6 +215,15 @@ std::cout << "(" << VEC.x << ", " << VEC.y << ")" << std::endl;
 
 #define PrintRect(_RECT)      \
 std::cout << "(" << _RECT.left << ", " << _RECT.top << ", " << _RECT.width << ", " << _RECT.height << ")" << std::endl;
+
+#define ExecuteOnlyOnce \
+static bool __loaded__ = false; \
+if (__loaded__) return; \
+__loaded__ = true;
+
+#define CodeSectionOnce( CODE ) \
+static bool __executed__ = false; \
+if (!__executed__) { __executed__ = true; CODE; } ;
 
 constexpr ms operator"" _ms(unsigned long long l) { return std::chrono::milliseconds(l); }
 constexpr sf::Uint8 operator"" _ui8(unsigned long long l) { return static_cast< sf::Uint8 >( l ); }

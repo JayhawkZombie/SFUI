@@ -202,6 +202,11 @@ namespace sfui
 
   }
 
+  size_t ListView::GetItemCount() const
+  {
+    return m_Items.size();
+  }
+
   void ListView::AdjustScrollbar()
   {
     m_ScrollBar->SetPosition({ m_Position.x + m_Size.x - 15, m_Position.y });

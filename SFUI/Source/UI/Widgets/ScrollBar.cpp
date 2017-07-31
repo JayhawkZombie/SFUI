@@ -51,12 +51,10 @@ namespace sfui
     : Widget(theme, parent)
   {
     m_UpButton = m_Theme->MakeButton("U");
-    m_UpButton->SetCanAnimateContract(false);
-    m_UpButton->SetCanAnimateExpand(false);
+    m_UpButton->DisableAnimations();
 
     m_DownButton = m_Theme->MakeButton("D");
-    m_DownButton->SetCanAnimateContract(false);
-    m_DownButton->SetCanAnimateExpand(false);
+    m_DownButton->DisableAnimations();
 
     m_Slider = m_Theme->MakeSlider(this);
     m_Slider->SetBackgroundColor(sf::Color(211, 217, 226));
