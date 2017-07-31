@@ -1,5 +1,5 @@
-#ifndef SFUI_APPENTRY_H
-#define SFUI_APPENTRY_H
+#ifndef SFUI_PRELOADER_H
+#define SFUI_PRELOADER_H
 
 ////////////////////////////////////////////////////////////
 //
@@ -34,7 +34,8 @@
 ////////////////////////////////////////////////////////////
 // Internal Headers
 ////////////////////////////////////////////////////////////
-#include <SFUI/Include/Application/AppMain.h>
+#include <SFUI/Include/UI/Widget.h>
+#include <SFUI/Include/UI/Widgets/PreloaderBox.h>
 
 ////////////////////////////////////////////////////////////
 // Dependency Headers
@@ -44,57 +45,50 @@
 // Standard Library Headers
 ////////////////////////////////////////////////////////////
 
-//Application main entry point
+namespace sfui
+{  
+  
+  class Preloader : public Widget
+  {
+  public:
+    WIDGET_DERIVED(Preloader, Widget);
+    Preloader(optional<Theme*> theme = { }, optional<Widget*> parent = { });
+    virtual ~Preloader() override;
 
-int main(int argc, const char **argv)
-{
+    static shared_ptr Create(optional<Theme*> theme = { }, optional<Widget*> parent = { });
 
-  //Create initialization data
-  sfui::AppMainInitData initData;
-  initData.argc = argc;
-  initData.argv = argv;
-  initData.WindowTitle = "SFUI";
-  initData.WindowSize = Vec2i(1400, 800);
-  initData.WindowStyle = sf::Style::Default;
+    virtual void Update() override;
+    virtual void Render(sf::RenderTarget &Target) override;
+    virtual void SetPosition(const Vec2i &Position) override;
+    virtual void SetSize(const Vec2i &Size) override;
+    virtual void Move(const Vec2i &Delta) override;
 
-  APP_LOG("Initializing application data");
+    virtual void Start(uint32 SpawnFallDuration, uint32 SitDuration, uint32 DespawnFallDuration);
+    virtual void Pause();
+    virtual void Stop();
+    virtual void Restart();
 
-  //Try to initialize, but initiate a shutdown if it fails
-  auto initStatus = sfui::AppMainWindow::Init(initData);
-  if (initStatus != 0)
-    return sfui::AppMainWindow::FailedStartup();
+    virtual void SetColor(const Color &c);
+  protected:
 
-  APP_LOG("Beginning main loop");
+    void PositionBoxes();
+    void BlockFinished();
+    SequenceTimer m_RestartTimer;
+    std::vector<PreloaderBox::shared_ptr> m_Boxes;
+    Vec2f m_BoxVelocities;
+    int m_BoxHeight = 0;
+    int m_BoxSpacing = 0;
+    int m_FinishedCount = 0;
+    uint32 m_SpawnDur = 0;
+    uint32 m_SitDur = 0;
+    uint32 m_DespDur = 0;
 
-  while (sfui::AppMainWindow::IsRunning()) {
+    kairos::Timer m_AnimTimer;
+    kairos::Duration m_AnimDuration;
+    bool m_ShouldRestart = true;
+    bool m_IsPlaying = false;
+  };
+  
+}  
 
-    //A non-zero return is only used for unrecoverable errors.
-    // Errors handled internally (successfully handled) will still return 0
-    try
-    {
-      sfui::AppMainWindow::BeginFrame();
-
-      if (sfui::AppMainWindow::ProcessEvents() != 0)
-        throw std::runtime_error("Event Processing Error");
-      if (sfui::AppMainWindow::Update() != 0)
-        throw std::runtime_error("Update Error");
-      if (sfui::AppMainWindow::Render() != 0)
-        throw std::runtime_error("Rendering Error");
-
-      sfui::AppMainWindow::EndFrame();
-    }
-    catch (const std::exception &exc)
-    {
-      APP_LOG_EXCEPTION("Uncaught runtime error", exc);
-
-      return sfui::AppMainWindow::Abort();
-    }
-
-  }
-
-  APP_LOG("Beginning application shutdown");
-  try { return sfui::AppMainWindow::Shutdown(); }
-  catch (const std::exception&) { return -1; }
-}
-
-#endif // SFUI_APPENTRY_H
+#endif // SFUI_PRELOADER_H

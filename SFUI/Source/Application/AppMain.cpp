@@ -113,7 +113,6 @@ namespace sfui
       END_PERFORMANCE_TIMING(InitEnd, InitStart, Frequency, ElspasedMicroseconds);
       APP_LOG_TASK_PERFORMANCE("Initial Window Allocation & Creation", ElspasedMicroseconds);
 
-      AppMainRenderWindow->setVerticalSyncEnabled(false);
       AppMainWidgets->SetSize(InitData.WindowSize);
 
       int uiStatus = 0;
@@ -223,6 +222,32 @@ namespace sfui
       AppMainWidgets->HandleEvent(event);
     }
 
+    return 0;
+  }
+
+  int AppMainWindow::BeginFrame()
+  {
+    QueryPerformanceFrequency(&AppFrequency);
+    QueryPerformanceCounter(&FrameStart);
+    return 0;
+  }
+
+  int AppMainWindow::EndFrame()
+  {
+    //It appears that vsync doesn't really work to limit for some reason, so
+    // we will try to do our own limiting to throttle our CPU usage
+
+    QueryPerformanceCounter(&FrameEnd);
+    FrameElapsed.QuadPart = FrameEnd.QuadPart - FrameStart.QuadPart;
+    FrameElapsed.QuadPart *= 1000000;
+    FrameElapsed.QuadPart /= AppFrequency.QuadPart;
+
+    //Convert to ms
+    unsigned long InMS = std::clamp(static_cast< unsigned long >( ceil(float(FrameElapsed.QuadPart) * 0.001) ), (unsigned long) 0, (unsigned long) 16);
+    unsigned long msToWait = std::clamp(10 - InMS, (unsigned long) 0, (unsigned long) 10);
+
+    if (msToWait > 0)
+      std::this_thread::sleep_for(std::chrono::milliseconds(msToWait));
     return 0;
   }
 
@@ -354,6 +379,12 @@ namespace sfui
   LARGE_INTEGER AppMainWindow::AppFrequency;
 
   LARGE_INTEGER AppMainWindow::AppElapsedTimeRun;
+
+  LARGE_INTEGER AppMainWindow::FrameStart;
+
+  LARGE_INTEGER AppMainWindow::FrameEnd;
+
+  LARGE_INTEGER AppMainWindow::FrameElapsed;
 
   std::shared_ptr<sfui::WidgetWindow> AppMainWindow::AppMainWidgets;
 

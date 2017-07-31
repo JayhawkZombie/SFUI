@@ -385,4 +385,20 @@ namespace sfui
     return menu;
   }
 
+  _shared_ptr<sfui::NavigationPanel> Theme::MakeNavPanel(optional<Widget*> parent /*= optional<Widget*>()*/)
+  {
+    NavigationPanel::shared_ptr nPanel = NavigationPanel::Create(this, parent);
+    nPanel->SetBackgroundColor(sf::Color(0, 0, 0));
+    nPanel->SetBorderColor(sf::Color(122, 122, 122, 120));
+    nPanel->SetBorderWidth(1);
+    return nPanel;
+  }
+
+  _shared_ptr<sfui::Preloader> Theme::MakePreloader(optional<Widget*> parent /*= optional<Widget*>()*/)
+  {
+    Preloader::shared_ptr pPtr = Preloader::Create(this, parent);
+    pPtr->SetBackgroundColor(sf::Color::Transparent);
+    return pPtr;
+  }
+
 }

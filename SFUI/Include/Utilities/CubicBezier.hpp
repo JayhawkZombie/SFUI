@@ -77,6 +77,9 @@ public:
     point += 3 * a * y * p2;
     point += y * t * last;
 
+    point.x = std::clamp(point.x, first.x, last.x);
+    point.y = std::clamp(point.y, first.y, last.y);
+
     return point;
   }
 

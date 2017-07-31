@@ -61,17 +61,17 @@ namespace sfui
     m_UpdateTimeText.setFont(m_UpdateTimeFont);
     m_UpdateTimeText.setFillColor(sf::Color::White);
     m_UpdateTimeText.setCharacterSize(14);
-    m_UpdateTimeText.setPosition({ 10.f, 25.f });
+    m_UpdateTimeText.setPosition({ 1100.f, 25.f });
 
     m_RenderTimeText.setFont(m_UpdateTimeFont);
     m_RenderTimeText.setFillColor(sf::Color::White);
     m_RenderTimeText.setCharacterSize(14);
-    m_RenderTimeText.setPosition({ 10.f, 45.f });
+    m_RenderTimeText.setPosition({ 1100.f, 45.f });
 
     m_UpdateTimeBG.setFillColor(sf::Color::Black);
     m_UpdateTimeBG.setOutlineColor(sf::Color(122, 122, 122));
     m_UpdateTimeBG.setOutlineThickness(1);
-    m_UpdateTimeBG.setPosition({ 7.f, 22.f });
+    m_UpdateTimeBG.setPosition({ 1097.f, 22.f });
     m_UpdateTimeBG.setSize({ 300.f, 50.f });
     m_UpdateTimer.restart();
     m_UpdateTimer.pause();
@@ -95,8 +95,26 @@ namespace sfui
   void WidgetWindow::Add(Widget::shared_ptr widget)
   {
     widget->SetParent(this);
-    m_Widgets.push_back(widget);
+
+    auto itemIterator = m_Widgets.push_back(widget);
     widget->m_TopWindow = this;
+
+    //If it is a top level widget, it needs to be checked first for updates and rendered last
+    if (widget->IsTopLevel()) {
+      m_RenderOrder.emplace_back(widget.get());
+
+      if (itemIterator != m_Widgets.begin()) {
+
+        //This is really not safe, but right now only 1 thread will be accessing the vector
+        std::iter_swap(m_Widgets.begin(), itemIterator);
+      }
+    }
+    else {
+      if (m_RenderOrder.size() > 1)
+        m_RenderOrder.emplace(m_RenderOrder.end() - 1, widget.get());
+      else
+        m_RenderOrder.emplace_back(widget.get());
+    }
   }
 
   void WidgetWindow::Remove(Widget::shared_ptr widget)
@@ -281,8 +299,14 @@ namespace sfui
   {
     START_PERFORMANCE_TIMING(m_RenderStartTime, m_Frequency);
 
-    std::for_each(m_Widgets.begin(), m_Widgets.end(),
-                  [this](auto wptr) { wptr->Render(m_Window); wptr->RenderLabel(m_Window); });
+    //std::for_each(m_Widgets.begin(), m_Widgets.end(),
+    //              [this](auto wptr) { wptr->Render(m_Window); wptr->RenderLabel(m_Window); });
+
+    std::for_each(
+      begin(m_RenderOrder),
+      end(m_RenderOrder),
+      [this](Widget *wPtr) { wPtr->Render(m_Window); wPtr->RenderLabel(m_Window); }
+    );
 
     if (GlobalMouseFocus) {
       GlobalMouseFocus->Render(m_Window);

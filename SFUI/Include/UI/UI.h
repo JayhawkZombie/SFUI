@@ -70,6 +70,9 @@
 #include <SFUI/Include/UI/Widgets/SpinBox.h>
 #include <SFUI/Include/UI/Widgets/Canvas.h>
 #include <SFUI/Include/UI/Widgets/LoadingSpinner.h>
+#include <SFUI/Include/UI/Widgets/NavigationPanel.h>
+#include <SFUI/Include/UI/Widgets/PreloaderBox.h>
+#include <SFUI/Include/UI/Widgets/Preloader.h>
 
 ////////////////////////////////////////////////////////////
 // Dependency Headers

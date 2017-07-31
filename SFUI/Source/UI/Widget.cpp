@@ -248,6 +248,11 @@ namespace sfui
     return ( m_Parent.has_value() );
   }
 
+  bool Widget::IsTopLevel() const
+  {
+    return m_IsTopLevel;
+  }
+
   optional<Widget::pointer> Widget::GetParent() const
   {
     return m_Parent;

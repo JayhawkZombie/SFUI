@@ -71,7 +71,11 @@ namespace sfui
   class LoadingSpinner;
 
   class MenuBar;
+
+  class NavigationPanel;
   
+  class Preloader;
+  class PreloaderBox;
   class ProgressBar;
   class Popup;
   class PopupWindow;

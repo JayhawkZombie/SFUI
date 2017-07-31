@@ -1,5 +1,5 @@
-#ifndef SFUI_APPENTRY_H
-#define SFUI_APPENTRY_H
+#ifndef SFUI_EXECUTIONQUEUE_H
+#define SFUI_EXECUTIONQUEUE_H
 
 ////////////////////////////////////////////////////////////
 //
@@ -34,67 +34,48 @@
 ////////////////////////////////////////////////////////////
 // Internal Headers
 ////////////////////////////////////////////////////////////
-#include <SFUI/Include/Application/AppMain.h>
+#include <SFUI/Include/Common.h>
 
 ////////////////////////////////////////////////////////////
 // Dependency Headers
 ////////////////////////////////////////////////////////////
+#include <Kairos.hpp>
 
 ////////////////////////////////////////////////////////////
 // Standard Library Headers
 ////////////////////////////////////////////////////////////
+#include <queue>
 
-//Application main entry point
+namespace sfui
+{  
+  
+  class ExecutionQueue
+  {
+  public:
+    ExecutionQueue();
+    ~ExecutionQueue();
 
-int main(int argc, const char **argv)
-{
+    void Update();
 
-  //Create initialization data
-  sfui::AppMainInitData initData;
-  initData.argc = argc;
-  initData.argv = argv;
-  initData.WindowTitle = "SFUI";
-  initData.WindowSize = Vec2i(1400, 800);
-  initData.WindowStyle = sf::Style::Default;
+    bool IsTiming() const;
+    void Enqueue(uint32 TimeInMS, std::function<void()> Function);
+    size_t QueueSize() const;
+    void FinishCurrent();
+    void SkipCurrent();
+    void PauseCurrent();
+    void StopCurrent();
+    void RestartCurrent();
 
-  APP_LOG("Initializing application data");
+  private:
+    void PushAction(const uint32 &TimeInMS, std::function<void()> Function);
+    void PopAction();
+    void FinishAction();
+    void StartNextAction();
 
-  //Try to initialize, but initiate a shutdown if it fails
-  auto initStatus = sfui::AppMainWindow::Init(initData);
-  if (initStatus != 0)
-    return sfui::AppMainWindow::FailedStartup();
+    std::queue<std::pair<uint32, std::function<void()>>> m_ActionQueue;
+    kairos::Timer m_Timer;
+  };
+  
+}  
 
-  APP_LOG("Beginning main loop");
-
-  while (sfui::AppMainWindow::IsRunning()) {
-
-    //A non-zero return is only used for unrecoverable errors.
-    // Errors handled internally (successfully handled) will still return 0
-    try
-    {
-      sfui::AppMainWindow::BeginFrame();
-
-      if (sfui::AppMainWindow::ProcessEvents() != 0)
-        throw std::runtime_error("Event Processing Error");
-      if (sfui::AppMainWindow::Update() != 0)
-        throw std::runtime_error("Update Error");
-      if (sfui::AppMainWindow::Render() != 0)
-        throw std::runtime_error("Rendering Error");
-
-      sfui::AppMainWindow::EndFrame();
-    }
-    catch (const std::exception &exc)
-    {
-      APP_LOG_EXCEPTION("Uncaught runtime error", exc);
-
-      return sfui::AppMainWindow::Abort();
-    }
-
-  }
-
-  APP_LOG("Beginning application shutdown");
-  try { return sfui::AppMainWindow::Shutdown(); }
-  catch (const std::exception&) { return -1; }
-}
-
-#endif // SFUI_APPENTRY_H
+#endif // SFUI_EXECUTIONQUEUE_H

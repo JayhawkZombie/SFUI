@@ -39,6 +39,7 @@
 #include <SFUI/Include/UI/Components/TextView.h>
 #include <SFUI/Include/Utilities/DropShadow.h>
 #include <SFUI/Include/UI/Animation/WidgetAnimator.h>
+#include <SFUI/Include/Utilities/ExecutionQueue.h>
 
 ////////////////////////////////////////////////////////////
 // Dependency Headers
@@ -150,6 +151,7 @@ namespace sfui
     bool HasMouseFocus( ) const;
     bool HasKeyboardFocus( ) const;
     bool HasParent( ) const;
+    bool IsTopLevel() const;
     std::optional<pointer> GetParent( ) const;
 
     void TakeParentMouseFocus(Widget *widget);
@@ -304,6 +306,7 @@ namespace sfui
     bool m_IsRightMouseDown = false;
     bool m_IsMouseOver = false;
     bool m_HasLabel = false;
+    bool m_IsTopLevel = false;
 
     //Controlling animations
     bool m_CanAnimateExpand = true;
@@ -332,6 +335,8 @@ namespace sfui
     Vec2i m_ExpandSizeOffset = { 0, 0 };
     Vec2i m_ContractSize = { 0, 0 };
     Vec2i m_ExpansionDelta = { 0, 0 };
+
+    ExecutionQueue m_ActionQueue;
 
     PopupWindow* m_BlockingWindow = nullptr;
     optional<pointer> m_Parent = nullptr;

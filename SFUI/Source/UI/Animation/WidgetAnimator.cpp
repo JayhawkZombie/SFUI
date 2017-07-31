@@ -115,12 +115,14 @@ namespace sfui
     }
     else if (!m_AnimationQueue.empty()) {
       Animation &a = m_AnimationQueue.front();
-      auto time = m_Timer.getTime().asMilliseconds();
-      float perc = std::clamp(( float )time / a.duration.asMilliseconds(), 0.f, 1.f);
-      ApplyAnimation(1.f - perc);
+      auto time = m_Timer.getTime();
+      float perc = std::clamp(1.f - ( float )time.asMilliseconds() / ( float )a.duration.asMilliseconds(), 0.01f, 1.f);
+      ApplyAnimation(perc);
     }
 
     if (m_Timer.isDone() && !m_AnimationQueue.empty()) {
+      m_Timer.stop();
+      ApplyAnimation(1.f);
       DequeAnimation();
     }
   }

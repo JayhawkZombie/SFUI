@@ -97,6 +97,8 @@ namespace sfui
     _shared_ptr<ProgressBar> MakeProgressBar(optional<Widget*> parent = optional<Widget*>());
     _shared_ptr<CheckBox> MakeCheckBox(const std::string &Text, optional<Widget*> parent = optional<Widget*>());
     _shared_ptr<Menu> MakeMenu(optional<Widget*> parent = optional<Widget*>());
+    _shared_ptr<NavigationPanel> MakeNavPanel(optional<Widget*> parent = optional<Widget*>());
+    _shared_ptr<Preloader> MakePreloader(optional<Widget*> parent = optional<Widget*>());
 
     static const std::string UserOptionalSkip;
     static const std::string UserActionCancel;

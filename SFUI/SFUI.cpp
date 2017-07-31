@@ -293,5 +293,35 @@ int ExternCreateUI(sfui::Theme *uiTheme, std::function<void(sfui::Widget::shared
   otherPanel->Add(progBtn);
   otherPanel->Add(lSpinner);
 
+  /* Add the navigation panel */
+  auto navPanel = uiTheme->MakeNavPanel();
+  navPanel->SetWidth(150);
+  navPanel->SetClosedWidth(50);
+  navPanel->SetPosition({ 0, 15 });
+  navPanel->SetHeight(int(sfui::WindowSize.y));
+
+  navPanel->AddItem("Page 1");
+  navPanel->AddItem("Page 2");
+
+  addFunc(navPanel);
+
+  /* Add the preloader */
+  auto pLoader = uiTheme->MakePreloader();
+  pLoader->SetSize({ 300, 300 });
+  pLoader->SetDefaultSize({ 300, 300 });
+  pLoader->SetPosition({ 300, 300 });
+  pLoader->SetColor(sf::Color(135, 0, 255));
+
+  auto pStartBtn = uiTheme->MakeButton("Play Preloader");
+  pStartBtn->SetPosition({ 100, 300 });
+  pStartBtn->SetSize({ 130, 20 });
+
+  pStartBtn->OnClicked(
+    [pPtr = pLoader.get()]() { pPtr->Start(800, 1600, 800); }
+  );
+
+  buttonPanel->Add(pLoader);
+  buttonPanel->Add(pStartBtn);
+
   return 0;
 }

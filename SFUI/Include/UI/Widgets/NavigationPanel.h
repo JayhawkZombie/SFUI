@@ -35,6 +35,10 @@
 // Internal Headers
 ////////////////////////////////////////////////////////////
 #include <SFUI/Include/UI/Widgets/Panel.h>
+#include <SFUI/Include/UI/Widgets/Button.h>
+#include <SFUI/Include/UI/Widgets/Selectable.h>
+#include <SFUI/Include/UI/Widgets/ScrollBar.h>
+#include <SFUI/Include/UI/Animation/WidgetAnimator.h>
 
 ////////////////////////////////////////////////////////////
 // Dependency Headers
@@ -56,31 +60,49 @@ namespace sfui
     
     static shared_ptr Create(optional<Theme*> theme = {}, optional<Widget*> parent = {});
 
+    virtual bool HandleEvent(const sf::Event &event) override;
     virtual void Update() override;
     virtual void Render(sf::RenderTarget &Target) override;
-    virtual void SetSize(const Vec2i &Size) override;
     virtual void SetPosition(const Vec2i &Position) override;
     virtual void SetDefaultSize(const Vec2i &Size) override;
-    virtual void SetExpandSizeOffset(const Vec2i &Size) override;
     virtual void Move(const Vec2i &Delta) override;
 
     bool IsOpen() const;
     std::string GetSelectedPanel() const;
+    void AddItem(const std::string &Text);
 
     void Open();
     void Close();
 
+    void SetWidth(int Width);
+    void SetHeight(int Height);
+    void SetClosedWidth(int Width);
     void OnPanelSelected(boost::function<void(const std::string &)> func);
+    bool SelectItem(const std::string &Text);
 
   protected:
     Signal<void(const std::string &)> m_PanelSelectedSignal;
 
+    virtual void Opened();
+    virtual void Closed();
+    virtual void ItemSelected(const std::string &Text);
+
     virtual void Shown() override;
     virtual void Hidden() override;
-
     virtual void Moved() override;
     virtual void Resized() override;
 
+    std::unordered_map<std::string, Selectable *> m_StringItemMap;
+
+    std::string m_SelectedPanelText = "";
+    int m_TotalItemsHeight = 0;
+    Button* m_OpenCloseButton;
+    bool m_IsOpen = false;
+    int m_ExpandedWidth = 100;
+    int m_CollapsedWidth = 50;
+
+    Vec2i m_CollapsedSize = { 0, 0 };
+    Vec2i m_ExpandedSize = { 0, 0 };
   };
   
 }  

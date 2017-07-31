@@ -144,6 +144,7 @@ namespace sfui
     //std::vector<Widget*> m_WidgetsSequential;
 
     concurrency::concurrent_vector<Widget::shared_ptr> m_Widgets;
+    std::vector<Widget*> m_RenderOrder;
 
     std::vector<_shared_ptr<PopupWindow>> m_Popups;
     

@@ -199,6 +199,8 @@
     <ClInclude Include="Include\UI\Widgets\Panel.h" />
     <ClInclude Include="Include\UI\Widgets\Popup.h" />
     <ClInclude Include="Include\UI\Widgets\PopupWindow.h" />
+    <ClInclude Include="Include\UI\Widgets\Preloader.h" />
+    <ClInclude Include="Include\UI\Widgets\PreloaderBox.h" />
     <ClInclude Include="Include\UI\Widgets\RainbowStrip.h" />
     <ClInclude Include="Include\UI\Widgets\ScrollBar.h" />
     <ClInclude Include="Include\UI\Widgets\Slider.h" />
@@ -217,6 +219,8 @@
     <ClInclude Include="Include\UI\Widget.h" />
     <ClInclude Include="Include\Utilities\CubicBezier.hpp" />
     <ClInclude Include="Include\Utilities\DropShadow.h" />
+    <ClInclude Include="Include\Utilities\ExecutionQueue.h" />
+    <ClInclude Include="Include\Utilities\SequenceTimer.h" />
     <ClInclude Include="Include\Utilities\Vec.hpp" />
     <ClInclude Include="Shaders\DrawBlack.glsl">
       <FileType>Text</FileType>
@@ -261,6 +265,8 @@
     <ClCompile Include="Source\UI\Widgets\Panel.cpp" />
     <ClCompile Include="Source\UI\Widgets\Popup.cpp" />
     <ClCompile Include="Source\UI\Widgets\PopupWindow.cpp" />
+    <ClCompile Include="Source\UI\Widgets\Preloader.cpp" />
+    <ClCompile Include="Source\UI\Widgets\PreloaderBox.cpp" />
     <ClCompile Include="Source\UI\Widgets\RainbowStrip.cpp" />
     <ClCompile Include="Source\UI\Widgets\ScrollBar.cpp" />
     <ClCompile Include="Source\UI\Widgets\Slider.cpp" />
@@ -274,6 +280,8 @@
     <ClCompile Include="Source\UI\Widgets\WidgetTree.cpp" />
     <ClCompile Include="Source\UI\Widgets\WidgetWindow.cpp" />
     <ClCompile Include="Source\Utilities\DropShadow.cpp" />
+    <ClCompile Include="Source\Utilities\ExecutionQueue.cpp" />
+    <ClCompile Include="Source\Utilities\SequenceTimer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Include\Application\AppLogger.inl" />

@@ -96,6 +96,9 @@ namespace sfui
     //Query our own events
     static int ProcessEvents();
 
+    static int BeginFrame();
+    static int EndFrame();
+
     static bool IsRunning();
 
     static void SetDefaultTheme(std::shared_ptr<Theme> themePtr);
@@ -142,6 +145,11 @@ namespace sfui
     static LARGE_INTEGER AppEndTime;
     static LARGE_INTEGER AppFrequency;
     static LARGE_INTEGER AppElapsedTimeRun;
+
+    static LARGE_INTEGER FrameStart;
+    static LARGE_INTEGER FrameEnd;
+    static LARGE_INTEGER FrameElapsed;
+
   };
 
 }
