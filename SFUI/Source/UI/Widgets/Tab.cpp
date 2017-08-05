@@ -68,7 +68,7 @@ namespace sfui
     if (m_IsSelected) return;
 
     m_IsSelected = true;
-    m_BackgroundRect.setFillColor(m_SelectionColor);
+    //m_BackgroundRect.setFillColor(m_SelectionColor);
     m_SelectedSignal(this);
   }
 
@@ -93,8 +93,10 @@ namespace sfui
   void Tab::SetSelectColor(const Color &c)
   {
     m_SelectionColor = c;
-    if (m_IsSelected)
-      m_BackgroundRect.setFillColor(c);
+    m_SelectedRect.setFillColor(c);
+    SetHighlight(m_Highlight, c, m_HighlightThickness);
+    //if (m_IsSelected)
+    //  m_BackgroundRect.setFillColor(c);
   }
 
   void Tab::Render(sf::RenderTarget &Target)
@@ -102,11 +104,29 @@ namespace sfui
     Target.draw(m_BackgroundRect);
     if (m_TextView)
       ( *m_TextView )->Render(Target, {});
+    if (m_IsSelected)
+      Target.draw(m_HighlightRect);
   }
 
   void Tab::OnSelected(boost::function<void(Tab*)> func)
   {
     m_SelectedSignal.connect(func);
+  }
+
+  void Tab::SetPosition(const Vec2i &Position)
+  {
+    super::SetPosition(Position);
+  }
+
+  void Tab::SetSize(const Vec2i &Size)
+  {
+    super::SetSize(Size);
+  }
+
+  void Tab::Move(const Vec2i &Delta)
+  {
+    super::Move(Delta);
+    m_SelectedRect.move(Delta);
   }
 
   void Tab::MouseEntered()

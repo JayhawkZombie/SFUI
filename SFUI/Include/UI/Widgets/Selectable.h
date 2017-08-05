@@ -50,7 +50,7 @@ namespace sfui
   class Selectable : public Widget
   {
   public:
-    WIDGET_DERIVED(Selectable, Button);
+    WIDGET_DERIVED(Selectable, Widget);
     Selectable(optional<Theme*> theme = optional<Theme*>(), optional<Widget*> parent = optional<Widget*>());
     virtual ~Selectable() override = default;
 
@@ -58,7 +58,8 @@ namespace sfui
 
     void Select();
     void Deselect();
-
+    virtual void SetPosition(const Vec2i &Position) override;
+    virtual void SetSize(const Vec2i &Size) override;
     bool IsSelected() const;
     void SetSelectColor(const Color &c);
     virtual void Move(const Vec2i &Delta) override;
@@ -74,7 +75,6 @@ namespace sfui
     virtual void MouseLeft() override;
     virtual void MousePressed(bool left, bool right) override;
     virtual void MouseReleased(bool left, bool right) override;
-  
     virtual void Selected();
     virtual void Deselected();
 

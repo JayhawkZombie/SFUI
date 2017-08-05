@@ -236,6 +236,16 @@ namespace sfui
     virtual std::string Class() const = 0;
     void RenderLabel(sf::RenderTarget &Target);
 
+    enum class Highlight
+    {
+      Left,
+      Top,
+      Right,
+      Bottom,
+      Fill
+    };
+    virtual void SetHighlight(Highlight hLight, const Color &c, int Width = 3);
+
   protected:
     static Vec2i currentMousePosition;
     static Vec2i previousMousePositon;
@@ -352,6 +362,11 @@ namespace sfui
     ms m_HoverDelay = ms(2000);
 
     sf::RectangleShape m_BackgroundRect;
+    Highlight m_Highlight = Highlight::Bottom;
+    Color m_HighlightColor = sf::Color::Transparent;
+    sf::RectangleShape m_HighlightRect;
+    int m_HighlightThickness = 0;
+    bool m_IsHighlighted = false;
   };
   
 }  

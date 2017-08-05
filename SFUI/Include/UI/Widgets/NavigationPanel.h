@@ -93,6 +93,7 @@ namespace sfui
     virtual void Resized() override;
 
     std::unordered_map<std::string, Selectable *> m_StringItemMap;
+    Selectable *m_CurrentPage = nullptr;
 
     std::string m_SelectedPanelText = "";
     int m_TotalItemsHeight = 0;

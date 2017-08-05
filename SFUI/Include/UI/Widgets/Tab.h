@@ -62,6 +62,9 @@ namespace sfui
     void SetSelectColor(const Color &c);
     virtual void Render(sf::RenderTarget &Target) override;
     virtual void OnSelected(boost::function<void(Tab*)> func);
+    virtual void SetPosition(const Vec2i &Position) override;
+    virtual void SetSize(const Vec2i &Size) override;
+    virtual void Move(const Vec2i &Delta) override;
 
   protected:
     Signal<void(Tab*)> m_SelectedSignal;
@@ -72,6 +75,7 @@ namespace sfui
 
     TabList *m_ParentTabList = nullptr;
     Color m_SelectionColor = sf::Color(0, 92, 242, 155);
+    sf::RectangleShape m_SelectedRect;
     bool m_IsSelected = false;
   };
 

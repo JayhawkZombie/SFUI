@@ -160,13 +160,17 @@ namespace sfui
   {
     auto newItem = m_Theme->MakeSelectableButton(Text, this);
     newItem->SetBackgroundColor(sf::Color::Transparent);
+    newItem->SetHighlight(Selectable::Highlight::Left, sf::Color(0, 204, 204), 2);
     newItem->SetBorderWidth(0);
     newItem->SetSize({ m_Size.x - 6, 25 });
     newItem->SetPosition({ m_Position.x + 3, m_TotalItemsHeight });
+    newItem->OnSelected([this](const std::string &txt) { ItemSelected(txt); });
 
     Add(newItem);
     m_TotalItemsHeight += newItem->GetSize().y + 5;
     m_StringItemMap[Text] = newItem.get();
+    if (m_StringItemMap.size() == 1)
+      SelectItem(Text);
   }
 
   void NavigationPanel::Open()
@@ -284,6 +288,12 @@ namespace sfui
   void NavigationPanel::ItemSelected(const std::string &Text)
   {
     m_SelectedPanelText = Text;
+    auto it = m_StringItemMap.find(Text);
+    if (m_CurrentPage)
+      m_CurrentPage->Deselect();
+    if (it != m_StringItemMap.end()) {
+      m_CurrentPage = it->second;
+    }
     m_PanelSelectedSignal(Text);
   }
 

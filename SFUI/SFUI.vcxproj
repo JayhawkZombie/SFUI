@@ -222,6 +222,7 @@
     <ClInclude Include="Include\Utilities\ExecutionQueue.h" />
     <ClInclude Include="Include\Utilities\SequenceTimer.h" />
     <ClInclude Include="Include\Utilities\Vec.hpp" />
+    <ClInclude Include="Include\Utilities\WRenderTree.h" />
     <ClInclude Include="Shaders\DrawBlack.glsl">
       <FileType>Text</FileType>
     </ClInclude>
@@ -285,6 +286,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Include\Application\AppLogger.inl" />
+    <None Include="Sample.json" />
     <None Include="Shaders\CircularBlur.glsl" />
     <None Include="Shaders\GaussBlur.glsl" />
     <None Include="Shaders\GaussVert.glsl" />
@@ -294,4 +296,9 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties Sample_1json__JSONSchema="http://json.schemastore.org/config" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

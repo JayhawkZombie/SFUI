@@ -156,7 +156,7 @@ namespace sfui
   {
     Vec2i CurrentPos = m_Position;
 
-    Vec2i PosOffset = Vec2i(0, 4 * 45);
+    Vec2i PosOffset = Vec2i(0, 6 * 45);
 
     for (size_t i = 0; i < 4; ++i) {
       m_Boxes[4 * i]->SetSpawnPosition(CurrentPos - PosOffset);

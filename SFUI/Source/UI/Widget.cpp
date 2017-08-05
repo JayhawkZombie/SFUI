@@ -103,6 +103,7 @@ namespace sfui
       auto lSize = m_Label->GetSize();
       m_Label->SetPosition({ m_Position.x - lSize.x - 10, m_Position.y + m_Size.y - 3 });
     }
+    SetHighlight(m_Highlight, m_HighlightColor, m_HighlightThickness);
     Moved();
   }
 
@@ -117,6 +118,7 @@ namespace sfui
       auto lSize = m_Label->GetSize();
       m_Label->SetPosition({ m_Position.x - lSize.x - 10, m_Position.y + m_Size.y - 3 });
     }
+    SetHighlight(m_Highlight, m_HighlightColor, m_HighlightThickness);
     Resized();
   }
 
@@ -823,6 +825,70 @@ namespace sfui
   {
     if (m_HasLabel && m_Label)
       m_Label->Render(Target);
+  }
+
+  void Widget::SetHighlight(Highlight hLight, const Color &c, int Width /*= 3*/)
+  {
+    Vec2i hPos = { m_Position.x, m_Position.y + m_Size.y - Width };
+    Vec2i hSize = { m_Size.x, Width };
+    m_HighlightRect.setFillColor(c);
+    m_HighlightColor = c;
+    m_Highlight = hLight;
+    m_HighlightThickness = Width;
+    switch (hLight)
+    {
+      //Fill a small strip along the bottom of the button
+      case Highlight::Bottom:
+      {
+        hPos.y = m_Position.y + m_Size.y - Width;
+        hPos.x = m_Position.x;
+        hSize.y = Width;
+        hSize.x = m_Size.x;
+        break;
+      }
+
+      case Highlight::Fill:
+      {
+        hPos = m_Position;
+        hSize = m_Size;
+        break;
+      }
+
+      case Highlight::Left:
+      {
+        hSize.x = Width;
+        hSize.y = m_Size.y;
+        hPos = m_Position;
+        break;
+      }
+
+      case Highlight::Right:
+      {
+        hPos.x = m_Position.x + m_Size.x - Width;
+        hPos.y = m_Position.y;
+        hSize.x = Width;
+        hSize.y = m_Size.y;
+        break;
+      }
+
+      case Highlight::Top:
+      {
+        hSize.y = Width;
+        hSize.x = m_Size.x;
+        break;
+      }
+
+      default:
+      {
+        hSize.x = m_Size.x;
+        hSize.y = Width;
+        hPos.x = m_Position.x;
+        hPos.y = m_Position.y + m_Size.y - Width;
+      }
+    }
+
+    m_HighlightRect.setPosition(hPos);
+    m_HighlightRect.setSize(hSize);
   }
 
   void Widget::SetLabel(const std::string &Text)

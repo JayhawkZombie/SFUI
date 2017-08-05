@@ -213,6 +213,9 @@
     <ClInclude Include="Include\Utilities\SequenceTimer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Utilities\WRenderTree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SFUI.cpp">
@@ -375,5 +378,6 @@
     <None Include="Include\Application\AppLogger.inl">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="Sample.json" />
   </ItemGroup>
 </Project>

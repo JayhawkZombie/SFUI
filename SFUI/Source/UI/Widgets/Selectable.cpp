@@ -57,7 +57,7 @@ namespace sfui
 
   void Selectable::Select()
   {
-    m_BackgroundRect.setFillColor(m_SelectionColor);
+    //m_BackgroundRect.setFillColor(m_SelectionColor);
     m_IsSelected = true;
     m_SelectedSignal(GetText());
     Selected();
@@ -71,6 +71,16 @@ namespace sfui
     Deselected();
   }
 
+  void Selectable::SetPosition(const Vec2i &Position)
+  {
+    super::SetPosition(Position);
+  }
+
+  void Selectable::SetSize(const Vec2i &Size)
+  {
+    super::SetSize(Size);
+  }
+
   bool Selectable::IsSelected() const
   {
     return m_IsSelected;
@@ -79,7 +89,8 @@ namespace sfui
   void Selectable::SetSelectColor(const Color &c)
   {
     m_SelectionColor = c;
-    m_SelectedRect.setFillColor(c);
+    m_HighlightRect.setFillColor(c);
+    SetHighlight(m_Highlight, c, m_HighlightThickness);
   }
 
   void Selectable::Move(const Vec2i &Delta)
@@ -94,7 +105,7 @@ namespace sfui
     if (m_TextView)
       ( *m_TextView )->Render(Target, {});
     if (m_IsSelected)
-      Target.draw(m_SelectedRect);
+      Target.draw(m_HighlightRect);
   }
 
   void Selectable::OnSelected(boost::function<void(const std::string &)> func)
@@ -109,23 +120,26 @@ namespace sfui
 
   void Selectable::MouseEntered()
   {
-    if (m_IsSelected) {
-      m_BackgroundRect.setFillColor(m_SelectionColor);
-    }
-    else {
-      Color c = m_BGColor + Color(m_BrightFactor, m_BrightFactor, m_BrightFactor, 0);
-      m_BackgroundRect.setFillColor(c);
-    }
+    Color c = m_BGColor + Color(m_BrightFactor, m_BrightFactor, m_BrightFactor, 0);
+    m_BackgroundRect.setFillColor(c);
+    //if (m_IsSelected) {
+    //  m_BackgroundRect.setFillColor(m_SelectionColor);
+    //}
+    //else {
+    //  Color c = m_BGColor + Color(m_BrightFactor, m_BrightFactor, m_BrightFactor, 0);
+    //  m_BackgroundRect.setFillColor(c);
+    //}
   }
 
   void Selectable::MouseLeft()
   {
-    if (m_IsSelected) {
-      m_BackgroundRect.setFillColor(m_SelectionColor);
-    }
-    else {
-      m_BackgroundRect.setFillColor(m_BGColor);
-    }
+    m_BackgroundRect.setFillColor(m_BGColor);
+    //if (m_IsSelected) {
+    //  m_BackgroundRect.setFillColor(m_SelectionColor);
+    //}
+    //else {
+    //  m_BackgroundRect.setFillColor(m_BGColor);
+    //}
   }
 
   void Selectable::MousePressed(bool left, bool right)

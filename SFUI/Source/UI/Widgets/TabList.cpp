@@ -68,6 +68,7 @@ namespace sfui
     pPtr->SetPosition({ m_Position.x, m_Position.y + cast_int(m_TabHeight) });
     pPtr->SetSize({ m_Size.x, m_Size.y - cast_int(m_TabHeight) });
     pPtr->SetParent(this);
+    tPtr->SetHighlight(Tab::Highlight::Bottom, sf::Color(0, 204, 204), 2);
 
     tPtr->OnSelected([this](Tab* t) { TabSelected(t); });
     m_Tabs.emplace_back( tPtr, pPtr );

@@ -317,7 +317,7 @@ int ExternCreateUI(sfui::Theme *uiTheme, std::function<void(sfui::Widget::shared
   pStartBtn->SetSize({ 130, 20 });
 
   pStartBtn->OnClicked(
-    [pPtr = pLoader.get()]() { pPtr->Start(800, 1600, 800); }
+    [pPtr = pLoader.get()]() { pPtr->Start(600, 1200, 600); }
   );
 
   buttonPanel->Add(pLoader);
