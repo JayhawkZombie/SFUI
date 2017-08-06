@@ -73,6 +73,8 @@
 #include <SFUI/Include/UI/Widgets/NavigationPanel.h>
 #include <SFUI/Include/UI/Widgets/PreloaderBox.h>
 #include <SFUI/Include/UI/Widgets/Preloader.h>
+#include <SFUI/Include/UI/Widgets/ChildWindow.h>
+#include <SFUI/Include/UI/Widgets/DraggableFree.h>
 
 ////////////////////////////////////////////////////////////
 // Dependency Headers

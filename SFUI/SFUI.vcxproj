@@ -180,6 +180,8 @@
     <ClInclude Include="Include\UI\Components\TextView.h" />
     <ClInclude Include="Include\UI\Fwd.h" />
     <ClInclude Include="Include\UI\UI.h" />
+    <ClInclude Include="Include\UI\Widgets\ChildWindow.h" />
+    <ClInclude Include="Include\UI\Widgets\DraggableFree.h" />
     <ClInclude Include="Include\UI\Widgets\NavigationPanel.h" />
     <ClInclude Include="Include\UI\Widgets\BitmapLabel.h" />
     <ClInclude Include="Include\UI\Widgets\Button.h" />
@@ -246,6 +248,8 @@
     <ClCompile Include="Source\UI\Components\TextView.cpp" />
     <ClCompile Include="Source\UI\Theme.cpp" />
     <ClCompile Include="Source\UI\Widget.cpp" />
+    <ClCompile Include="Source\UI\Widgets\ChildWindow.cpp" />
+    <ClCompile Include="Source\UI\Widgets\DraggableFree.cpp" />
     <ClCompile Include="Source\UI\Widgets\NavigationPanel.cpp" />
     <ClCompile Include="Source\UI\Widgets\BitmapLabel.cpp" />
     <ClCompile Include="Source\UI\Widgets\Button.cpp" />
@@ -286,7 +290,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Include\Application\AppLogger.inl" />
-    <None Include="Sample.json" />
     <None Include="Shaders\CircularBlur.glsl" />
     <None Include="Shaders\GaussBlur.glsl" />
     <None Include="Shaders\GaussVert.glsl" />

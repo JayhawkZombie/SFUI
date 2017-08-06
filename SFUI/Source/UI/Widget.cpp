@@ -203,11 +203,11 @@ namespace sfui
       m_TextView.value()->SetBMFont(fnt);
   }
 
-  std::string Widget::GetText() const
+  const std::string& Widget::GetText() const
   {
     if (m_TextView)
       return ( *m_TextView )->GetText();
-    return "";
+    return m_Text;
   }
 
   Vec2i Widget::GetTextPosition() const

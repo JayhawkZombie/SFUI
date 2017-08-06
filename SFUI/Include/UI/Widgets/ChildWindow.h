@@ -1,3 +1,6 @@
+#ifndef SFUI_CHILDWINDOW_H
+#define SFUI_CHILDWINDOW_H
+
 ////////////////////////////////////////////////////////////
 //
 // MIT License
@@ -31,7 +34,10 @@
 ////////////////////////////////////////////////////////////
 // Internal Headers
 ////////////////////////////////////////////////////////////
-#include <SFUI/Include/UI/Widgets/Draggable.h>
+#include <SFUI/Include/UI/Widgets/GenericContainer.h>
+#include <SFUI/Include/UI/Widgets/Button.h>
+#include <SFUI/Include/UI/Widgets/BitmapLabel.h>
+#include <SFUI/Include/UI/Widgets/DraggableFree.h>
 
 ////////////////////////////////////////////////////////////
 // Dependency Headers
@@ -42,107 +48,57 @@
 ////////////////////////////////////////////////////////////
 
 namespace sfui
-{  
+{
 
-  Draggable::Draggable(optional<Theme*> theme /*= optional<Theme*>()*/, optional<Widget*> parent /*= optional<Widget*>()*/)
-    : Widget(theme, parent)
+  class ChildWindow : public GenericContainer
   {
+  public:
+    WIDGET_DERIVED(ChildWindow, GenericContainer);
+    ChildWindow(optional<Theme*> theme = {}, optional<Widget*> parent = {});
+    virtual ~ChildWindow() override;
 
-  }
+    static shared_ptr Create(optional<Theme*> theme = {}, optional<Widget*> parent = {});
 
-  Draggable::~Draggable()
-  {
+    virtual bool HandleEvent(const sf::Event &event) override;
+    virtual void Update() override;
+    virtual void Render(sf::RenderTarget &Target) override;
+    virtual void SetPosition(const Vec2i &Position) override;
+    virtual void SetSize(const Vec2i &Size) override;
+    virtual void Move(const Vec2i &Delta) override;
 
-  }
+    void Open();
+    void Close();
+    void Dismiss();
 
-  bool Draggable::HandleEvent(const sf::Event &event)
-  {
-    //if (!Widget::HandleEvent(event)) return false;
+    //Check if the window allows the user to close it (ie has a close button)
+    bool CanUserClose() const;
+    void SetUserCanClose(bool CanClose);
+    bool IsOpen() const;
 
-    switch (event.type)
-    {
-      case sf::Event::MouseMoved:
-      {
-        if (m_IsDragging)
-        {
-          //continue drag
-          Vec2i delta = currentMousePosition - previousMousePositon;
-          Drag(delta);
-          return true;
-        }
-        return false;
-      }
+    const sstring& GetTitle() const;
+    void SetTitle(const sstring &Title);
 
-      case sf::Event::MouseButtonPressed:
-      {
-        if (!m_IsDragging)
-        {
-          //Begin the drag
-          StartDrag();
-          return true;
-        }
-        return false;
-      }
+    void OnOpened(boost::function<void()> func);
+    void OnClosed(boost::function<void()> func);
+    void OnDismissed(boost::function<void()> func);
 
-      case sf::Event::MouseButtonReleased:
-      {
-        if (m_IsDragging)
-        {
-          //Stop the drag
-          Drop();
-          return true;
-        }
-        return false;
-      }
-    }
+  protected:
 
-    return false;
-  }
+    virtual void Opened();
+    virtual void Closed();
+    virtual void Dismissed();
+    
+    Signal<void()> m_OpenedSignal;
+    Signal<void()> m_ClosedSignal;
+    Signal<void()> m_DismissedSignal;
 
-  bool Draggable::IsBeingDragged() const
-  {
-    return m_IsDragging;
-  }
+    BitmapLabel::shared_ptr m_Title;
+    bool m_CanUserClose = true;
+    bool m_IsOpen = false;
+    Button::shared_ptr m_CloseButton;
+    DraggableFree::shared_ptr m_DragBar;
+  };
 
-  void Draggable::MouseMoved()
-  {
+}
 
-  }
-
-  void Draggable::DragStarted()
-  {
-
-  }
-
-  void Draggable::Dragged(const Vec2i &delta)
-  {
-
-  }
-
-  void Draggable::Dropped()
-  {
-
-  }
-
-  void Draggable::StartDrag()
-  {
-    m_IsDragging = true;
-    StealMouseFocus(this);
-    //TakeGlobalMouseFocus(this);
-    DragStarted();
-  }
-
-  void Draggable::Drag(const Vec2i &Delta)
-  {
-    Dragged(Delta);
-  }
-
-  void Draggable::Drop()
-  {
-    m_IsDragging = false;
-    //ReleaseGlobalMouseFocus();
-    ReturnMouseFocus(this);
-    Dropped();
-  }
-
-}  
+#endif // SFUI_CHILDWINDOW_H

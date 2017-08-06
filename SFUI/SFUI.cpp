@@ -289,9 +289,26 @@ int ExternCreateUI(sfui::Theme *uiTheme, std::function<void(sfui::Widget::shared
   lSpinner->SetFrameCount(37);
   lSpinner->SetSpeed(45);
 
+
+
+  auto cWin = uiTheme->MakeChildWindow();
+  cWin->SetSize({ 400, 400 });
+  cWin->SetPosition({ 400, 200 });
+  cWin->SetTitle("ChildWindow");
+  cWin->OnOpened([ ]() { std::cout << "ChildWindow opened\n"; });
+  cWin->OnClosed([ ]() { std::cout << "ChildWindow closed\n"; });
+
+
+  auto openCWin = uiTheme->MakeButton("Open ChildWindow", 14);
+  openCWin->SetSize({ 200, 20 });
+  openCWin->SetPosition({ 10, 100 });
+  openCWin->OnClicked([cptr = cWin.get()](){ cptr->Open(); });
+
   otherPanel->Add(pBar);
   otherPanel->Add(progBtn);
   otherPanel->Add(lSpinner);
+  otherPanel->Add(openCWin);
+  otherPanel->Add(cWin);
 
   /* Add the navigation panel */
   auto navPanel = uiTheme->MakeNavPanel();

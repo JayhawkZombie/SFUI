@@ -175,8 +175,11 @@ namespace sfui
     float txtHeight = ( 45.f + rBds.height - 25.f );
     float txtWidth = std::max(hBds.width, rBds.width);
 
-    if (GlobalMouseFocus || GlobalKeyboardFocus) {
+    if (GlobalMouseFocus) {
       GlobalMouseFocus->BaseUpdate();
+    }
+    if (GlobalKeyboardFocus) {
+      GlobalKeyboardFocus->BaseUpdate();
     }
   }
 
@@ -214,7 +217,7 @@ namespace sfui
 
   bool WidgetWindow::HandleEvent(sf::Event event)
   {
-    optional<Widget::pointer> mFocus = GetChildWithMouseFocus();
+    Widget *mFocus = ( m_MouseFocusQueue.empty() ? nullptr : m_MouseFocusQueue.front() );
     optional<Widget::pointer> kFocus = GetChildWithKeyboardFocus();
 
     Widget::previousMousePositon = Widget::currentMousePosition;
@@ -222,8 +225,8 @@ namespace sfui
 
     //auto uMouse = GetWidgetMouseOver();
 
-    if (GlobalMouseFocus && (event.type == sf::Event::MouseButtonPressed || event.type == sf::Event::MouseButtonReleased || event.type == sf::Event::MouseMoved) ) {
-      GlobalMouseFocus->HandleEvent(event);
+    if (mFocus && (event.type == sf::Event::MouseButtonPressed || event.type == sf::Event::MouseButtonReleased || event.type == sf::Event::MouseMoved) ) {
+      mFocus->HandleEvent(event);
       return true;
     }
 
@@ -299,17 +302,21 @@ namespace sfui
   {
     START_PERFORMANCE_TIMING(m_RenderStartTime, m_Frequency);
 
-    //std::for_each(m_Widgets.begin(), m_Widgets.end(),
-    //              [this](auto wptr) { wptr->Render(m_Window); wptr->RenderLabel(m_Window); });
-
     std::for_each(
       begin(m_RenderOrder),
       end(m_RenderOrder),
-      [this](Widget *wPtr) { wPtr->Render(m_Window); wPtr->RenderLabel(m_Window); }
+      [this](Widget *wPtr) 
+    { 
+      if (!wPtr->IsVisible()) 
+        return;
+
+      wPtr->Render(m_Window); 
+      wPtr->RenderLabel(m_Window); 
+    }
     );
 
-    if (GlobalMouseFocus) {
-      GlobalMouseFocus->Render(m_Window);
+    if (!m_MouseFocusQueue.empty()) {
+      m_MouseFocusQueue.front()->Render(m_Window);
     }
     if (GlobalKeyboardFocus) {
       GlobalKeyboardFocus->Render(m_Window);
@@ -379,11 +386,18 @@ namespace sfui
   void WidgetWindow::StealMouseFocus(Widget *widget)
   {
     GlobalMouseFocus = widget;
+    m_MouseFocusQueue.push_front(widget);
   }
 
   void WidgetWindow::ReturnMouseFocus(Widget *widget)
   {
     GlobalMouseFocus = nullptr;
+    auto it = m_MouseFocusQueue.begin();
+    while (it != m_MouseFocusQueue.end() && *it != widget)
+      it++;
+
+    if (it != m_MouseFocusQueue.end())
+      m_MouseFocusQueue.erase(it);
   }
 
   void WidgetWindow::StealKeyboardFocus(Widget *widget)

@@ -387,6 +387,7 @@ namespace sfui
 
   _shared_ptr<sfui::NavigationPanel> Theme::MakeNavPanel(optional<Widget*> parent /*= optional<Widget*>()*/)
   {
+    APP_LOG_WIDGET_CONSTRUCTION(NavigationPanel);
     NavigationPanel::shared_ptr nPanel = NavigationPanel::Create(this, parent);
     nPanel->SetBackgroundColor(sf::Color(0, 0, 0));
     nPanel->SetBorderColor(sf::Color(122, 122, 122, 120));
@@ -396,9 +397,30 @@ namespace sfui
 
   _shared_ptr<sfui::Preloader> Theme::MakePreloader(optional<Widget*> parent /*= optional<Widget*>()*/)
   {
+    APP_LOG_WIDGET_CONSTRUCTION(Preloader);
     Preloader::shared_ptr pPtr = Preloader::Create(this, parent);
     pPtr->SetBackgroundColor(sf::Color::Transparent);
     return pPtr;
+  }
+
+  ChildWindow::shared_ptr Theme::MakeChildWindow(optional<Widget*> parent /* = { } */)
+  {
+    APP_LOG_WIDGET_CONSTRUCTION(ChildWindow);
+    ChildWindow::shared_ptr cWin = ChildWindow::Create(this, parent);
+    cWin->SetBackgroundColor(WidgetBackgroundColor);
+    cWin->SetBorderColor(WidgetOutlineColor);
+    cWin->SetBorderWidth(WidgetOutlineWidth);
+    return cWin;
+  }
+
+  _shared_ptr<DraggableFree> Theme::MakeDraggableFree(optional<Widget*> parent /* = { } */)
+  {
+    APP_LOG_WIDGET_CONSTRUCTION(DraggableFree);
+    auto dFree = DraggableFree::Create(this, parent);
+    dFree->SetBackgroundColor(sf::Color::Transparent);
+    dFree->SetBorderColor(sf::Color(0, 255, 0));
+    dFree->SetBorderWidth(1);
+    return dFree;
   }
 
 }

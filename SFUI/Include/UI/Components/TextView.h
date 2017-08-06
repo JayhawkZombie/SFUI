@@ -118,7 +118,7 @@ namespace sfui
     virtual void SetBMFont(std::shared_ptr<sw::BitmapFont> fnt);
     static std::shared_ptr<sw::BitmapFont> DefaultBitmapFont;
 
-    std::string GetText() const;
+    const std::string& GetText() const;
     sf::Color GetColor() const;
     uint32 GetTextSize() const;
     font_handle GetFont() const;

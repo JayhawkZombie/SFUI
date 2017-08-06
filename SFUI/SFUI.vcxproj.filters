@@ -216,6 +216,12 @@
     <ClInclude Include="Include\Utilities\WRenderTree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Include\UI\Widgets\ChildWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\UI\Widgets\DraggableFree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SFUI.cpp">
@@ -368,6 +374,12 @@
     <ClCompile Include="Source\Utilities\SequenceTimer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\UI\Widgets\ChildWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\Widgets\DraggableFree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\GaussBlur.glsl" />
@@ -378,6 +390,5 @@
     <None Include="Include\Application\AppLogger.inl">
       <Filter>Header Files</Filter>
     </None>
-    <None Include="Sample.json" />
   </ItemGroup>
 </Project>

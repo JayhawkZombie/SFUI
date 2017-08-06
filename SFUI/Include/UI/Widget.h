@@ -141,7 +141,7 @@ namespace sfui
     void SetFont(font_handle HFont);
     void SetBitmapFont(std::shared_ptr<sw::BitmapFont> fnt);
 
-    std::string GetText() const;
+    const std::string& GetText() const;
     Vec2i GetTextPosition() const;
     Vec2i GetTextSize() const;
     
@@ -367,6 +367,7 @@ namespace sfui
     sf::RectangleShape m_HighlightRect;
     int m_HighlightThickness = 0;
     bool m_IsHighlighted = false;
+    sstring m_Text = "";
   };
   
 }  

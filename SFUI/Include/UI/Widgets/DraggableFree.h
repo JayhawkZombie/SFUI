@@ -1,3 +1,6 @@
+#ifndef SFUI_DRAGGABLEFREE_H
+#define SFUI_DRAGGABLEFREE_H
+
 ////////////////////////////////////////////////////////////
 //
 // MIT License
@@ -42,107 +45,25 @@
 ////////////////////////////////////////////////////////////
 
 namespace sfui
-{  
+{
 
-  Draggable::Draggable(optional<Theme*> theme /*= optional<Theme*>()*/, optional<Widget*> parent /*= optional<Widget*>()*/)
-    : Widget(theme, parent)
+  class DraggableFree : public Draggable
   {
+  public:
+    WIDGET_DERIVED(DraggableFree, Draggable);
+    DraggableFree(optional<Theme*> theme = optional<Theme*>(), optional<Widget*> parent = optional<Widget*>());
+    virtual ~DraggableFree() override;
+    
+    static shared_ptr Create(optional<Theme*> theme = optional<Theme*>(), optional<Widget*> parent = optional<Widget*>());
 
-  }
+    void OnDragged(boost::function<void(const Vec2i &)> func);
 
-  Draggable::~Draggable()
-  {
+  protected:
+    Signal<void(const Vec2i &)> m_DraggedSignal;
+    virtual void Dragged(const Vec2i &delta) override;
 
-  }
+  };
 
-  bool Draggable::HandleEvent(const sf::Event &event)
-  {
-    //if (!Widget::HandleEvent(event)) return false;
+}
 
-    switch (event.type)
-    {
-      case sf::Event::MouseMoved:
-      {
-        if (m_IsDragging)
-        {
-          //continue drag
-          Vec2i delta = currentMousePosition - previousMousePositon;
-          Drag(delta);
-          return true;
-        }
-        return false;
-      }
-
-      case sf::Event::MouseButtonPressed:
-      {
-        if (!m_IsDragging)
-        {
-          //Begin the drag
-          StartDrag();
-          return true;
-        }
-        return false;
-      }
-
-      case sf::Event::MouseButtonReleased:
-      {
-        if (m_IsDragging)
-        {
-          //Stop the drag
-          Drop();
-          return true;
-        }
-        return false;
-      }
-    }
-
-    return false;
-  }
-
-  bool Draggable::IsBeingDragged() const
-  {
-    return m_IsDragging;
-  }
-
-  void Draggable::MouseMoved()
-  {
-
-  }
-
-  void Draggable::DragStarted()
-  {
-
-  }
-
-  void Draggable::Dragged(const Vec2i &delta)
-  {
-
-  }
-
-  void Draggable::Dropped()
-  {
-
-  }
-
-  void Draggable::StartDrag()
-  {
-    m_IsDragging = true;
-    StealMouseFocus(this);
-    //TakeGlobalMouseFocus(this);
-    DragStarted();
-  }
-
-  void Draggable::Drag(const Vec2i &Delta)
-  {
-    Dragged(Delta);
-  }
-
-  void Draggable::Drop()
-  {
-    m_IsDragging = false;
-    //ReleaseGlobalMouseFocus();
-    ReturnMouseFocus(this);
-    Dropped();
-  }
-
-}  
+#endif // SFUI_DRAGGABLEFREE_H

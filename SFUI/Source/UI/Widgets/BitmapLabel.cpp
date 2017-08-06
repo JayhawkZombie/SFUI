@@ -152,4 +152,10 @@ namespace sfui
     m_BMText.setPosition(Position);
   }
 
+  void BitmapLabel::Move(const Vec2i &Delta)
+  {
+    super::Move(Delta);
+    m_BMText.move(Delta);
+  }
+
 }  

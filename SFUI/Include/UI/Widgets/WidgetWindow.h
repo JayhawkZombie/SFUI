@@ -147,6 +147,7 @@ namespace sfui
     std::vector<Widget*> m_RenderOrder;
 
     std::vector<_shared_ptr<PopupWindow>> m_Popups;
+    std::deque<Widget*> m_MouseFocusQueue;
     
     //std::vector<Widget::shared_ptr> m_Widgets;
     sf::RenderWindow &m_Window;

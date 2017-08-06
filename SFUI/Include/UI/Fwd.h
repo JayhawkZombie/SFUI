@@ -53,12 +53,14 @@ namespace sfui
 
   class Canvas;
   class CheckBox;
+  class ChildWindow;
   class ComboBox;
   class CollapsingHeader;
   class ColorBox;
   class ColorPicker;
 
   class Draggable;
+  class DraggableFree;
 
   class GenericContainer;
 

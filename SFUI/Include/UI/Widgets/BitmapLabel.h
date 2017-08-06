@@ -66,6 +66,7 @@ namespace sfui
 
     virtual void Render(sf::RenderTarget &Target) override;
     virtual void SetPosition(const Vec2i &Position) override;
+    virtual void Move(const Vec2i &Delta) override;
 
   private:
     _shared_ptr<sw::BitmapFont> m_BMFont;

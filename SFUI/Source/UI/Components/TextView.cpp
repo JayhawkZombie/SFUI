@@ -130,7 +130,7 @@ namespace sfui
 
   std::shared_ptr<sw::BitmapFont> TextView::DefaultBitmapFont;
 
-  std::string TextView::GetText() const
+  const std::string& TextView::GetText() const
   {
     return m_Text;
   }
