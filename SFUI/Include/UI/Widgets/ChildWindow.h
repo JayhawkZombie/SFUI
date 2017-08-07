@@ -92,7 +92,7 @@ namespace sfui
     Signal<void()> m_ClosedSignal;
     Signal<void()> m_DismissedSignal;
 
-    BitmapLabel::shared_ptr m_Title;
+    TextView::shared_ptr m_Title;
     bool m_CanUserClose = true;
     bool m_IsOpen = false;
     Button::shared_ptr m_CloseButton;

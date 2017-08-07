@@ -72,15 +72,16 @@ namespace sfui
     selBle->SetHighlight(Widget::Highlight::Fill, sf::Color(0, 71, 153, 50), 1);
     selBle->SetBorderWidth(-1);
     selBle->SetParent(this);
-    selBle->SetTextSize(15);
+    selBle->SetText(Text);
+    selBle->SetTextSize(12);
     selBle->SetPosition(itempos);
     selBle->SetTopWindow(m_TopWindow);
     auto sSize = selBle->GetTextSize();
     selBle->OnSelected([this](auto txt) { ItemSelected(txt); });
 
-    int height = ( int )( floor(1.15 * sSize.y) );
+    int height = ( int )( floor(1.25 * sSize.y) );
 
-    selBle->SetSize({ m_Size.x, height });
+    //selBle->SetSize({ m_Size.x, height });
     m_CumulativeSize.y += height;
     m_Items.push_back(selBle);
 

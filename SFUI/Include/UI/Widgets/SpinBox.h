@@ -119,7 +119,7 @@ namespace sfui
     float m_DecreaseDelta = 0.f;
     float m_CurrentValue = 0.f;
 
-    BitmapLabel::shared_ptr m_DescLabel = nullptr;
+    TextView::shared_ptr m_DescLabel = nullptr;
     LineEdit::shared_ptr m_ValueInput = nullptr;
     Button::shared_ptr m_IncreaseButton = nullptr;
     Button::shared_ptr m_DecreaseButton = nullptr;

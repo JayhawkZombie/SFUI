@@ -62,9 +62,9 @@ namespace sfui
     Color tColor = WIDGET_STYLE_COLOR_LIGHT_GREY;
     tColor.a = TEXT_OPACITY_HIGH_CONTRAST_SMALL_TEXT;
     btn->SetTextColor(tColor);
-    btn->SetTextSize(Subheading);
+    btn->SetTextSize(12);
     btn->SetTextAlignment(TextAlignment::Centered);
-    btn->SetBitmapFont(DefaultBitmapFont);
+    btn->SetFont(DefaultFont);
     btn->SetText(Text);
     return btn;
   }
@@ -81,7 +81,7 @@ namespace sfui
     btn->SetTextColor(tColor);
     btn->SetTextSize(textSize);
     btn->SetTextAlignment(TextAlignment::Centered);
-    btn->SetBitmapFont(DefaultBitmapFont);
+    btn->SetFont(DefaultFont);
     btn->SetText(Text);
     return btn;
   }
@@ -106,7 +106,7 @@ namespace sfui
     sel->SetTextColor(tColor);
     sel->SetTextSize(12);
     sel->SetTextAlignment(TextAlignment::Left);
-    sel->SetBitmapFont(DefaultBitmapFont);
+    sel->SetFont(DefaultFont);
     sel->SetText(Text);
     return sel;
   }
@@ -118,7 +118,7 @@ namespace sfui
     tPtr->SetBackgroundColor(WidgetBackgroundColor);
     tPtr->SetBorderColor(WidgetOutlineColor);
     tPtr->SetBorderWidth(WidgetOutlineWidth);
-    tPtr->SetBitmapFont(DefaultBitmapFont);
+    tPtr->SetFont(DefaultFont);
     tPtr->SetTextSize(12);
     tPtr->SetText(Text);
     tPtr->SetTextAlignment(TextAlignment::Centered);
@@ -192,7 +192,7 @@ namespace sfui
     item->SetTextSize(12);
     item->SetBackgroundColor(sf::Color::Transparent);
     item->SetHoverColor(WidgetBackgroundColor + sf::Color(15, 15, 15));
-    item->SetBitmapFont(DefaultBitmapFont);
+    item->SetFont(DefaultFont);
     item->SetTextAlignment(TextAlignment::Left);
     return item;
   }
@@ -227,7 +227,7 @@ namespace sfui
     cHeader->SetTextColor(tColor);
     cHeader->SetTextSize(12);
     cHeader->SetTextAlignment(TextAlignment::Left);
-    cHeader->SetBitmapFont(DefaultBitmapFont);
+    cHeader->SetFont(DefaultFont);
     cHeader->SetText(Text);
     return cHeader;
   }
@@ -242,9 +242,9 @@ namespace sfui
     Color tColor = WIDGET_STYLE_COLOR_LIGHT_GREY;
     tColor.a = TEXT_OPACITY_HIGH_CONTRAST_SMALL_TEXT;
     cBox->SetTextColor(tColor);
-    cBox->SetTextSize(14);
+    cBox->SetTextSize(12);
     cBox->SetTextAlignment(TextAlignment::Left);
-    cBox->SetBitmapFont(DefaultBitmapFont);
+    cBox->SetFont(DefaultFont);
     cBox->SetText("combo box");
     return cBox;
   }
@@ -296,14 +296,14 @@ namespace sfui
     return cBox;
   }
 
-  _shared_ptr<sfui::BitmapLabel> Theme::MakeBitmapLabel(optional<Widget*> parent /*= optional<Widget*>()*/)
-  {
-    APP_LOG_WIDGET_CONSTRUCTION(BitmapLabel);
-    BitmapLabel::shared_ptr bmLabel = BitmapLabel::Create(this, parent);
-    bmLabel->SetBMFont(DefaultBitmapFont);
-    bmLabel->SetBMText("");
-    return bmLabel;
-  }
+  //_shared_ptr<sfui::BitmapLabel> Theme::MakeBitmapLabel(optional<Widget*> parent /*= optional<Widget*>()*/)
+  //{
+  //  APP_LOG_WIDGET_CONSTRUCTION(BitmapLabel);
+  //  BitmapLabel::shared_ptr bmLabel = BitmapLabel::Create(this, parent);
+  //  bmLabel->SetBMFont(DefaultBitmapFont);
+  //  bmLabel->SetBMText("");
+  //  return bmLabel;
+  //}
 
   _shared_ptr<sfui::ColorPicker> Theme::MakeColorPicker(optional<Widget*> parent /*= optional<Widget*>()*/)
   {
@@ -353,7 +353,7 @@ namespace sfui
     pBar->SetTextColor(tColor);
     pBar->SetTextSize(Subheading);
     pBar->SetTextAlignment(TextAlignment::Left);
-    pBar->SetBitmapFont(DefaultBitmapFont);
+    pBar->SetFont(DefaultFont);
     pBar->SetText("0 %");
     return pBar;
   }
@@ -370,7 +370,7 @@ namespace sfui
     cBox->SetTextColor(tColor);
     cBox->SetTextSize(14);
     cBox->SetTextAlignment(TextAlignment::Left);
-    cBox->SetBitmapFont(DefaultBitmapFont);
+    cBox->SetFont(DefaultFont);
     cBox->SetText(Text);
     return cBox;
   }

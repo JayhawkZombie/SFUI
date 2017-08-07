@@ -51,7 +51,7 @@ namespace sfui
   {
     m_CurrentValue = m_DefaultValue;
 
-    m_DescLabel = m_Theme->MakeBitmapLabel(this);
+    m_DescLabel = TextView::Create(this, "Description", sf::Color(198, 198, 198), 12, m_Theme->DefaultFont);
     m_IncreaseButton = m_Theme->MakeIconButton(m_Theme->IconTexture, IntRect(153, 408, 50, 50), this);
     m_DecreaseButton = m_Theme->MakeIconButton(m_Theme->IconTexture, IntRect(204, 255, 50, 50), this);
     m_LockButton = m_Theme->MakeIconButton(m_Theme->IconTexture, IntRect(0, 357, 50, 50), this);
@@ -68,7 +68,7 @@ namespace sfui
     m_ValueInput->OnTextEntered([this]() { ValueInputChanged(); });
     m_ValueInput->OnReturnHit([this]() { ValueEntered(); });
 
-    Add(m_DescLabel);
+    //Add(m_DescLabel);
     Add(m_IncreaseButton);
     Add(m_DecreaseButton);
     Add(m_LockButton);
@@ -120,6 +120,7 @@ namespace sfui
       return;
 
     super::Render(Target, {});
+    m_DescLabel->Render(Target, {});
   }
 
   void SpinBox::Move(const Vec2i &Delta)

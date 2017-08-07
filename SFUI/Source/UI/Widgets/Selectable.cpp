@@ -101,10 +101,10 @@ namespace sfui
   void Selectable::Render(sf::RenderTarget &Target)
   {
     Target.draw(m_BackgroundRect);
-    if (m_TextView)
-      ( *m_TextView )->Render(Target, {});
     if (m_IsSelected)
       Target.draw(m_HighlightRect);
+    if (m_TextView)
+      ( *m_TextView )->Render(Target, { });
   }
 
   void Selectable::OnSelected(boost::function<void(const std::string &)> func)

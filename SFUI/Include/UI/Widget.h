@@ -338,7 +338,7 @@ namespace sfui
     Theme *m_Theme = nullptr;
     std::optional<TextView::shared_ptr> m_TextView = {};
     optional<_shared_ptr<ContextMenu>> m_ContextMenu = {};
-    _shared_ptr<BitmapLabel> m_Label = nullptr;
+    TextView::shared_ptr m_Label = nullptr;
     optional<Widget::shared_ptr> m_Tooltip = {};
 
     bool m_HasMouseFocus = false;

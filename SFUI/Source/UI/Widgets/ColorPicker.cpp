@@ -49,10 +49,10 @@ namespace sfui
   ColorPicker::ColorPicker(optional<Theme*> theme /*= optional<Theme*>()*/, optional<Widget*> parent /*= optional<Widget*>()*/)
     : Panel(theme, parent)
   {
-    m_HexLabel = m_Theme->MakeBitmapLabel(this);
-    m_HexLabel->SetBMText("#FFFFFF");
-    m_RGBLabel = m_Theme->MakeBitmapLabel(this);
-    m_RGBLabel->SetBMText("(255, 255, 255");
+    m_HexLabel = TextView::Create(this, "#FFFFFF", sf::Color(198, 198, 198), 12, m_Theme->DefaultFont);
+    //m_HexLabel->SetBMText("#FFFFFF");
+    m_RGBLabel = TextView::Create(this, "rgb", sf::Color(198, 198, 198), 12, m_Theme->DefaultFont);
+    //m_RGBLabel->SetBMText("(255, 255, 255");
 
     m_CancelBtn = m_Theme->MakeButton("Cancel", this);
     m_OKBtn = m_Theme->MakeButton("OK", this);
@@ -85,8 +85,8 @@ namespace sfui
     m_PreviewBox.setOutlineColor(sf::Color::Black);
     m_PreviewBox.setOutlineThickness(-1);
 
-    Add(m_HexLabel);
-    Add(m_RGBLabel);
+    //Add(m_HexLabel);
+    //Add(m_RGBLabel);
     Add(m_CancelBtn);
     Add(m_ColorBox);
     Add(m_OKBtn);
@@ -113,6 +113,8 @@ namespace sfui
   {
     Panel::Render(Target);
     Target.draw(m_PreviewBox);
+    m_HexLabel->Render(Target, {});
+    m_RGBLabel->Render(Target, {});
   }
 
   void ColorPicker::SetPosition(const Vec2i &Position)
@@ -153,7 +155,7 @@ namespace sfui
       ", " + std::to_string(m_CurrentColor.g) +
       ", " + std::to_string(m_CurrentColor.b) + ")";
 
-    m_RGBLabel->SetBMText(newRGB);
+    m_RGBLabel->SetText(newRGB);
 
     std::string hexStr{ "#000000" };
 
@@ -170,7 +172,7 @@ namespace sfui
     dResRem = m_CurrentColor.b - ( dRes << 4 );
     hexStr[6] = CharToAlphaAscii(dResRem);
 
-    m_HexLabel->SetBMText(hexStr);
+    m_HexLabel->SetText(hexStr);
   }
 
   void ColorPicker::CancelButtonHit()

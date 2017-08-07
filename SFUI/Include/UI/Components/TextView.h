@@ -126,6 +126,7 @@ namespace sfui
 
     void SetPosition(Vec2i pos);
     void SetSize(Vec2i pos);
+    void Move(const Vec2i &Delta);
     Vec2i GetPosition() const;
     Vec2i GetSize() const;
 

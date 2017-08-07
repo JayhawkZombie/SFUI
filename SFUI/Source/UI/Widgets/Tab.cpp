@@ -51,6 +51,7 @@ namespace sfui
   {
     if (parentList)
       m_ParentTabList = parentList.value();
+    m_TextView.value()->SetAlignment(TextAlignment::Centered);
   }
 
   Tab::~Tab()

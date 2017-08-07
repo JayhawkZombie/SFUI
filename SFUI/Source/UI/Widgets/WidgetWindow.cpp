@@ -60,12 +60,12 @@ namespace sfui
     m_UpdateTimeFont.loadFromFile("NotoSans-Regular.ttf");
     m_UpdateTimeText.setFont(m_UpdateTimeFont);
     m_UpdateTimeText.setFillColor(sf::Color::White);
-    m_UpdateTimeText.setCharacterSize(14);
+    m_UpdateTimeText.setCharacterSize(10);
     m_UpdateTimeText.setPosition({ 1100.f, 25.f });
 
     m_RenderTimeText.setFont(m_UpdateTimeFont);
     m_RenderTimeText.setFillColor(sf::Color::White);
-    m_RenderTimeText.setCharacterSize(14);
+    m_RenderTimeText.setCharacterSize(10);
     m_RenderTimeText.setPosition({ 1100.f, 45.f });
 
     m_UpdateTimeBG.setFillColor(sf::Color::Black);

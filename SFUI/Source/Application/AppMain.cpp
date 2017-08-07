@@ -172,8 +172,8 @@ namespace sfui
       iconTexture->loadFromFile("iconmap_grey.png");
 
       font_handle hFont = std::make_shared<sf::Font>();
-      if (!hFont->loadFromFile("segoeui.ttf")) {
-        APP_LOG_LOAD_FAILURE("segoeui.ttf");
+      if (!hFont->loadFromFile("OpenSans-Light.ttf")) {
+        APP_LOG_LOAD_FAILURE("OpenSans-Light.ttf");
         return -1;
       }
 

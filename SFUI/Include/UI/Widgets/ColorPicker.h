@@ -90,8 +90,8 @@ namespace sfui
     Button::shared_ptr m_OKBtn;
     Button::shared_ptr m_CancelBtn;
 
-    BitmapLabel::shared_ptr m_RGBLabel;
-    BitmapLabel::shared_ptr m_HexLabel;
+    TextView::shared_ptr m_RGBLabel;
+    TextView::shared_ptr m_HexLabel;
 
     sf::Color m_CurrentColor = sf::Color::White;
     sf::Uint8 m_Opacity = 255;

@@ -202,7 +202,7 @@ namespace sfui
 
     for (auto & bptr : m_Items) {
       if (bptr->GetTextSize().x > m_MaxItemWidth)
-        m_MaxItemWidth = bptr->GetTextSize().x;
+        m_MaxItemWidth = bptr->GetSize().x;
 
       bptr->SetPosition(itempos);      
 

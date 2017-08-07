@@ -50,10 +50,12 @@ namespace sfui
   {
     m_CloseButton = m_Theme->MakeIconButton(m_Theme->IconTexture, IntRect(259, 106, 42, 42), this);
     m_CloseButton->SetSize({ 20, 20 });
-    m_Title = m_Theme->MakeBitmapLabel(this);
+    //m_Title = m_Theme->MakeBitmapLabel(this
+    m_Title = TextView::Create(this, "ChildWindow", sf::Color(198, 198, 198), 12., m_Theme->DefaultFont);
+
     auto c = m_BGColor;
     c.r -= 15; c.g -= 15; c.b -= 15;
-    m_Title->SetBackgroundColor(c);
+    
     m_CloseButton->OnClicked([this]() { Close(); });
     m_Highlight = Widget::Highlight::Top;
     m_HighlightColor = sf::Color(0, 204, 204);
@@ -91,7 +93,7 @@ namespace sfui
       return;
 
     super::Update();
-    m_Title->BaseUpdate();
+    //m_Title->BaseUpdate();
     m_CloseButton->BaseUpdate();
     m_DragBar->BaseUpdate();
   }
@@ -103,7 +105,7 @@ namespace sfui
 
     Widget::Render(Target);
     super::Render(Target, {});
-    m_Title->Render(Target);
+    m_Title->Render(Target, {});
     if (m_CanUserClose)
       m_CloseButton->Render(Target);
     Target.draw(m_HighlightRect);
@@ -194,8 +196,8 @@ namespace sfui
 
   void ChildWindow::SetTitle(const sstring &Title)
   {
-    m_Title->SetBMText(Title);
-    m_Title->SetPosition({ m_Position.x + 5, m_Position.y + m_Title->GetTextSize().y });
+    m_Title->SetText(Title);
+    m_Title->SetPosition({ m_Position.x + 5, m_Position.y + m_Title->GetSize().y });
   }
 
   void ChildWindow::OnOpened(boost::function<void()> func)

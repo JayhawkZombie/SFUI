@@ -835,7 +835,7 @@ namespace sfui
   void Widget::RenderLabel(sf::RenderTarget &Target)
   {
     if (m_HasLabel && m_Label)
-      m_Label->Render(Target);
+      m_Label->Render(Target, {});
   }
 
   void Widget::SetHighlight(Highlight hLight, const Color &c, int Width /*= 3*/)
@@ -927,12 +927,12 @@ namespace sfui
   {
     m_HasLabel = true;
     if (!m_Label) {
-      m_Label = m_Theme->MakeBitmapLabel(this);
+      m_Label = TextView::Create(this, Text, sf::Color(198, 198, 198), 12, m_Theme->DefaultFont);
     }
 
-    m_Label->SetBMText(Text);
+    m_Label->SetText(Text);
     auto lSize = m_Label->GetSize();
-    m_Label->SetPosition({ m_Position.x - lSize.x - 10, m_Position.y + m_Size.y - 3 });
+    m_Label->SetPosition({ m_Position.x - lSize.x - 10, m_Position.y + m_Size.y });
     //else {
     //  auto oldLabelSize = m_Label->GetSize();
     //  m_Label->SetBMText(Text);

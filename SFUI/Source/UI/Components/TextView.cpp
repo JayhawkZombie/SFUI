@@ -86,24 +86,28 @@ namespace sfui
 
   void TextView::Render(sf::RenderTarget &Target, sf::View RenderView)
   {
-    Target.draw(m_BMText);
+    Target.draw(m_RenderText);
+    //Target.draw(m_BMText);
   }
 
   void TextView::SetText(const std::string &Text)
   {
     m_Text = Text;
-    m_BMText.setString(Text);
+    m_RenderText.setString(m_Text);
+    //m_BMText.setString(Text);
   }
 
   void TextView::SetColor(sf::Color Color)
   {
     m_TextColor = Color;
-    m_BMText.setColor(Color);
+    m_RenderText.setFillColor(m_TextColor);
+    //m_BMText.setColor(Color);
   }
 
   void TextView::SetTextSize(uint32 TexSize)
   {
     m_TextSize = TexSize;
+    m_RenderText.setCharacterSize(m_TextSize);
   }
 
   void TextView::SetFont(font_handle HFont)
@@ -154,7 +158,8 @@ namespace sfui
   void TextView::SetPosition(Vec2i pos)
   {
     m_Position = pos;
-    m_BMText.setPosition(pos); 
+    //m_BMText.setPosition(pos); 
+    m_RenderText.setPosition(pos);
     RealignText();
   }
 
@@ -164,15 +169,20 @@ namespace sfui
     RealignText();
   }
 
+  void TextView::Move(const Vec2i &Delta)
+  {
+    m_RenderText.move(Delta);
+  }
+
   Vec2i TextView::GetPosition() const
   {
-    return m_BMText.getPosition();
+    return m_RenderText.getPosition();
   }
 
   Vec2i TextView::GetSize() const
   {
-    auto bds = m_BMText.getLocalBounds();
-    return Vec2i((int)floor(bds.width), (int)floor(bds.height));
+    auto bds = m_RenderText.getLocalBounds();
+    return Vec2i((int)ceil(bds.width + bds.left), (int)ceil(bds.height + bds.top));
   }
 
   void TextView::Reposition()
@@ -182,8 +192,30 @@ namespace sfui
 
   void TextView::RealignText()
   {
-    FloatRect tBds = m_BMText.getLocalBounds();
-    auto tPos = m_BMText.getPosition();
+    auto lBds = m_RenderText.getLocalBounds();
+    auto pPos = m_Parent->GetPosition();
+    auto pSiz = m_Parent->GetSize();
+
+    //We can't "center" the text vertically, because words with letters extending
+    // lower than the baseline will make the text render higher,
+    // so we must align using the baseline
+
+    Vec2i newPos = pPos;
+    newPos.y = newPos.y + pSiz.y - 3 - m_TextSize;
+    //newPos.y -= pSiz.y;
+    //newPos.y -= m_TextSize;
+
+    //But we CAN align it horizontally
+    float xDiff = cast_float(floor(pSiz.x - lBds.width));
+    newPos.x += cast_int(floor(xDiff / 2.f));
+
+    //newPos.x = pPos.x + cast_int(floor(xDiff / 2.f)) - cast_int(lBds.left);
+    //newPos.y = pPos.y + cast_int(floor(yDiff / 2.f)) - cast_int(lBds.top);
+
+    m_RenderText.setPosition(newPos);
+
+    /*FloatRect tBds = m_RenderText.getLocalBounds();
+    auto tPos = m_RenderText.getPosition();
     Vec2i pSiz = m_Parent->GetSize();
     Vec2i pPos = m_Position;
 
@@ -192,8 +224,8 @@ namespace sfui
 
     Vec2i newPos = pPos;
 
-    auto gBds = m_BMText.getLocalBounds();
-    auto topDiff = abs(tBds.height - pPos.y - m_Size.y);    
+    auto gBds = m_RenderText.getLocalBounds();
+    auto topDiff = abs(tBds.height - pPos.y - m_Size.y);
 
     switch (m_Alignment)
     {
@@ -236,10 +268,10 @@ namespace sfui
 
         break;
       }
-    }
+    } 
 
     newPos.y -= cast_int(floor(0.25 * pSiz.y));
-    m_BMText.setPosition(newPos);
+    m_RenderText.setPosition(newPos); */
   }
 
 }  

@@ -87,7 +87,7 @@ int ExternCreateUI(sfui::Theme *uiTheme, std::function<void(sfui::Widget::shared
   auto tstBtn = uiTheme->MakeButton("TestButton");
   tstBtn->SetHasDropShadow(true);
   tstBtn->SetPosition({ 260, 40 });
-  tstBtn->SetDefaultSize({ 150, 25 });
+  tstBtn->SetDefaultSize({ 150, 20 });
 
   auto cBox = uiTheme->MakeCheckBox("Test Check");
   cBox->SetPosition({ 10, 10 });
@@ -98,7 +98,7 @@ int ExternCreateUI(sfui::Theme *uiTheme, std::function<void(sfui::Widget::shared
   animBox->AddItem("Accelerate");
   animBox->AddItem("Decelerate");
   animBox->AddItem("EaseInOut");
-  animBox->SetSize({ 200, 25 });
+  animBox->SetSize({ 200, 15 });
   animBox->SetBoxSize({ 200, 100 });
   animBox->SetPosition({ 10, 40 });
   
@@ -217,7 +217,7 @@ int ExternCreateUI(sfui::Theme *uiTheme, std::function<void(sfui::Widget::shared
   }
   
   auto combo = uiTheme->MakeComboBox();
-  combo->SetDefaultSize({ 200, 20 });
+  combo->SetDefaultSize({ 200, 15 });
   combo->SetBoxSize({ 200, 300 });
   combo->SetPosition({ 150, 40 });
   combo->AddItem("Test item 1");

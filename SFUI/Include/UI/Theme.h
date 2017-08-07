@@ -89,7 +89,7 @@ namespace sfui
     _shared_ptr<ValueSlider> MakeValueSlider(optional<Widget*> parent = optional<Widget*>());
     _shared_ptr<RainbowStrip> MakeRainbowStrip(optional<Widget*> parent = optional<Widget*>());
     _shared_ptr<ColorBox> MakeColorBox(optional<Widget*> parent = optional<Widget*>());
-    _shared_ptr<BitmapLabel> MakeBitmapLabel(optional<Widget*> parent = optional<Widget*>());
+    //_shared_ptr<BitmapLabel> MakeBitmapLabel(optional<Widget*> parent = optional<Widget*>());
     _shared_ptr<ColorPicker> MakeColorPicker(optional<Widget*> parent = optional<Widget*>());
     _shared_ptr<WidgetTree> MakeTree(optional<Widget*> parent = optional<Widget*>());
     _shared_ptr<SpinBox> MakeSpinBox(optional<Widget*> parent = optional<Widget*>());
