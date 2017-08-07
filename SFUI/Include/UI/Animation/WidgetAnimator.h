@@ -112,6 +112,33 @@ namespace sfui
     bool m_EndCurrent = false;
   };
 
+
+  struct ValueAnimation
+  {
+    float LowValue;
+    float HighValue;
+    kairos::Duration Duration;
+    CubicBezier EasingCurve;
+    std::function<void(const float &)> Callback;
+  };
+
+  class ValueAnimator
+  {
+  public:
+    ValueAnimator();
+    ~ValueAnimator();
+
+    void Animate(const float &LowVal, const float &HighVal, Easing curve, uint32 Duration, std::function<void(const float &)> Callback);
+    void Update();
+
+  private:
+    void ApplyAnimation(float perc);
+    void DequeAnimation();
+
+    kairos::Timer m_Timer;
+    std::queue<ValueAnimation> m_AnimationQueue;
+  };
+
 }  
 
 #endif // SFUI_WIDGETANIMATOR_H

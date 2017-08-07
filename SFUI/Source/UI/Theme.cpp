@@ -423,4 +423,14 @@ namespace sfui
     return dFree;
   }
 
+  _shared_ptr<ContextMenu> Theme::MakeContextMenu(optional<Widget*> parent /* = { } */)
+  {
+    APP_LOG_WIDGET_CONSTRUCTION(ContextMenu);
+    auto cMenu = ContextMenu::Create(this, parent);
+    cMenu->SetBackgroundColor(WIDGET_STYLE_COLOR_NEAR_BLACK);
+    cMenu->SetBorderColor(WidgetOutlineColor);
+    cMenu->SetBorderWidth(1);
+    return cMenu;
+  }
+
 }

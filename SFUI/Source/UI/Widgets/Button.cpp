@@ -100,8 +100,6 @@ namespace sfui
 
     auto tSize = GetTextSize();
     tSize.x = cast_int(floor(tSize.x * 1.2f));
-
-    //SetSize(tSize);
   }
 
   void Button::MouseMoved()
@@ -112,9 +110,6 @@ namespace sfui
   void Button::MouseEntered()
   {
     super::MouseEntered();
-    if (m_CanAnimateExpand) 
-      m_Animator.Animate(WidgetAnimation::Expand, m_Size, m_Size + m_ExpandSizeOffset, Easing::EaseInOut, 150);
-
     if (m_IsLeftMouseDown) {
       Button::MousePressed(true, m_IsRightMouseDown);
     }
@@ -132,9 +127,6 @@ namespace sfui
   void Button::MouseLeft()
   {
     super::MouseLeft();
-    if (m_CanAnimateContract)
-      m_Animator.Animate(WidgetAnimation::Expand, m_Size, m_Size - m_ExpandSizeOffset, Easing::EaseInOut, 150);
-
     m_BackgroundRect.setFillColor(m_BGColor);
     Unhovered();
   }
@@ -184,13 +176,11 @@ namespace sfui
     m_ExpandSizeOffset = Vec2i(5, 5);
     m_ContractSize = Size;
     super::SetDefaultSize(Size);
-    //if (m_HasDropShadow) CreateDropShadow();
   }
 
   void Button::SetSize(const Vec2i &Size)
   {
     super::SetSize(Size);
-    //if (m_HasDropShadow) CreateDropShadow();
   }
 
   void Button::SetHasDropShadow(bool HasDropShadow)
@@ -215,10 +205,6 @@ namespace sfui
     if (m_HasDropShadow) {
       m_DropShadow.SetCasterPosition(m_Position);
     }
-    //auto tSize = GetTextSize();
-    //tSize.x = cast_int(floor(tSize.x * 1.2f));
-
-    //SetSize(tSize);
   }
 
   void Button::Pressed()

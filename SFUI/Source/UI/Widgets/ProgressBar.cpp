@@ -44,34 +44,27 @@
 namespace sfui
 {  
   
-
-  
   ProgressBar::ProgressBar(optional<Theme*> theme, optional<Widget*> parent)
     : Widget(theme, parent, 0)
   {
     SetProgressColor(m_ProgressColor);
   }
 
-  sfui::ProgressBar::shared_ptr ProgressBar::Create(optional<Theme*> theme, optional<Widget*> parent /*= optional<Widget*>()*/)
+  ProgressBar::shared_ptr ProgressBar::Create(optional<Theme*> theme, optional<Widget*> parent /*= optional<Widget*>()*/)
   {
     return std::make_shared<ProgressBar>(theme, parent);
   }
 
   void ProgressBar::SetProgress(float Prog)
-  {
-    m_FillDelta = abs(Prog - m_Progress);
-    m_ToAddPerTick = 0.5;
-    m_DirUp = ( Prog >= m_Progress );
-    
-    m_Progress = Prog;
+  {   
     if (m_ShowPercText && m_TextView)
       ( *m_TextView )->SetText(std::to_string(m_Progress) + std::string(" %"));
 
-    m_FillPercPerMs = m_FillDelta / 1000.f; // fill up delta over 1s -> 1000ms
-    m_AnimationStep.resetTime();
-    m_AnimationStep.setStep((1000.0 / m_FillDelta) / 4000.0);
-    m_Animating = true;
+    m_ValueAnimator.Animate(m_Progress, Prog, Easing::Standard, 350, [this](const float &progFill)
+    { m_FillRect.setSize({ cast_float(m_Size.x * ( progFill / 100.f )), cast_float(m_Size.y) });
+    });
 
+    m_Progress = Prog;
     ProgressChanged();
   }
 
@@ -115,27 +108,13 @@ namespace sfui
 
   void ProgressBar::Reset()
   {
-    Restarted();
+    m_Progress = 0.f;
+    m_FillRect.setSize({ 0.f, cast_float(m_Size.y) });
   }
 
   void ProgressBar::Update()
   {
-    m_AnimationStep.addFrame();
-
-    if (!m_Animating) {
-      while (m_AnimationStep.isUpdateRequired());
-    }
-    else {
-      while (m_AnimationStep.isUpdateRequired() && m_Animating) {
-        AdvanceAnimation();
-      }
-    }
-
-    if (!m_IsCompleted && m_Progress >= ( 100.f - 0.001f )) {
-      Completed();
-    }
-
-
+    super::Update();
   }
 
   void ProgressBar::Render(sf::RenderTarget &Target)
@@ -168,37 +147,9 @@ namespace sfui
 
   void ProgressBar::Resized()
   {
-    m_FillRect.setSize({ cast_float(m_Size.x * (m_CurrentPercent / 100.f)), cast_float(m_Size.y) });    
+    m_FillRect.setSize({ cast_float(m_Size.x * (m_Progress / 100.f)), cast_float(m_Size.y) });    
     m_BufferRect.setSize({ cast_float(m_Size.x * (m_BufferProgress / 100.f)), cast_float(m_Size.y) });
     m_BackgroundRect.setSize(m_Size);
-  }
-
-  void ProgressBar::AdvanceAnimation()
-  {
-    m_CurrentPercent += ( m_DirUp ? m_ToAddPerTick : -m_ToAddPerTick );
-    m_FillRect.setSize({ cast_float(m_Size.x * ( m_CurrentPercent / 100.f)), cast_float(m_Size.y) });
-
-    if (abs(m_CurrentPercent - m_Progress) < 0.01) {
-      m_FillDelta = 0.f;
-      m_CurrentPercent = static_cast< double >( m_Progress );
-      m_Animating = false;
-      m_FillRect.setSize({ m_Size.x * ( m_Progress / 100.f ), cast_float(m_Size.y) });
-    }
-  }
-
-  void ProgressBar::Completed()
-  {
-    m_IsCompleted = true;
-    m_Progress = 100.f;
-    m_FillRect.setSize(m_Size);
-    m_CompletedSignal();
-  }
-
-  void ProgressBar::Restarted()
-  {
-    m_IsCompleted = false;
-    m_Progress = 0.f;
-    m_BufferProgress = 0.f;
   }
 
   void ProgressBar::ProgressChanged()

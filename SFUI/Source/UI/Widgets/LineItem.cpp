@@ -97,6 +97,13 @@ namespace sfui
     m_HoverColor = c;
   }
 
+  void LineItem::SetText(const std::string &Text)
+  {
+    super::SetText(Text);
+    auto tSize = m_TextView.value()->GetSize();
+    SetSize(tSize);
+  }
+
   void LineItem::Select()
   {
     m_BackgroundRect.setFillColor(sf::Color::Transparent);

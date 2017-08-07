@@ -57,7 +57,6 @@ namespace sfui
 
   void Selectable::Select()
   {
-    //m_BackgroundRect.setFillColor(m_SelectionColor);
     m_IsSelected = true;
     m_SelectedSignal(GetText());
     Selected();
@@ -122,24 +121,11 @@ namespace sfui
   {
     Color c = m_BGColor + Color(m_BrightFactor, m_BrightFactor, m_BrightFactor, 0);
     m_BackgroundRect.setFillColor(c);
-    //if (m_IsSelected) {
-    //  m_BackgroundRect.setFillColor(m_SelectionColor);
-    //}
-    //else {
-    //  Color c = m_BGColor + Color(m_BrightFactor, m_BrightFactor, m_BrightFactor, 0);
-    //  m_BackgroundRect.setFillColor(c);
-    //}
   }
 
   void Selectable::MouseLeft()
   {
     m_BackgroundRect.setFillColor(m_BGColor);
-    //if (m_IsSelected) {
-    //  m_BackgroundRect.setFillColor(m_SelectionColor);
-    //}
-    //else {
-    //  m_BackgroundRect.setFillColor(m_BGColor);
-    //}
   }
 
   void Selectable::MousePressed(bool left, bool right)

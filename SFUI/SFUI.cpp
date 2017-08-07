@@ -268,11 +268,11 @@ int ExternCreateUI(sfui::Theme *uiTheme, std::function<void(sfui::Widget::shared
     */
     
   auto pBar = uiTheme->MakeProgressBar();
-  pBar->SetDefaultSize({ 300, 7 });
-  pBar->SetPosition({ 10, 10 });
+  pBar->SetDefaultSize({ 300, 2 });
+  pBar->SetPosition({ 60, 10 });
 
   auto progBtn = uiTheme->MakeButton("Change Progress");
-  progBtn->SetPosition({ 320, 10 });
+  progBtn->SetPosition({ 370, 10 });
   progBtn->SetDefaultSize({ 150, 20 });
   srand(0);
   progBtn->OnClicked(
@@ -300,9 +300,17 @@ int ExternCreateUI(sfui::Theme *uiTheme, std::function<void(sfui::Widget::shared
 
 
   auto openCWin = uiTheme->MakeButton("Open ChildWindow", 14);
-  openCWin->SetSize({ 200, 20 });
+  openCWin->SetDefaultSize({ 200, 20 });
   openCWin->SetPosition({ 10, 100 });
   openCWin->OnClicked([cptr = cWin.get()](){ cptr->Open(); });
+
+
+
+  auto ocMenu = otherPanel->AddContextMenu();
+  ocMenu->AddMenuItem("Item 1");
+  ocMenu->AddMenuItem("Item 2");
+
+
 
   otherPanel->Add(pBar);
   otherPanel->Add(progBtn);

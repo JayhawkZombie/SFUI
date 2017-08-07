@@ -65,7 +65,7 @@ namespace sfui
     bool HandleEvent(const sf::Event &event) override;
 
     void SetHoverColor(const Color &c);
-
+    virtual void SetText(const std::string &Text) override;
     void Select();
     void Deselect();
 

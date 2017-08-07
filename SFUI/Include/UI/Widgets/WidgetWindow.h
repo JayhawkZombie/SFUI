@@ -135,21 +135,12 @@ namespace sfui
     long long m_ThisRenderTime = 0;
     long long m_RenderCounts = 0;
 
-    // Testing shows a parallel update is not worth it
-    //  But this makes sense.  The update methods for widgets are (currently)
-    //  very simple/fast.  The overhead of launching them in parallel is too high
-    //  while the UI does so little
-
-    //concurrency::concurrent_vector<Widget*> m_WidgetsParallel;
-    //std::vector<Widget*> m_WidgetsSequential;
-
     concurrency::concurrent_vector<Widget::shared_ptr> m_Widgets;
     std::vector<Widget*> m_RenderOrder;
 
     std::vector<_shared_ptr<PopupWindow>> m_Popups;
     std::deque<Widget*> m_MouseFocusQueue;
     
-    //std::vector<Widget::shared_ptr> m_Widgets;
     sf::RenderWindow &m_Window;
   };
   

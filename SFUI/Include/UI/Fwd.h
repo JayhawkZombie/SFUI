@@ -55,6 +55,7 @@ namespace sfui
   class CheckBox;
   class ChildWindow;
   class ComboBox;
+  class ContextMenu;
   class CollapsingHeader;
   class ColorBox;
   class ColorPicker;

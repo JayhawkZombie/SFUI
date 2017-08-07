@@ -246,6 +246,16 @@ namespace sfui
     };
     virtual void SetHighlight(Highlight hLight, const Color &c, int Width = 3);
 
+    enum class SizingPolicy
+    {
+      Manual,
+      Dynamic
+    };
+    void SetSizingPolicy(SizingPolicy Policy);
+    SizingPolicy GetSizingPolicy() const;
+
+    _shared_ptr<ContextMenu> AddContextMenu();
+
   protected:
     static Vec2i currentMousePosition;
     static Vec2i previousMousePositon;
@@ -319,22 +329,24 @@ namespace sfui
     bool m_IsTopLevel = false;
 
     //Controlling animations
-    bool m_CanAnimateExpand = true;
-    bool m_CanAnimateContract = true;
-    bool m_CanAnimateSlide = true;
-    bool m_CanAnimateFade = true;
-    bool m_CanAnimateBounce = true;
+    bool m_CanAnimateExpand = false;
+    bool m_CanAnimateContract = false;
+    bool m_CanAnimateSlide = false;
+    bool m_CanAnimateFade = false;
+    bool m_CanAnimateBounce = false;
 
     Theme *m_Theme = nullptr;
-    std::optional<TextView::shared_ptr> m_TextView;
-    _shared_ptr<BitmapLabel> m_Label;
-    optional<Widget::shared_ptr> m_Tooltip;
+    std::optional<TextView::shared_ptr> m_TextView = {};
+    optional<_shared_ptr<ContextMenu>> m_ContextMenu = {};
+    _shared_ptr<BitmapLabel> m_Label = nullptr;
+    optional<Widget::shared_ptr> m_Tooltip = {};
 
     bool m_HasMouseFocus = false;
     bool m_HasKeyboardFocus = false;
 
     WidgetWindow *m_TopWindow = nullptr;
     WidgetAnimator m_Animator;
+    ValueAnimator m_ValueAnimator;
     optional<pointer> m_ChildWithMouseFocus;
     optional<pointer> m_ChildWithKeyboardFocus;
 
@@ -363,6 +375,7 @@ namespace sfui
 
     sf::RectangleShape m_BackgroundRect;
     Highlight m_Highlight = Highlight::Bottom;
+    SizingPolicy m_SizingPolicy = SizingPolicy::Dynamic;
     Color m_HighlightColor = sf::Color::Transparent;
     sf::RectangleShape m_HighlightRect;
     int m_HighlightThickness = 0;

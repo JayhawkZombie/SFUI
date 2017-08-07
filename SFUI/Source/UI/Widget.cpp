@@ -36,6 +36,7 @@
 #include <SFUI/Include/UI/Widgets/PopupWindow.h>
 #include <SFUI/Include/UI/Widgets/WidgetWindow.h>
 #include <SFUI/Include/UI/Widgets/BitmapLabel.h>
+#include <SFUI/Include/UI/Widgets/ContextMenu.h>
 
 ////////////////////////////////////////////////////////////
 // Dependency Headers
@@ -68,6 +69,10 @@ namespace sfui
   Widget::~Widget()
   {
     if (m_TextView) m_TextView.reset();
+    if (m_ContextMenu.has_value())
+      m_ContextMenu.value().reset();
+    if (m_Tooltip.has_value())
+      m_Tooltip.value().reset();
   }
 
   bool Widget::IsKeyDown(Key key) const
@@ -528,6 +533,7 @@ namespace sfui
     }
       //HandleMouseMovedOff();
     m_Animator.Update();
+    m_ValueAnimator.Update();
     Update();
   }
 
@@ -585,11 +591,16 @@ namespace sfui
 
       case sf::Event::MouseButtonReleased:
       {
-        if (event.mouseButton.button == sf::Mouse::Left)
+        if (event.mouseButton.button == sf::Mouse::Left) {
           MouseReleased(true, false);
+        }
           //HandleLeftMouseReleased();
-        else
+        else {
           MouseReleased(false, true);
+          if (m_ContextMenu.has_value()) {
+            m_ContextMenu.value()->Open();
+          }
+        }
           //HandleRightMouseReleased();
         return true;
       }
@@ -889,6 +900,27 @@ namespace sfui
 
     m_HighlightRect.setPosition(hPos);
     m_HighlightRect.setSize(hSize);
+  }
+
+  void Widget::SetSizingPolicy(SizingPolicy Policy)
+  {
+    m_SizingPolicy = Policy;
+  }
+
+  Widget::SizingPolicy Widget::GetSizingPolicy() const
+  {
+    return m_SizingPolicy;
+  }
+
+  _shared_ptr<sfui::ContextMenu> Widget::AddContextMenu()
+  {
+    if (m_ContextMenu.has_value()) {
+      return m_ContextMenu.value();
+    }
+    else {
+      m_ContextMenu.emplace(m_Theme->MakeContextMenu(this));
+      return m_ContextMenu.value();
+    }
   }
 
   void Widget::SetLabel(const std::string &Text)

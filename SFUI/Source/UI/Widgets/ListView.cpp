@@ -69,6 +69,7 @@ namespace sfui
     itempos.y += m_CumulativeSize.y;
     auto selBle = m_Theme->MakeSelectableButton(Text, this);
     selBle->SetBorderColor(m_Theme->WidgetOutlineColor);
+    selBle->SetHighlight(Widget::Highlight::Fill, sf::Color(0, 71, 153, 50), 1);
     selBle->SetBorderWidth(-1);
     selBle->SetParent(this);
     selBle->SetTextSize(15);
@@ -173,8 +174,6 @@ namespace sfui
   void ListView::SetPosition(const Vec2i &Position)
   {
     super::SetPosition(Position);
-    //auto delta = Position - m_Position;
-
     AdjustList();
     AdjustScrollbar();
   }
@@ -188,7 +187,6 @@ namespace sfui
     }
 
     m_ScrollBar->Move(Delta);
-    //AdjustScrollbar();
   }
 
   void ListView::ScrollTo(int ListTop)

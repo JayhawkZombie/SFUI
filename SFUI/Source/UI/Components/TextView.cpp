@@ -86,7 +86,6 @@ namespace sfui
 
   void TextView::Render(sf::RenderTarget &Target, sf::View RenderView)
   {
-    //Target.draw(m_RenderText);
     Target.draw(m_BMText);
   }
 
@@ -94,20 +93,17 @@ namespace sfui
   {
     m_Text = Text;
     m_BMText.setString(Text);
-    //m_RenderText.setString(m_Text);
   }
 
   void TextView::SetColor(sf::Color Color)
   {
     m_TextColor = Color;
     m_BMText.setColor(Color);
-    //m_RenderText.setFillColor(m_TextColor);
   }
 
   void TextView::SetTextSize(uint32 TexSize)
   {
     m_TextSize = TexSize;
-    //m_RenderText.setCharacterSize(m_TextSize);
   }
 
   void TextView::SetFont(font_handle HFont)
@@ -158,7 +154,7 @@ namespace sfui
   void TextView::SetPosition(Vec2i pos)
   {
     m_Position = pos;
-    m_BMText.setPosition(pos); //m_RenderText.setPosition(pos);
+    m_BMText.setPosition(pos); 
     RealignText();
   }
 
@@ -170,12 +166,12 @@ namespace sfui
 
   Vec2i TextView::GetPosition() const
   {
-    return m_BMText.getPosition();// m_RenderText.getPosition();
+    return m_BMText.getPosition();
   }
 
   Vec2i TextView::GetSize() const
   {
-    auto bds = m_BMText.getLocalBounds();// m_RenderText.getLocalBounds();
+    auto bds = m_BMText.getLocalBounds();
     return Vec2i((int)floor(bds.width), (int)floor(bds.height));
   }
 
@@ -186,7 +182,7 @@ namespace sfui
 
   void TextView::RealignText()
   {
-    FloatRect tBds = m_BMText.getLocalBounds();// m_RenderText.getLocalBounds();
+    FloatRect tBds = m_BMText.getLocalBounds();
     auto tPos = m_BMText.getPosition();
     Vec2i pSiz = m_Parent->GetSize();
     Vec2i pPos = m_Position;
@@ -204,7 +200,7 @@ namespace sfui
       case TextAlignment::Centered:
       {
         newPos.x = pPos.x + cast_int(floor(xDiff / 2.f) - tBds.left);
-        newPos.y = pPos.y + pSiz.y;// -cast_int(topDiff / 2.f);
+        newPos.y = pPos.y + pSiz.y;
 
         break;
       }
@@ -212,7 +208,7 @@ namespace sfui
       case TextAlignment::Justified:
       {
         newPos.x = pPos.x + cast_int(floor(xDiff / 2.f) - tBds.left);
-        newPos.y = pPos.y + pSiz.y;// -cast_int(topDiff / 2.f);
+        newPos.y = pPos.y + pSiz.y;
 
         break;
       }
@@ -220,7 +216,7 @@ namespace sfui
       case TextAlignment::Left:
       {
         newPos.x = pPos.x + 5;
-        newPos.y = pPos.y + pSiz.y;// -cast_int(topDiff / 2.f);
+        newPos.y = pPos.y + pSiz.y;
 
         break;
       }
@@ -228,7 +224,7 @@ namespace sfui
       case TextAlignment::Right:
       {
         newPos.x = pPos.x + cast_int(floor(xDiff / 2.f) - tBds.left);
-        newPos.y = pPos.y + pSiz.y;// -cast_int(topDiff / 2.f);
+        newPos.y = pPos.y + pSiz.y;
 
         break;
       }
@@ -236,16 +232,14 @@ namespace sfui
       default:
       {
         newPos.x = pPos.x + cast_int(floor(xDiff / 2.f) - tBds.left);
-        newPos.y = pPos.y + pSiz.y;// -cast_int(topDiff / 2.f);
+        newPos.y = pPos.y + pSiz.y;
 
         break;
       }
     }
 
-    //m_RenderText.setPosition(newPos);
     newPos.y -= cast_int(floor(0.25 * pSiz.y));
     m_BMText.setPosition(newPos);
-    //outline.setPosition(newPos);
   }
 
 }  

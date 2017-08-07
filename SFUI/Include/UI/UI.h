@@ -75,6 +75,7 @@
 #include <SFUI/Include/UI/Widgets/Preloader.h>
 #include <SFUI/Include/UI/Widgets/ChildWindow.h>
 #include <SFUI/Include/UI/Widgets/DraggableFree.h>
+#include <SFUI/Include/UI/Widgets/ContextMenu.h>
 
 ////////////////////////////////////////////////////////////
 // Dependency Headers

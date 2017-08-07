@@ -192,8 +192,6 @@ namespace sfui
     if (m_CurrentPanel && m_CurrentPanel->HandleEvent(event))
       return true;
 
-    //if (!Widget::HandleEvent(event)) return false;
-
     for (auto & w_pair : m_Tabs) {
       if (w_pair.first->HandleEvent(event)) return true;
     }

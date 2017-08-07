@@ -44,6 +44,51 @@
 // Standard Library Headers
 ////////////////////////////////////////////////////////////
 
+template<typename VType>
+class CubicBezierValue
+{
+public:
+  CubicBezierValue() = default;
+  ~CubicBezierValue() = default;
+  CubicBezierValue(const VType &VLow, const VType &VHigh)
+    : m_Low(VLow), m_High(VHigh) { }
+
+  void Set(const VType &VLow, const VType &VHigh)
+  {
+    m_Low = VLow;
+    m_High = VHigh;
+  }
+
+  VType Compute(const float &t)
+  {
+    static Vec2f first = { 0.f, 0.f };
+    static Vec2f last = { 1.f, 1.f };
+    Vec2f p1 = { m_X1, m_Y1 };
+    Vec2f p2 = { m_X2, m_Y2 };
+
+    Vec2f point = first;
+    float a = 1 - t;
+    float b = a * a;
+    float y = t * t;
+
+    /* B(t) = (1 - t)^3P0 + 3(1 - t)^2 t*P1 + 3(1 - t) t^2*P2 + t^3*P3 */
+
+    point += 3 * b * t * p1;
+    point += 3 * a * y * p2;
+    point += y * t * last;
+
+    point.x = std::clamp(point.x, first.x, last.x);
+    point.y = std::clamp(point.y, first.y, last.y);
+
+    return m_Low + point.y * ( m_High - m_Low );
+  }
+
+
+private:
+  VType m_Low = VType();
+  VType m_High = VType();
+};
+
 class CubicBezier {
 public:
   CubicBezier( ) = default;

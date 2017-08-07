@@ -74,6 +74,9 @@ namespace sfui
 
   bool ChildWindow::HandleEvent(const sf::Event &event)
   {
+    if (!m_IsOpen)
+      return false;
+
     if (m_CloseButton->HandleEvent(event))
       return true;
 
@@ -84,6 +87,9 @@ namespace sfui
 
   void ChildWindow::Update()
   {
+    if (!m_IsOpen)
+      return;
+
     super::Update();
     m_Title->BaseUpdate();
     m_CloseButton->BaseUpdate();

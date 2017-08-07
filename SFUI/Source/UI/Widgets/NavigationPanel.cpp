@@ -226,9 +226,6 @@ namespace sfui
 
   void NavigationPanel::SetHeight(int Height)
   {
-    //m_Size.y = Height;
-    //m_BackgroundRect.setSize(sf::Vector2f(cast_float(m_Size.x), cast_float(Height)));
-    //m_Bounds.height = Height;
     m_ExpandedSize.y = Height;
     m_CollapsedSize.y = Height;
 

@@ -80,10 +80,6 @@ namespace sfui
     virtual void Moved() override;
     virtual void Resized() override;
 
-    virtual void AdvanceAnimation();
-    void Completed();
-    void Restarted();
-
     virtual void ProgressChanged();
     virtual void BufferChanged();
 
@@ -91,14 +87,6 @@ namespace sfui
     static constexpr float m_BufferOpacity = 0.6f;
 
   private:
-    double m_FillPercPerMs = 0.;
-    double m_CurrentPercent = 0.;
-    double m_FillDelta = 0.;
-    double m_ToAddPerTick = 0.;
-    bool m_Animating = false;
-    bool m_DirUp = true;
-
-    kairos::Timestep m_AnimationStep;
 
     bool m_IsCompleted = false;
     sf::RectangleShape m_BufferRect;

@@ -1,5 +1,5 @@
-#ifndef SFUI_GENERICCONTAINER_H
-#define SFUI_GENERICCONTAINER_H
+#ifndef SFUI_CONTEXTMENU_H
+#define SFUI_CONTEXTMENU_H
 
 ////////////////////////////////////////////////////////////
 //
@@ -34,7 +34,7 @@
 ////////////////////////////////////////////////////////////
 // Internal Headers
 ////////////////////////////////////////////////////////////
-#include <SFUI/Include/UI/Widget.h>
+#include <SFUI/Include/UI/Widgets/GenericContainer.h>
 
 ////////////////////////////////////////////////////////////
 // Dependency Headers
@@ -45,33 +45,47 @@
 ////////////////////////////////////////////////////////////
 
 namespace sfui
-{  
+{
   
-  class GenericContainer : public Widget
+  class ContextMenu : public GenericContainer
   {
   public:
-    WIDGET_DERIVED(GenericContainer, Widget);
-    GenericContainer(optional<Theme*> theme = optional<Theme*>(), optional<Widget*> parent = optional<Widget*>());
-    virtual ~GenericContainer() override;
+    WIDGET_DERIVED(ContextMenu, GenericContainer);
+    ContextMenu(optional<Theme*> theme = {}, optional<Widget*> parent = {});
+    virtual ~ContextMenu() override;
+    static shared_ptr Create(optional<Theme*> theme = { }, optional<Widget*> parent = { });
 
+    virtual bool HandleEvent(const sf::Event &event) override;
     virtual void Update() override;
-    virtual void Render(sf::RenderTarget &Target, sf::View view);
+    virtual void Render(sf::RenderTarget &Target) override;
 
-    virtual void Add(Widget::shared_ptr widget);
-    virtual void Remove(Widget::shared_ptr widget);
+    virtual void SetPosition(const Vec2i &Position) override;
+    virtual void SetSize(const Vec2i &Size) override;
     virtual void Move(const Vec2i &Delta) override;
 
-    bool HandleEvent(const sf::Event &event) override;
+    virtual void Add(Widget::shared_ptr widget) override;
+    virtual void AddMenuItem(const std::string &Text);
+
+    virtual void Open();
+    virtual void Close();
+
+    void OnOpened(boost::function<void()> func);
+    void OnClosed(boost::function<void()> func);
 
   protected:
-    optional<Widget::shared_ptr> GetChildUnderMouse(const Vec2i &mpos);    
 
-    virtual void ItemAdded();
-    virtual void ItemRemoved();
+    Signal<void()> m_OpenedSignal;
+    Signal<void()> m_ClosedSignal;
 
-    unordered_set<Widget::shared_ptr> m_Widgets;
+    virtual void Opened();
+    virtual void Closed();
+
+    bool m_IsOpen = false;
+    int m_ItemSpacing = 1;
+    Vec2i m_ItemPadding = { 2, 2 };
+
   };
-  
-}  
 
-#endif // SFUI_GENERICCONTAINER_H
+}
+
+#endif // SFUI_CONTEXTMENU_H

@@ -181,6 +181,7 @@
     <ClInclude Include="Include\UI\Fwd.h" />
     <ClInclude Include="Include\UI\UI.h" />
     <ClInclude Include="Include\UI\Widgets\ChildWindow.h" />
+    <ClInclude Include="Include\UI\Widgets\ContextMenu.h" />
     <ClInclude Include="Include\UI\Widgets\DraggableFree.h" />
     <ClInclude Include="Include\UI\Widgets\NavigationPanel.h" />
     <ClInclude Include="Include\UI\Widgets\BitmapLabel.h" />
@@ -249,6 +250,7 @@
     <ClCompile Include="Source\UI\Theme.cpp" />
     <ClCompile Include="Source\UI\Widget.cpp" />
     <ClCompile Include="Source\UI\Widgets\ChildWindow.cpp" />
+    <ClCompile Include="Source\UI\Widgets\ContextMenu.cpp" />
     <ClCompile Include="Source\UI\Widgets\DraggableFree.cpp" />
     <ClCompile Include="Source\UI\Widgets\NavigationPanel.cpp" />
     <ClCompile Include="Source\UI\Widgets\BitmapLabel.cpp" />

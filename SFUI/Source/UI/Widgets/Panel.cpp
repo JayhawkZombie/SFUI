@@ -96,7 +96,7 @@ namespace sfui
 
   bool Panel::HandleEvent(const sf::Event &event)
   {
-    //if (!Widget::HandleEvent(event)) return false;
+    if (!Widget::HandleEvent(event)) return false;
 
     for (auto & wptr : m_Widgets) {
       if (wptr->HandleEvent(event))

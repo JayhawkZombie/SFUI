@@ -89,6 +89,12 @@ namespace sfui
       m_Widgets.erase(it);
   }
 
+  void GenericContainer::Move(const Vec2i &Delta)
+  {
+    for (auto & wptr : m_Widgets)
+      wptr->Move(Delta);
+  }
+
   bool GenericContainer::HandleEvent(const sf::Event &event)
   {
     if (m_ChildWithMouseFocus) {

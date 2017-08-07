@@ -48,8 +48,8 @@ constexpr uint32 TEXT_OPACITY_HIGH_CONTRAST_LARGE_TEXT = 138;
 constexpr uint32 TEXT_OPACITY_HIGH_CONTRAST_SMALL_TEXT = 221;
 constexpr uint32 TEXT_OPACITY_TEXT_DISABLED = 80;
 
-const sf::Color WIDGET_STYLE_COLOR_NEAR_BLACK = sf::Color(28, 28, 28);
-const sf::Color WIDGET_STYLE_COLOR_VERY_DARK = sf::Color(50, 50, 50);
+const sf::Color WIDGET_STYLE_COLOR_NEAR_BLACK = sf::Color(15, 15, 15);
+const sf::Color WIDGET_STYLE_COLOR_VERY_DARK = sf::Color(35, 35, 35);
 const sf::Color WIDGET_STYLE_COLOR_DARK = sf::Color(61, 61, 61);
 const sf::Color WIDGET_STYLE_COLOR_MEDIUM_DARK = sf::Color(76, 76, 76);
 const sf::Color WIDGET_STYLE_COLOR_MEDIUM_LIGHT_DARK = sf::Color(92, 92, 92);

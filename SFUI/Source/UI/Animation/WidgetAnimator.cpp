@@ -195,4 +195,83 @@ namespace sfui
     }
   }
 
+  ValueAnimator::ValueAnimator()
+  {
+    m_Timer.stop();
+  }
+
+  ValueAnimator::~ValueAnimator()
+  {
+
+  }
+
+  void ValueAnimator::Animate(const float &LowVal, const float &HighVal, Easing curve, uint32 Duration, std::function<void(const float &)> Callback)
+  {
+    ValueAnimation VAnim;
+    VAnim.LowValue = LowVal;
+    VAnim.HighValue = HighVal;
+    VAnim.Duration.setFromMilliseconds(Duration);
+    VAnim.Callback = Callback;
+
+    switch (curve)
+    {
+      case Easing::Accelerate:
+      {
+        VAnim.EasingCurve = EasingCurves::acceleration; break;
+      }
+      case Easing::Decelerate:
+      {
+        VAnim.EasingCurve = EasingCurves::deceleration; break;
+      }
+      case Easing::EaseInOut:
+      {
+        VAnim.EasingCurve = EasingCurves::easeInOut; break;
+      }
+      case Easing::Standard:
+      {
+        VAnim.EasingCurve = EasingCurves::standard; break;
+      }
+    }
+
+    if (m_AnimationQueue.empty()) {
+      m_Timer.setTime(VAnim.Duration);
+      m_Timer.start();
+    }
+    m_AnimationQueue.push(VAnim);
+  }
+
+  void ValueAnimator::Update()
+  {
+    auto tTime = m_Timer.getTime();
+    if (!m_AnimationQueue.empty()) {
+      float frac = std::clamp(cast_float(tTime.asMilliseconds()) / cast_float(m_AnimationQueue.front().Duration.asMilliseconds()), 0.01f, 1.f);
+      ApplyAnimation(1.f - frac);
+
+      if (m_Timer.isDone() && !m_AnimationQueue.empty()) {
+        m_Timer.stop();
+        DequeAnimation();
+      }
+    }
+
+  }
+
+  void ValueAnimator::ApplyAnimation(float perc)
+  {
+    Vec2f interpVal = m_AnimationQueue.front().EasingCurve.Compute(perc);
+    ValueAnimation &VAnim = m_AnimationQueue.front();
+
+    float val = VAnim.LowValue + interpVal.y * ( VAnim.HighValue - VAnim.LowValue );
+    VAnim.Callback(val);
+  }
+
+  void ValueAnimator::DequeAnimation()
+  {
+    ApplyAnimation(1.f);
+    m_AnimationQueue.pop();
+    if (!m_AnimationQueue.empty()) {
+      m_Timer.setTime(m_AnimationQueue.front().Duration);
+      m_Timer.start();
+    }
+  }
+
 }  

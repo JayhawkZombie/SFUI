@@ -101,6 +101,7 @@ namespace sfui
     _shared_ptr<Preloader> MakePreloader(optional<Widget*> parent = optional<Widget*>());
     _shared_ptr<ChildWindow> MakeChildWindow(optional<Widget*> parent = {});
     _shared_ptr<DraggableFree> MakeDraggableFree(optional<Widget*> parent = {});
+    _shared_ptr<ContextMenu> MakeContextMenu(optional<Widget*> parent = {});
 
     static const std::string UserOptionalSkip;
     static const std::string UserActionCancel;
