@@ -91,6 +91,7 @@ namespace sfui
 
   void GenericContainer::Move(const Vec2i &Delta)
   {
+    super::Move(Delta);
     for (auto & wptr : m_Widgets)
       wptr->Move(Delta);
   }

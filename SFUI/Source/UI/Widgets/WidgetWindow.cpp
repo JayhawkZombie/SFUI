@@ -57,7 +57,7 @@ namespace sfui
   {
     m_Size = Window.getSize();
     m_BlockingWindow = nullptr;
-    m_UpdateTimeFont.loadFromFile("NotoSans-Regular.ttf");
+    m_UpdateTimeFont.loadFromFile("GOTHIC.ttf");
     m_UpdateTimeText.setFont(m_UpdateTimeFont);
     m_UpdateTimeText.setFillColor(sf::Color::White);
     m_UpdateTimeText.setCharacterSize(10);
